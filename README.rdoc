@@ -1,0 +1,5 @@
+== Gexip
+
+Este proyecto es una aplicación que forma parte de la tesina de tres estudiantes de Licenciatura en Análisis de Sistemas la Universidad Católica Ntra. Señora de la Asunción.
+
+==== Licencia GNU/GPL v3
