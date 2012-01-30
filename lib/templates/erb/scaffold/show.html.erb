@@ -1,0 +1,23 @@
+<section>
+  <div class="alert-message notice" style="margin-top:20px;">    
+    <p><%%= notice %></p>
+  </div> 
+
+  <div class="page-header">
+    <h1><%= singular_table_name %></h1>
+  </div>
+
+   <div class="well">
+    <%%= link_to 'Editar', edit_<%= singular_table_name %>_path(@<%= singular_table_name %>), :class => 'btn primary' %>
+    <%%= link_to 'Borrar', @<%= singular_table_name %>, confirm: 'Estás seguro?', method: :delete, class: 'btn' %>
+    <%%= link_to 'Ver Todos', <%= index_helper %>_path, class: 'btn' %>
+  </div>
+
+  <% attributes.each do |attribute| -%>
+    <p>
+      <b><%= attribute.human_name %>:</b>
+      <%%= @<%= singular_table_name %>.<%= attribute.name %> %>
+    </p>
+
+  <% end -%>
+</section>

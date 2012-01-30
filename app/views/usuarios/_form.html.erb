@@ -1,0 +1,27 @@
+<%= simple_form_for(@usuario) do |f| %>
+  <fieldset>
+    <%= f.error_notification %>
+    
+      <div class="clearfix">
+        <%= f.input :nombres %>
+      </div>
+      <div class="clearfix">
+        <%= f.input :apellidos %>
+      </div>
+      <div class="clearfix">
+        <%= f.input :documento %>
+      </div>
+      <div class="clearfix">
+        <%= f.input :ente_id %>
+      </div>
+      <div class="clearfix">
+        <%= f.input :rol_id %>
+      </div>
+    </div>
+
+    <div class="actions">
+      <%= f.button :submit, 'Guardar', class: 'btn primary' %>
+      <%= link_to 'Cancelar', usuarios_path, :class => "btn" %>
+    </div>
+  </fieldset>
+<% end %>

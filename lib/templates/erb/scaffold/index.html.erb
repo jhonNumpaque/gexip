@@ -1,0 +1,36 @@
+<section>
+  <div class="page-header">
+    <h1><%= plural_table_name.titlecase %> <small>Lista de <%= plural_table_name %></small></h1>
+  </div>
+
+  <div class="well">
+    <%%= link_to 'Agregar', new_<%= singular_table_name %>_path, :class => 'btn primary' %>
+  </div>
+  <br />
+
+  <%% if @<%= plural_table_name %>.present? %>
+    <table class="zebra-striped">
+      <tr>
+      <% attributes.each do |attribute| -%>
+        <th><%= attribute.human_name %></th>
+      <% end -%>        
+        <th></th>
+      </tr>
+      <%% @<%= plural_table_name %>.each do |<%= singular_table_name %>| %>
+        <tr>
+          <% attributes.each do |attribute| -%>
+            <td><%%= <%= singular_table_name %>.<%= attribute.name %> %></td>
+          <% end -%>
+          <td>
+            <%%= link_to 'Editar', edit_<%= singular_table_name %>_path(<%= singular_table_name %>) %>
+          </td>
+        </tr>
+      <%% end %>
+    </table> 
+  <%% else %>
+    <p class="alert-message warning">
+      Todavía no hay <%= plural_table_name %>, <%%= link_to 'agregar', new_<%= singular_table_name %>_path %>.
+    </p>
+  <%% end %>
+
+</section>

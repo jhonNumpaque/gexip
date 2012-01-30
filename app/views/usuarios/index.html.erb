@@ -1,0 +1,41 @@
+<section>
+  <div class="page-header">
+    <h1>Usuarios <small>Lista de usuarios</small></h1>
+  </div>
+
+  <div class="well">
+    <%= link_to 'Agregar', new_usuario_path, :class => 'btn primary' %>
+  </div>
+  <br />
+
+  <% if @usuarios.present? %>
+    <table class="zebra-striped">
+      <tr>
+              <th>Nombres</th>
+              <th>Apellidos</th>
+              <th>Documento</th>
+              <th>Ente</th>
+              <th>Rol</th>
+              
+        <th></th>
+      </tr>
+      <% @usuarios.each do |usuario| %>
+        <tr>
+                      <td><%= usuario.nombres %></td>
+                      <td><%= usuario.apellidos %></td>
+                      <td><%= usuario.documento %></td>
+                      <td><%= usuario.ente_id %></td>
+                      <td><%= usuario.rol_id %></td>
+                    <td>
+            <%= link_to 'Editar', edit_usuario_path(usuario) %>
+          </td>
+        </tr>
+      <% end %>
+    </table> 
+  <% else %>
+    <p class="alert-message warning">
+      Todavía no hay usuarios, <%= link_to 'agregar', new_usuario_path %>.
+    </p>
+  <% end %>
+
+</section>
