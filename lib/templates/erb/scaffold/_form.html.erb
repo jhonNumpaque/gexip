@@ -1,17 +1,13 @@
-<%%= simple_form_for(@<%= singular_table_name %>) do |f| %>
-  <fieldset>
-    <%%= f.error_notification %>
-    
-    <%- attributes.each do |attribute| -%>
-      <div class="clearfix">
-        <%%= f.<%= attribute.reference? ? :association : :input %> :<%= attribute.name %> %>
-      </div>
-    <%- end -%>
-    </div>
+<%%= simple_form_for @<%= singular_table_name %>, :html => { :class => 'form-horizontal' } do |f| %>
+  <%%= f.error_notification %>
+  
+  <%- attributes.each do |attribute| -%>
+    <%%= f.<%= attribute.reference? ? :association : :input %> :<%= attribute.name %> %>
+  <%- end -%>
 
-    <div class="actions">
-      <%%= f.button :submit, 'Guardar', class: 'btn primary' %>
-      <%%= link_to 'Cancelar', <%= plural_table_name %>_path, :class => "btn" %>
-    </div>
-  </fieldset>
+
+  <div class="form-actions">
+    <%%= f.button :submit, 'Guardar' :class => 'btn btn-success' %>
+    <%%= link_to 'Cancelar', <%= plural_table_name %>_path, :class => "btn" %>
+  </div>
 <%% end %>

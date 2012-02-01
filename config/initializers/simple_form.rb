@@ -45,6 +45,40 @@ SimpleForm.setup do |config|
     b.use :error, :tag => :span, :class => :error
   end
 
+  config.wrappers :bootstrap, :tag => 'div', :class => 'control-group', :error_class => 'error' do |b|
+    b.use :placeholder
+    b.use :label, :class => 'control-label'
+    b.use :tag => 'div', :class => 'controls' do |ba|
+      ba.use :input
+      ba.use :error, :tag => 'span', :class => 'help-inline'
+      ba.use :hint,  :tag => 'p', :class => 'help-block'
+    end
+  end
+
+  config.wrappers :prepend, :tag => 'div', :class => "control-group", :error_class => 'error' do |b|
+    b.use :placeholder
+    b.use :label, :class => 'control-label'
+    b.use :hint,  :tag => 'span', :class => 'help-block'
+    b.use :tag => 'div', :class => 'controls' do |input|
+      input.use :tag => 'div', :class => 'input-prepend' do |prepend|
+        prepend.use :input
+      end
+      input.use :error, :tag => 'span', :class => 'help-inline'
+    end
+  end
+
+  config.wrappers :append, :tag => 'div', :class => "control-group", :error_class => 'error' do |b|
+    b.use :placeholder
+    b.use :label, :class => 'control-label'
+    b.use :hint,  :tag => 'span', :class => 'help-block'
+    b.use :tag => 'div', :class => 'controls' do |input|
+      input.use :tag => 'div', :class => 'input-append' do |append|
+        append.use :input
+      end
+      input.use :error, :tag => 'span', :class => 'help-inline'
+    end
+  end
+
   # Method used to tidy up errors.
   # config.error_method = :first
 
@@ -87,6 +121,21 @@ SimpleForm.setup do |config|
   # Tell browsers whether to use default HTML5 validations (novalidate option).
   # Default is enabled.
   config.browser_validations = false
+
+  # Wrappers for forms and inputs using the Twitter Bootstrap toolkit.
+  # Check the Bootstrap docs (http://twitter.github.com/bootstrap)
+  # to learn about the different styles for forms and inputs,
+  # buttons and other elements.
+  config.default_wrapper = :bootstrap
+
+  # Define the way to render check boxes / radio buttons with labels.
+  # Defaults to :nested for bootstrap config.
+  #   :inline => input + label
+  #   :nested => label > input
+  config.boolean_style = :nested
+
+  # Default class for buttons
+  config.button_class = 'btn'
 
   # Collection of methods to detect if a file type was given.
   # config.file_methods = [ :mounted_as, :file?, :public_filename ]

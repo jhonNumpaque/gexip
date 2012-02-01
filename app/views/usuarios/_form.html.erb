@@ -1,27 +1,18 @@
-<%= simple_form_for(@usuario) do |f| %>
+<%= simple_form_for @usuario, :html => { :class => 'form-horizontal' }  do |f| %>
   <fieldset>
     <%= f.error_notification %>
     
-      <div class="clearfix">
-        <%= f.input :nombres %>
-      </div>
-      <div class="clearfix">
-        <%= f.input :apellidos %>
-      </div>
-      <div class="clearfix">
-        <%= f.input :documento %>
-      </div>
-      <div class="clearfix">
-        <%= f.input :ente_id %>
-      </div>
-      <div class="clearfix">
-        <%= f.input :rol_id %>
-      </div>
-    </div>
+      <%= f.input :nombres %>
 
-    <div class="actions">
-      <%= f.button :submit, 'Guardar', class: 'btn primary' %>
+      <%= f.input :apellidos %>
+
+      <%= f.input :ente_id %>
+
+      <%= f.input :rol_id %>    
+
+    <div class="form-actions">
+      <%= f.button :submit, 'Guardar', class: 'btn btn-success' %>
       <%= link_to 'Cancelar', usuarios_path, :class => "btn" %>
     </div>
   </fieldset>
-<% end %>
+  <% end %>

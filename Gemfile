@@ -6,7 +6,7 @@ gem 'rails', '3.2.0'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'pg'
-gem 'simple_form', :git => 'git://github.com/plataformatec/simple_form.git'
+gem "simple_form", "~> 2.0.0.rc"
 gem 'devise'
 gem 'mongrel'
 
