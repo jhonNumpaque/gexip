@@ -2,9 +2,19 @@
   <fieldset>
     <%= f.error_notification %>
     
+      <%= f.input :documento %>
+
       <%= f.input :nombres %>
 
       <%= f.input :apellidos %>
+
+      <%= f.input :login %>
+
+      <%= f.input :email %>
+
+      <%= f.input :password, :as => :password, :label => 'Contraseña' %>
+
+      <%= f.input :password_confirmation, :as => :password, :label =>  'Confirmar Contraseña' %>
 
       <%= f.input :ente_id %>
 

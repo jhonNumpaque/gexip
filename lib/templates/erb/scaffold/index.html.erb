@@ -4,7 +4,7 @@
   </div>
 
   <div class="well">
-    <%%= link_to 'Agregar', new_<%= singular_table_name %>_path, :class => 'btn primary' %>
+    <%%= link_to 'Agregar', new_<%= singular_table_name %>_path, :class => 'btn btn-primary' %>
   </div>
   <br />
 
@@ -22,7 +22,15 @@
             <td><%%= <%= singular_table_name %>.<%= attribute.name %> %></td>
           <% end -%>
           <td>
-            <%%= link_to 'Editar', edit_<%= singular_table_name %>_path(<%= singular_table_name %>) %>
+            
+            <div class="btn-group">              
+              <%= link_to 'Acciones <b class="caret"></b>'.html_safe, '#', :class => 'btn btn-primary dropdown-toggle', 'data-toggle' => 'dropdown' %>
+              <ul id="menu1" class="dropdown-menu">
+                <li><%= link_to '<i class="icon-pencil"></i> Editar'.html_safe, edit_<%= singular_table_name %>_path(<%= singular_table_name %>) %></li>
+                <li><%= link_to '<i class="icon-trash"></i> Eliminar'.html_safe, <%= singular_table_name %>, confirm: '¿Está seguro de eliminar este registro?. Esta acción no se puede deshacer', method: :delete %></li>
+
+              </ul>              
+            </div>
           </td>
         </tr>
       <%% end %>
