@@ -9,7 +9,7 @@
   <br />
 
   <%% if @<%= plural_table_name %>.present? %>
-    <table class="zebra-striped">
+    <table class="table table-striped table-bordered table-condensed">
       <tr>
       <% attributes.each do |attribute| -%>
         <th><%= attribute.human_name %></th>
