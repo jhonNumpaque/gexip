@@ -1,8 +1,14 @@
 Gexip::Application.routes.draw do
   
+  resources :controles
+
+  resources :roles
+
   devise_for :usuarios
 
   resources :usuarios
+  resources :permisos
+  resources :acciones
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
