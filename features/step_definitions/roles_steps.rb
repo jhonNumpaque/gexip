@@ -36,5 +36,5 @@ Cuando /^creo un rol sin especificar el nombre$/ do
 end
 
 Entonces /^debería ver un mensaje de nombre requerido$/  do
-	page.should have_content 'no puede estar en blanco'
+	page.should have_content 'Nombreno puede estar en blanco'
 end
