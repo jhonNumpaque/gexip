@@ -44,7 +44,7 @@ class RolesController < ApplicationController
 
     respond_to do |format|
       if @rol.save
-        format.html { redirect_to @rol, notice: 'Rol was successfully created.' }
+        format.html { redirect_to @rol, notice: 'Rol creado!' }
         format.json { render json: @rol, status: :created, location: @rol }
       else
         format.html { render action: "new" }
