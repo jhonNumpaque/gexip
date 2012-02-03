@@ -1,16 +1,19 @@
 # encoding: utf-8
 
 def usuario_valido
-  @user ||= { :nombres => "Marcos", :email => "marcos@gmail.com",
-    :password => "please", :password_confirmation => "please" }
+  @user ||= { :nombres => "Marcos", :login => 'marcos', :email => "marcos@gmail.com",
+    :password => "please", :password_confirmation => "please", :apellidos => 'Gadea', :documento => 3322323 }
 end
 
 def crear_usuario(usuario)
   visit '/usuarios/new'
   fill_in 'Nombres', :with => usuario[:nombres]
+  fill_in 'Apellidos', :with => usuario[:apellidos]
+  fill_in 'Documento', :with => usuario[:documento]
   fill_in 'Email', :with => usuario[:email]
   fill_in 'Contraseña', :with => usuario[:password]
-  fill_in 'Confirmación de Contraseña', :with => usuario[:password_confirmation]
+  fill_in 'Usuario', :with => usuario[:login]
+  fill_in 'Confirmar Contraseña', :with => usuario[:password_confirmation]
   click_button 'Guardar'
 end
 
@@ -34,37 +37,41 @@ Entonces /^debería ver un mensaje de confirmación$/ do
 end
 
 Cuando /^creo un usuario con un email incorrecto$/ do
-  usuario = usuario_valido[:email] = 'noesemail'
+  usuario = usuario_valido
+  usuario[:email] = 'noesemail'
   crear_usuario usuario
 end
 
 Entonces /^debería ver un mensaje de email inválido$/ do
-  page.should have_content 'Email inválido'
+  page.should have_content 'Email es inválido'
 end
 
 Cuando /^creo un usuario sin escribir una contraseña$/ do
-  usuario = usuario_valido[:password] = nil
+  usuario = usuario_valido
+  usuario[:password] = nil
   crear_usuario usuario
 end
 
 Entonces /^debería ver un mensaje de password requerido$/ do
-  page.should have_content 'Contraseña no puede quedar vacío'
+  page.should have_content 'Password no puede estar en blanco'
 end
 
 Cuando /^creo un usuario sin escribir una confirmación de contraseña$/ do
-  usuario = usuario_valido[:password_confirmation] = nil
+  usuario = usuario_valido
+  usuario[:password_confirmation] = nil
   crear_usuario usuario
 end
 
 Entonces /^debería ver un mensaje de contraseña requerida$/ do
-  page.should have_content 'Confirmación de Contraseña no puede quedar vacío'
+  page.should have_content 'Password no coincide con la confirmación'
 end
 
 Cuando /^creo un usuario con una confirmación de contraseña no coincidente$/ do
-  usuario = usuario_valido[:password_confirmation] = 'holaad'
+  usuario = usuario_valido
+  usuario[:password_confirmation] = 'holaad'
   crear_usuario usuario
 end
 
 Entonces /^debería ver un mensaje de contraseña no coincidente$/ do
-  page.should have_content 'Contraseña no coincide'
+  page.should have_content 'Password no coincide con la confirmación'
 end

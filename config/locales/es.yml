@@ -212,6 +212,7 @@ es:
       odd: "debe ser un número non"
       taken: "ya ha sido tomado"
       record_invalid: "La validación falló: %{errors}"
+      not_saved: 'No se ha podido guardar'
     template: &errors_template
       header:
         one: "%{model} no pudo guardarse debido a 1 error"

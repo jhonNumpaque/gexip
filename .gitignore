@@ -29,6 +29,8 @@ tmp/*
 /coverage/
 /db/*.javadb/
 /db/*.sqlite3-journal
+/db/schema.rb
+/app/assets/stylesheets/scaffolds.css.scss
 /doc/api/
 /doc/app/
 /doc/features.html
