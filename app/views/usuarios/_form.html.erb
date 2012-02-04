@@ -2,6 +2,8 @@
   <fieldset>
     <%= f.error_notification %>
     
+    
+    
       <%= f.input :documento %>
 
       <%= f.input :nombres %>
@@ -18,7 +20,7 @@
 
       <%= f.input :ente_id %>
 
-      <%= f.input :rol_id %>    
+      <%= f.input :rol_id, :collection => Rol.all, :label_method => :nombre, :prompt => '-- Seleccione --' %>    
 
     <div class="form-actions">
       <%= f.button :submit, 'Guardar', class: 'btn btn-success' %>

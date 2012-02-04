@@ -43,7 +43,7 @@ Cuando /^creo un usuario con un email incorrecto$/ do
 end
 
 Entonces /^debería ver un mensaje de email inválido$/ do
-  page.should have_content 'Email es inválido'
+  page.should have_content 'Emailes inválido'
 end
 
 Cuando /^creo un usuario sin escribir una contraseña$/ do
@@ -53,7 +53,7 @@ Cuando /^creo un usuario sin escribir una contraseña$/ do
 end
 
 Entonces /^debería ver un mensaje de password requerido$/ do
-  page.should have_content 'Password no puede estar en blanco'
+  page.should have_content 'Contraseñano puede estar en blanco'
 end
 
 Cuando /^creo un usuario sin escribir una confirmación de contraseña$/ do
@@ -63,7 +63,7 @@ Cuando /^creo un usuario sin escribir una confirmación de contraseña$/ do
 end
 
 Entonces /^debería ver un mensaje de contraseña requerida$/ do
-  page.should have_content 'Password no coincide con la confirmación'
+  page.should have_content 'Contraseñano coincide con la confirmación'
 end
 
 Cuando /^creo un usuario con una confirmación de contraseña no coincidente$/ do
@@ -73,5 +73,5 @@ Cuando /^creo un usuario con una confirmación de contraseña no coincidente$/ d
 end
 
 Entonces /^debería ver un mensaje de contraseña no coincidente$/ do
-  page.should have_content 'Password no coincide con la confirmación'
+  page.should have_content 'Contraseñano coincide con la confirmación'
 end

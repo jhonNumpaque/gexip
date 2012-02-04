@@ -14,13 +14,13 @@ es:
       invalid_token: "Llave de Autenticación invalida."
       timeout: "Su sesión ha expirado, por favor ingrese nuevamente para continuar."
       inactive: 'Su cuenta aun no ha sido activada.'
-    sessions:
+    sesions:
       signed_in: "Ingreso de sesión exitosamente."
       signed_out: 'Sesión cerrada exitosamente.'
     sesiones:
-      admin_usuario:
-        signed_in: "Ingreso de sesión exitosamente."
-        signed_out: 'Sesión cerrada exitosamente.'
+      usuario:
+        signed_in: "Sesión iniciada."
+        signed_out: 'Sesión cerrada.'
     passwords:
       send_instructions: "Usted recibirá un email con instrucciones sobre como re establecer su contraseña en unos minutos."
       updated: "Su contraseña ha sido cambiada exitosamente. Ahora usted puede ingresar."
