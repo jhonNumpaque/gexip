@@ -1,0 +1,46 @@
+<%= form_for resource, :as => resource_name, :url => session_path(resource_name), :html => { :class => 'form-stacked' } do |f| %>
+
+  <div class='clearfix'>
+    <%= f.label :login, 'Nombre de usuario' %>
+    <div class='input'>
+      <%= f.text_field :login, :class => 'span6' %>
+    </div>
+  </div>
+
+  <div class='clearfix'>
+    <%= f.label :login, 'Contrase&ntilde;a'.html_safe %>
+    <div class='input'>
+      <%= f.password_field :password, :class => 'span6' %>
+    </div>
+  </div>
+
+  <br />
+
+  <div class='row'>
+    <div class='span2' style='width:75px'>
+      <p>
+        <%= f.submit 'Iniciar', :class => 'btn primary large' %>        
+      </p>
+    </div>
+
+    <div class='span5'>
+      <div class='clearfix'>
+        <div class='input'>
+          <ul class='inputs-list'>
+            <li>
+              <%= f.label :remember_me do %>
+                <%= f.check_box :remember_me %>
+                <span>Recordarme en esta máquina</span>
+              <% end %>              
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<% end  %>
+
+<p class='ac'>
+  <%= link_to '&iquest;Olvid&oacute; su contrase&ntilde;a?'.html_safe, '#' %>  
+</p>

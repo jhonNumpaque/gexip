@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Bootstrap, from Twitter</title>
+    <title>GexIP :: <%= controller_name.humanize  %></title>
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -44,14 +44,19 @@
             <span class="i-bar"></span>
             <span class="i-bar"></span>
           </a>
-          <a class="brand" href="#">Project name</a>
+          <%= link_to 'GexIP', root_path, :class => 'brand' %>          
           <div class="nav-collapse">
-            <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
-            <p class="navbar-text pull-right">Logged in as <a href="#">username</a></p>
+            <% if usuario_signed_in? %>            
+              <ul class="nav">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+              </ul>
+              <p class="navbar-text pull-right">
+                Conectado como <%= icon_tag(nil, :class => 'icon-user icon-white') %> <%= link_to current_usuario.login, '#' %> 
+                <%= icon_tag(nil, :class => 'icon-share icon-white') %> <%= link_to 'Salir', logout_path %>
+              </p>
+            <% end %>
           </div><!--/.nav-collapse -->
         </div>
       </div>
@@ -82,8 +87,18 @@
           </div><!--/.well -->
         </div><!--/span-->
         <div class="span9">
-          <%= notice %>
-          <%= alert %>
+          <% if notice %>
+            <div class="alert alert-success">
+              <p><%= notice %></p>
+            </div>
+          <% end %>
+
+          <% if alert  %>
+            <div class="alert alert-error">
+              <p><%= alert %></p>
+            </div>
+          <% end %>
+          
           <%= yield %>
         </div><!--/span-->
       </div><!--/row-->

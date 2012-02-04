@@ -13,4 +13,13 @@ class Usuario < ActiveRecord::Base
   validates :apellidos, :presence => true
   validates :documento, :presence => true
   #validates :documento, :presence => true
+  
+  # asociaciones
+  belongs_to :rol
+  
+  def self.find_for_database_authentication(warden_conditions)
+    conditions = warden_conditions.dup
+    login = conditions.delete(:login)
+    where(conditions).where(["lower(login) = :value OR lower(email) = :value", { :value => login.strip.downcase }]).first
+  end
 end
