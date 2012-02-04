@@ -4,7 +4,6 @@ class CreateEntes < ActiveRecord::Migration
       t.string :nombre
       t.string :apellido
       t.string :documento
-      t.string :tipo_documento
       t.string :direccion
       t.string :telefono
       t.integer :territorio_id

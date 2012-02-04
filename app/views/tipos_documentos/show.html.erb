@@ -1,0 +1,26 @@
+<section>
+  <div class="alert-message notice" style="margin-top:20px;">    
+    <p><%= notice %></p>
+  </div> 
+
+  <div class="page-header">
+    <h1>tipo_documento</h1>
+  </div>
+
+   <div class="well">
+    <%= link_to 'Editar', edit_tipo_documento_path(@tipo_documento), :class => 'btn primary' %>
+    <%= link_to 'Borrar', @tipo_documento, confirm: 'Estás seguro?', method: :delete, class: 'btn' %>
+    <%= link_to 'Ver Todos', tipos_documentos_path, class: 'btn' %>
+  </div>
+
+      <p>
+      <b>Nombre:</b>
+      <%= @tipo_documento.nombre %>
+    </p>
+
+      <p>
+      <b>Formato:</b>
+      <%= @tipo_documento.formato %>
+    </p>
+
+  </section>
