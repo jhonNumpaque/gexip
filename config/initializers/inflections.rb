@@ -34,5 +34,6 @@ ActiveSupport::Inflector.inflections do |inflect|
   inflect.irregular 'title', 'titles'
   inflect.irregular 'hint', 'hints'
   inflect.irregular 'action', 'actions'
+  inflect.irregular 'pais', 'paises'
 end
 
