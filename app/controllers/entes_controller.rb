@@ -1,4 +1,5 @@
 class EntesController < ApplicationController
+	before_filter :authenticate_usuario!
   # GET /entes
   # GET /entes.json
   def index

@@ -1,4 +1,5 @@
 class TiposDocumentosController < ApplicationController
+	before_filter :authenticate_usuario!
   # GET /tipos_documentos
   # GET /tipos_documentos.json
   def index
