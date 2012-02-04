@@ -1,5 +1,9 @@
 Gexip::Application.routes.draw do
   
+  resources :tipos_documentos
+
+  resources :cargos
+
   resources :entes
 
   resources :controles
