@@ -4,7 +4,10 @@ Gexip::Application.routes.draw do
 
   resources :roles
 
-  devise_for :usuarios
+  devise_for :usuarios, :controllers => { :registrations => "usuarios", :sessions => 'sesiones' } do 
+    get "/login" => "sesiones#new"
+    get "/logout" => "sesiones#destroy"
+  end
 
   resources :usuarios
   resources :permisos
