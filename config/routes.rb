@@ -1,5 +1,7 @@
 Gexip::Application.routes.draw do
   
+  resources :entes
+
   resources :controles
 
   resources :roles

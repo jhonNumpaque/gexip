@@ -1,0 +1,17 @@
+<%= simple_form_for @ente, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= f.error_notification %>
+  
+    <%= f.input :nombre %>
+    <%= f.input :apellido %>
+    <%= f.input :documento %>
+    <%= f.input :tipo_documento %>
+    <%= f.input :direccion %>
+    <%= f.input :telefono %>
+    <%= f.input :territorio_id %>
+
+
+  <div class="form-actions">
+    <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
+    <%= link_to 'Cancelar', entes_path, :class => "btn" %>
+  </div>
+<% end %>
