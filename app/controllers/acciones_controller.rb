@@ -1,4 +1,5 @@
 class AccionesController < ApplicationController
+	before_filter :authenticate_usuario!
   # GET /acciones
   # GET /acciones.json
   def index
