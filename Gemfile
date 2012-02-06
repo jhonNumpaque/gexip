@@ -8,7 +8,11 @@ gem 'rails', '3.2.0'
 gem 'pg'
 gem "simple_form", "~> 2.0.0.rc"
 gem 'devise'
-gem 'mongrel'
+
+group :development do
+  gem 'annotate'
+  gem 'mongrel'
+end
 
 
 # Gems used only for assets and not required
