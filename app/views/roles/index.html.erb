@@ -17,8 +17,9 @@
       </tr>
       <% @roles.each do |rol| %>
         <tr>
-          <td><%= link_to rol.nombre, rol %></td>
-          <td>
+                      <td><%= link_to rol.nombre, rol %></td>
+                    <td>
+            
             <div class="btn-group">              
               <%= link_to 'Acciones <b class="caret"></b>'.html_safe, '#', :class => 'btn btn-primary dropdown-toggle', 'data-toggle' => 'dropdown' %>
               <ul id="menu1" class="dropdown-menu">

@@ -23,10 +23,10 @@
       </tr>
       <% @entes.each do |ente| %>
         <tr>
-                      <td><%= ente.nombre %></td>
-                      <td><%= ente.apellido %></td>
+                      <td><%= link_to ente.nombre, ente %></td>
+                      <td><%= link_to ente.apellido, ente %></td>
                       <td><%= ente.documento %></td>
-                      <td><%= ente.tipo_documento_id %></td>
+                      <td><%= ente.tipo_documento.nombre %></td>
                       <td><%= ente.direccion %></td>
                       <td><%= ente.telefono %></td>
                       <td><%= ente.territorio_id %></td>

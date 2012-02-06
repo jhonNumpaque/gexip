@@ -17,7 +17,7 @@
       </tr>
       <% @cargos.each do |cargo| %>
         <tr>
-                      <td><%= cargo.nombre %></td>
+                      <td><%= link_to cargo.nombre, cargo %></td>
                     <td>
             
             <div class="btn-group">              
