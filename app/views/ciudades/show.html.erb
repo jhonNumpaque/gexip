@@ -1,0 +1,31 @@
+<section>
+  <div class="alert-message notice" style="margin-top:20px;">    
+    <p><%= notice %></p>
+  </div> 
+
+  <div class="page-header">
+    <h1>ciudad</h1>
+  </div>
+
+   <div class="well">
+    <%= link_to 'Editar', edit_ciudad_path(@ciudad), :class => 'btn btn-primary' %>
+    <%= link_to 'Borrar', @ciudad, confirm: 'Estás seguro?', method: :delete, class: 'btn btn-primary' %>
+    <%= link_to 'Ver Todos', ciudades_path, class: 'btn btn-primary' %>
+  </div>
+
+      <p>
+      <b>Nombre:</b>
+      <%= @ciudad.nombre %>
+    </p>
+
+      <p>
+      <b>Tipo:</b>
+      <%= @ciudad.type %>
+    </p>
+
+      <p>
+      <b>Territorio:</b>
+      <%= @ciudad.territorio_id %>
+    </p>
+
+  </section>
