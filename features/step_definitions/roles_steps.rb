@@ -17,24 +17,24 @@ def iniciar_sesion usuario
   click_button "Ingresar"
 end
 
-Dado /^que estoy logueado$/ do
+Given /^que estoy autenticado$/ do
   #iniciar_sesion usuario_valido
 end
 
-Cuando /^creo un rol con los datos válidos$/ do
+When /^creo un rol con los datos válidos$/ do
 	crear_rol rol_valido
 end
 
-Entonces /^debería ver un mensaje de rol creado$/  do
+Then /^debería ver un mensaje de rol creado$/  do
 	page.should have_content 'Rol creado!'
 end
 
-Cuando /^creo un rol sin especificar el nombre$/ do
+When /^creo un rol sin especificar el nombre$/ do
 	rol = rol_valido
 	rol[:nombre] = nil
 	crear_rol rol
 end
 
-Entonces /^debería ver un mensaje de nombre requerido$/  do
+Then /^debería ver un mensaje de nombre requerido$/  do
 	page.should have_content 'Nombreno puede estar en blanco'
 end
