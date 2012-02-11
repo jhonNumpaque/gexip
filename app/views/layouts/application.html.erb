@@ -44,7 +44,8 @@
             <span class="i-bar"></span>
             <span class="i-bar"></span>
           </a>
-	  <%= link_to 'GexIP', root_path, :class => 'brand' %>          
+	  <%#= link_to 'GexIP', root_path, :class => 'brand' %>          
+	  <%= link_to image_tag('logo.png'), root_path, :class => 'brand', :style => 'padding-bottom:0;padding-top: 4px;' %>          
           <div class="nav-collapse">
 	    <% if usuario_signed_in? %>            
 	      <ul class="nav">
