@@ -1,3 +1,4 @@
+# encoding: utf-8
 class PaisesController < ApplicationController
   # GET /paises
   # GET /paises.json
@@ -44,7 +45,8 @@ class PaisesController < ApplicationController
 
     respond_to do |format|
       if @pais.save
-        format.html { redirect_to @pais, notice: 'Pais was successfully created.' }
+        #format.html { redirect_to @pais, notice: 'País Creado Correctame.' }
+        format.html { redirect_to paises_path, notice: 'País Creado Correctame.' }
         format.json { render json: @pais, status: :created, location: @pais }
       else
         format.html { render action: "new" }
@@ -60,7 +62,8 @@ class PaisesController < ApplicationController
 
     respond_to do |format|
       if @pais.update_attributes(params[:pais])
-        format.html { redirect_to @pais, notice: 'Pais was successfully updated.' }
+        #format.html { redirect_to @pais, notice: 'País Modificado Correctamente.' }
+        format.html { redirect_to paises_path, notice: 'País Modificado Correctamente.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -76,7 +79,7 @@ class PaisesController < ApplicationController
     @pais.destroy
 
     respond_to do |format|
-      format.html { redirect_to paises_url }
+      format.html { redirect_to paises_url, notice: 'País Eliminado Correctamente.' }
       format.json { head :no_content }
     end
   end
