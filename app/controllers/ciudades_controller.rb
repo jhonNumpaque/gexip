@@ -44,7 +44,7 @@ class CiudadesController < ApplicationController
 
     respond_to do |format|
       if @ciudad.save
-        format.html { redirect_to ciudades_path, notice: 'Ciudad creada.' }
+        format.html { redirect_to ciudades_path, notice: 'Ciudad Creada Correctamente.' }
         format.json { render json: @ciudad, status: :created, location: @ciudad }
       else
         format.html { render action: "new" }
@@ -60,7 +60,7 @@ class CiudadesController < ApplicationController
 
     respond_to do |format|
       if @ciudad.update_attributes(params[:ciudad])
-        format.html { redirect_to ciudades_path, notice: 'Ciudad actualizada.' }
+        format.html { redirect_to ciudades_path, notice: 'Ciudad Modificada Correctamente.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -76,7 +76,7 @@ class CiudadesController < ApplicationController
     @ciudad.destroy
 
     respond_to do |format|
-      format.html { redirect_to ciudades_url }
+      format.html { redirect_to ciudades_url, notice: 'Ciudad Eliminada Correctamente.'}
       format.json { head :no_content }
     end
   end
