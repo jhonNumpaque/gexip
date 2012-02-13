@@ -2,6 +2,5 @@
 
 FactoryGirl.define do
   factory :permiso do
-      descripcion "MyString"
     end
 end

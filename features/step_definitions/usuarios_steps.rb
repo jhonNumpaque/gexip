@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 def usuario_valido
-  @user ||= { :nombres => "Marcos", :login => 'marcos', :email => "marcos@gmail.com",
+  @usuario ||= { :nombres => "Marcos", :login => 'marcos', :email => "marcos@gmail.com",
     :password => "please", :password_confirmation => "please", :apellidos => 'Gadea', :documento => 3322323 }
 end
 

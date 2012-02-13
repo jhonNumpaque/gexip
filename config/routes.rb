@@ -6,8 +6,6 @@ Gexip::Application.routes.draw do
 
   resources :entes
 
-  resources :controles
-
   resources :roles
 
   devise_for :usuarios, :controllers => { :registrations => "usuarios", :sessions => 'sesiones' } do 
@@ -16,9 +14,6 @@ Gexip::Application.routes.draw do
   end
 
   resources :usuarios
-  resources :permisos
-  resources :acciones
-
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

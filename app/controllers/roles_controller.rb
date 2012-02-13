@@ -15,6 +15,8 @@ class RolesController < ApplicationController
   # GET /roles/1.json
   def show
     @rol = Rol.find(params[:id])
+    @permisos = Permiso.where(:permiso_id => nil).order('controlador')
+    @permisos_actuales = @rol.permisos
 
     respond_to do |format|
       format.html # show.html.erb
@@ -26,6 +28,8 @@ class RolesController < ApplicationController
   # GET /roles/new.json
   def new
     @rol = Rol.new
+    @permisos = Permiso.where(:permiso_id => nil, :publico => false).order('controlador')
+    @permisos_actuales = []
 
     respond_to do |format|
       format.html # new.html.erb
@@ -36,6 +40,8 @@ class RolesController < ApplicationController
   # GET /roles/1/edit
   def edit
     @rol = Rol.find(params[:id])
+    @permisos = Permiso.where(:permiso_id => nil).order('controlador')
+    @permisos_actuales = @rol.permisos
   end
 
   # POST /roles
@@ -45,6 +51,11 @@ class RolesController < ApplicationController
 
     respond_to do |format|
       if @rol.save
+        @permisos = Permiso.where(:id => params[:permisos])
+        
+        @rol.permisos = @permisos
+        @rol.save
+        
         format.html { redirect_to @rol, notice: 'Rol creado!' }
         format.json { render json: @rol, status: :created, location: @rol }
       else
@@ -61,7 +72,12 @@ class RolesController < ApplicationController
 
     respond_to do |format|
       if @rol.update_attributes(params[:rol])
-        format.html { redirect_to @rol, notice: 'Rol was successfully updated.' }
+        @permisos = Permiso.where(:id => params[:permisos])
+        
+        @rol.permisos = @permisos
+        @rol.save
+        
+        format.html { redirect_to @rol, notice: 'Rol actualizado!.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

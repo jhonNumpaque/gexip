@@ -9,8 +9,7 @@ gem 'pg'
 gem "simple_form", "~> 2.0.0.rc"
 gem 'devise'
 
-group :development do
-  gem 'annotate'
+group :development do 
   gem 'mongrel'
 end
 

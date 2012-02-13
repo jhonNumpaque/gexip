@@ -1,3 +1,4 @@
+<% ant = '' %>
 <section>
 
   <div class="page-header">
@@ -8,9 +9,25 @@
     <div class="btn-group">
       <%= link_to icon_tag('Editar', :class => 'icon-edit icon-white'), edit_rol_path(@rol), :class => 'btn btn-primary' %>
       <%= link_to icon_tag('Borrar', :class => 'icon-trash icon-white'), @rol, confirm: 'Estás seguro?', method: :delete, class: 'btn btn-primary' %>
-      <%= link_to icon_tag('Ver Todos', :class => 'icon-arrow-left icon-white'), roles_path, class: 'btn btn-primary' %>
-    </div>
-  </div>
+        <%= link_to icon_tag('Ver Todos', :class => 'icon-arrow-left icon-white'), roles_path, class: 'btn btn-primary' %>
+        </div>
+      </div>
+
+      <h3>Permisos</h3>
+      <% @permisos.each do |permiso| %>
+        <% if ant != permiso.controlador.humanize  %>
+          <% if ant != '' %>
+          </div>
+          <hr />
+        <% end %>
+        <div class="row">
+          <h4><%= ant = permiso.controlador.humanize %></h4>
+        <% end %>
+        <div class="span4">
+          <% icon = @permisos_actuales.include?(permiso) ? 'icon-ok' : 'icon-remove' %>
+          <%= icon_tag permiso.descripcion, :class => icon %>
+        </div>
+      <% end %> 
 
 
-</section>
+    </section>
