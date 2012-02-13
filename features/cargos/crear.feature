@@ -5,12 +5,12 @@ Característica: crear cargo
 	Quiero poder crear nuevos roles
 
 	Antecedentes:
-		Dado que estoy logueado
+		Given que estoy logueado
 
 	Escenario: El administrador crea un cargo con los datos válidos
-	                Cuando creo un cargo con los datos válidos
-		Entonces debería ver un mensaje de cargo creado
+	                When creo un cargo con los datos válidos
+		Then debería ver un mensaje de cargo creado
 
 	Escenario: El administrador no especifica el nombre del cargo
-	                Cuando creo un cargo sin especificar el nombre
-		Entonces debería ver un mensaje de nombre requerido
+	                When creo un cargo sin especificar el nombre
+		Then debería ver un mensaje de nombre requerido

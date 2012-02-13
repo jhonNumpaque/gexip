@@ -5,13 +5,13 @@ Característica: crear rol
 	Quiero poder crear nuevos roles
 
 	Antecedentes:
-	    Dado que estoy logueado
+		Given que estoy autenticado
 
 	Escenario: El administrador crea un rol con los datos válidos
-	                Cuando creo un rol con los datos válidos
-		Entonces debería ver un mensaje de rol creado
+	                When creo un rol con los datos válidos
+		Then debería ver un mensaje de rol creado
 
 	Escenario: El administrador no especifica el nombre del rol
-	                Cuando creo un rol sin especificar el nombre
-		Entonces debería ver un mensaje de nombre requerido
+	                When creo un rol sin especificar el nombre
+		Then debería ver un mensaje de nombre requerido
 	

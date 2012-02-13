@@ -1,5 +1,11 @@
 Gexip::Application.routes.draw do
   
+  resources :barrios
+
+  resources :paises
+
+  resources :ciudades
+
   resources :tipos_documentos
 
   resources :cargos

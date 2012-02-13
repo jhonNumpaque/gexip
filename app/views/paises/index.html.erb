@@ -1,0 +1,40 @@
+<section>
+  <div class="page-header">
+    <h1>Países <small>Países disponibles</small></h1>
+  </div>
+
+  <div class="well">
+    <%= link_to icon_tag('Agregar', :class => 'icon-plus-sign icon-white'), new_pais_path, :class => 'btn btn-primary' %>
+  </div>
+  <br />
+
+  <% if @paises.present? %>
+    <table class="table table-striped table-bordered table-condensed">
+      <tr>
+        <th>Nombre</th>
+        <th></th>
+      </tr>
+      <% @paises.each do |pais| %>
+        <tr>
+          <td><%= pais.nombre %></td>
+          <td>
+
+            <div class="btn-group">              
+              <%= link_to 'Acciones <b class="caret"></b>'.html_safe, '#', :class => 'btn btn-primary dropdown-toggle', 'data-toggle' => 'dropdown' %>
+              <ul id="menu1" class="dropdown-menu">
+                <li><%= link_to icon_tag('Editar', :class => 'icon-pencil'), edit_pais_path(pais) %></li>
+                <li><%= link_to icon_tag('Eliminar', :class => 'icon-trash'), pais, confirm: '¿Está seguro de eliminar este registro?. Esta acción no se puede deshacer', method: :delete %></li>
+
+              </ul>              
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </table> 
+  <% else %>
+    <p class="alert-message warning">
+      Todavía no hay paises, <%= link_to 'agregar', new_pais_path %>.
+    </p>
+  <% end %>
+
+</section>
