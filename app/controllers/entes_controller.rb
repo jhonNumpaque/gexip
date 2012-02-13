@@ -45,7 +45,7 @@ class EntesController < ApplicationController
 
     respond_to do |format|
       if @ente.save
-        format.html { redirect_to @ente, notice: 'Ente was successfully created.' }
+        format.html { redirect_to entes_path, notice: 'Ente Creado Correctamente.' }
         format.json { render json: @ente, status: :created, location: @ente }
       else
         format.html { render action: "new" }
@@ -61,7 +61,7 @@ class EntesController < ApplicationController
 
     respond_to do |format|
       if @ente.update_attributes(params[:ente])
-        format.html { redirect_to @ente, notice: 'Ente was successfully updated.' }
+        format.html { redirect_to entes_path, notice: 'Ente Modificado Correctamente.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -77,7 +77,7 @@ class EntesController < ApplicationController
     @ente.destroy
 
     respond_to do |format|
-      format.html { redirect_to entes_url }
+      format.html { redirect_to entes_url, notice: 'Ente Eliminado Correctamente.' }
       format.json { head :no_content }
     end
   end
