@@ -1,0 +1,11 @@
+<%= simple_form_for @barrio, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= f.error_notification %>
+  
+    <%= f.input :nombre %>
+    <%= f.input :territorio_id, :label => "Ciudad", :collection => Ciudad.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+
+  <div class="form-actions">
+    <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
+    <%= link_to 'Cancelar', barrios_path, :class => "btn" %>
+  </div>
+<% end %>
