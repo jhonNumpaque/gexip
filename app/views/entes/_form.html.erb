@@ -9,7 +9,8 @@
   <%= f.input :telefono %>
   <%= f.input :cargo_id, :collection =>  Cargo.all, :label_method => :nombre, :prompt => '-- Seleccione --' %>
   <%#=  select("cargo", "cargo_id", Cargo.all.collect {|p| [ p.nombre, p.id ] }, {:include_blank => 'Elegir...'}) %>
-  <%= f.input :territorio_id %>
+  <%#= f.input :territorio_id %>
+  <%= f.input :territorio_id, :label => "Ciudad", :collection => Ciudad.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
 
 
   <div class="form-actions">
