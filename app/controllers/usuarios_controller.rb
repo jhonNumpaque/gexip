@@ -1,5 +1,5 @@
 class UsuariosController < ApplicationController
-	before_filter :authenticate_usuario!
+	before_filter :authenticate_usuario!  
   
   # GET /usuarios
   # GET /usuarios.json
@@ -81,6 +81,10 @@ class UsuariosController < ApplicationController
       format.html { redirect_to usuarios_url }
       format.json { head :no_content }
     end
+  end
+  
+  def denegado
+    
   end
   
 end

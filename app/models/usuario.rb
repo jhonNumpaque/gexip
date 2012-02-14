@@ -15,7 +15,7 @@ class Usuario < ActiveRecord::Base
   #validates :documento, :presence => true
   
   # asociaciones
-  belongs_to :rol
+  belongs_to :rol  
   
   def self.find_for_database_authentication(warden_conditions)
     conditions = warden_conditions.dup

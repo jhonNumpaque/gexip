@@ -17,6 +17,6 @@ class SesionesController < Devise::SessionsController
         'destroy' => { :etiqueta => 'Salir Session (destroy)' }         
       }
     }
-  end
+  end    
   
 end

@@ -1,5 +1,7 @@
 Gexip::Application.routes.draw do
   
+  match 'denegado' => 'usuarios#denegado', :as => 'denegado'
+  
   resources :barrios
 
   resources :paises

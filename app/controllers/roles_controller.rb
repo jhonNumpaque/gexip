@@ -1,5 +1,6 @@
 class RolesController < ApplicationController
-	before_filter :authenticate_usuario!
+	before_filter :authenticate_usuario!	
+  
   # GET /roles
   # GET /roles.json
   def index
@@ -48,17 +49,17 @@ class RolesController < ApplicationController
   # POST /roles.json
   def create
     @rol = Rol.new(params[:rol])
+    permisos = Permiso.where(:id => params[:permisos])
+    @rol.permisos = permisos
 
     respond_to do |format|
-      if @rol.save
-        @permisos = Permiso.where(:id => params[:permisos])
-        
-        @rol.permisos = @permisos
-        @rol.save
-        
+      if @rol.save                                        
         format.html { redirect_to @rol, notice: 'Rol creado!' }
         format.json { render json: @rol, status: :created, location: @rol }
       else
+        @permisos = Permiso.where(:permiso_id => nil, :publico => false)
+        @permisos_actuales = permisos
+        
         format.html { render action: "new" }
         format.json { render json: @rol.errors, status: :unprocessable_entity }
       end
@@ -69,17 +70,17 @@ class RolesController < ApplicationController
   # PUT /roles/1.json
   def update
     @rol = Rol.find(params[:id])
+    permisos = Permiso.where(:id => params[:permisos])
+    @rol.permisos = permisos
 
     respond_to do |format|
-      if @rol.update_attributes(params[:rol])
-        @permisos = Permiso.where(:id => params[:permisos])
-        
-        @rol.permisos = @permisos
-        @rol.save
-        
+      if @rol.update_attributes(params[:rol])                
         format.html { redirect_to @rol, notice: 'Rol actualizado!.' }
         format.json { head :no_content }
       else
+        @permisos = Permiso.where(:permiso_id => nil, :publico => false)
+        @permisos_actuales = permisos
+        
         format.html { render action: "edit" }
         format.json { render json: @rol.errors, status: :unprocessable_entity }
       end
@@ -93,7 +94,7 @@ class RolesController < ApplicationController
     @rol.destroy
 
     respond_to do |format|
-      format.html { redirect_to roles_url }
+      format.html { redirect_to roles_url, notice: 'Rol eliminado!.' }
       format.json { head :no_content }
     end
   end
