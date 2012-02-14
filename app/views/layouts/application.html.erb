@@ -44,7 +44,7 @@
             <span class="i-bar"></span>
             <span class="i-bar"></span>
           </a>
-	  <%#= link_to 'GexIP', root_path, :class => 'brand' %>          
+<%#= link_to 'GexIP', root_path, :class => 'brand' %>          
 	  <%= link_to image_tag('logo.png'), root_path, :class => 'brand', :style => 'padding-bottom:0;padding-top: 4px;' %>          
           <div class="nav-collapse">
 	    <% if usuario_signed_in? %>            
@@ -60,16 +60,19 @@
 		    <li><%= link_to 'Cargos',cargos_path %></li>
 		    <li><%= link_to 'Entes', entes_path %></li>
 		    <li><%= link_to 'Paises', paises_path %></li>
+		    <li><%= link_to 'Ciudades', ciudades_path %></li>
+
+
 
 		  </ul>
 		</li>
 
-              </ul>
-              <p class="navbar-text pull-right">
-                Conectado como <%= icon_tag(nil, :class => 'icon-user icon-white') %> <%= link_to current_usuario.login, '#' %> 
-                <%= icon_tag(nil, :class => 'icon-share icon-white') %> <%= link_to 'Salir', logout_path %>
-              </p>
-            <% end %>
+	      </ul>
+	      <p class="navbar-text pull-right">
+		Conectado como <%= icon_tag(nil, :class => 'icon-user icon-white') %> <%= link_to current_usuario.login, '#' %> 
+		<%= icon_tag(nil, :class => 'icon-share icon-white') %> <%= link_to 'Salir', logout_path %>
+	      </p>
+	    <% end %>
           </div><!--/.nav-collapse -->
         </div>
       </div>
@@ -100,19 +103,19 @@
           </div><!--/.well -->
         </div><!--/span-->
         <div class="span10">
-          <% if notice %>
-            <div class="alert alert-success">
-              <p><%= notice %></p>
-            </div>
-          <% end %>
+	  <% if notice %>
+	    <div class="alert alert-success">
+	      <p><%= notice %></p>
+	    </div>
+	  <% end %>
 
-          <% if alert  %>
-            <div class="alert alert-error">
-              <p><%= alert %></p>
-            </div>
-          <% end %>
-          
-          <%= yield %>
+	  <% if alert  %>
+	    <div class="alert alert-error">
+	      <p><%= alert %></p>
+	    </div>
+	  <% end %>
+
+	  <%= yield %>
         </div><!--/span-->
       </div><!--/row-->
 

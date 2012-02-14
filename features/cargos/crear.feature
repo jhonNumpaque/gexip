@@ -2,7 +2,7 @@
 Característica: crear cargo
 	Para permitir el acceso al sistema
 	Como administrador
-	Quiero poder crear nuevos roles
+	Quiero poder crear nuevos cargos
 
 	Antecedentes:
 		Given que estoy logueado
