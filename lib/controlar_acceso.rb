@@ -7,9 +7,10 @@ module ControlarAcceso
   
   module InstanceMethods
     def controlar_acceso!
-      return true if ignorar?
-      
-      redirect_to denegado_path unless tiene_permiso?      
+      if current_usuario.present?
+        return true if ignorar?      
+        redirect_to denegado_path unless tiene_permiso?      
+      end
     end
     
     def permisos
