@@ -1,5 +1,7 @@
 Gexip::Application.routes.draw do
   
+  resources :procesos
+
   resources :procedimientos
 
   match 'denegado' => 'usuarios#denegado', :as => 'denegado'

@@ -1,0 +1,15 @@
+<%= simple_form_for @macroproceso, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= f.error_notification %>
+  
+    <%= f.input :nombre %>
+    <%= f.input :clasificacion %>
+    <%= f.input :objetivo %>
+    <%= f.input :codigo %>
+    <%= f.input :cargo_id, :label => "Cargo", :collection => Cargo.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+
+
+  <div class="form-actions">
+    <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
+    <%= link_to 'Cancelar', macroprocesos_path, :class => "btn" %>
+  </div>
+<% end %>
