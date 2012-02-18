@@ -18,3 +18,11 @@ $(function() {
     $( "input.date_picker" ).datepicker({ dateFormat: 'dd-mm-yy' });
    
 });
+
+function markAll() {  
+  $("input[type='checkbox']").attr('checked', true);      
+}
+
+function unmarkAll() {    
+  $("input[type='checkbox']").attr('checked', false);    
+}
