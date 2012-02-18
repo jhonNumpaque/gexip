@@ -1,0 +1,44 @@
+<section>  
+  <div class="page-header">
+    <h1>Subproceso</h1>
+  </div>
+
+   <div class="well">
+    <div class="btn-group">
+      <%= link_to icon_tag('Editar', :class => 'icon-edit icon-white'), edit_subproceso_path(@subproceso), :class => 'btn btn-primary' %>
+      <%= link_to icon_tag('Borrar', :class => 'icon-trash icon-white'), @subproceso, confirm: 'Estás seguro?', method: :delete, class: 'btn btn-primary' %>
+      <%= link_to icon_tag('Ver Todos', :class => 'icon-arrow-left icon-white'), subprocesos_path, class: 'btn btn-primary' %>
+    </div>
+  </div>
+
+      <p>
+      <b>Nombre:</b>
+      <%= @subproceso.nombre %>
+    </p>
+    
+      <p>
+      <b>Objetivo:</b>
+      <%= @subproceso.objetivo %>
+    </p>
+    
+      <p>
+      <b>Codigo:</b>
+      <%= @subproceso.codigo %>
+    </p>
+    
+      <p>
+      <b>Cargo:</b>
+      <%= @subproceso.cargo_id %>
+    </p>
+    
+      <p>
+      <b>Serieproceso:</b>
+      <%= @subproceso.serieproceso_id %>
+    </p>
+    
+      <p>
+      <b>Type:</b>
+      <%= @subproceso.type %>
+    </p>
+    
+  </section>

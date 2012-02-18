@@ -57,7 +57,6 @@ class MacroprocesosController < ApplicationController
   # PUT /macroprocesos/1.json
   def update
     @macroproceso = Macroproceso.find(params[:id])
-
     respond_to do |format|
       if @macroproceso.update_attributes(params[:macroproceso])
         format.html { redirect_to macroprocesos_path, notice: 'MacroProceso Modificado Correctamente.' }

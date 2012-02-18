@@ -1,5 +1,7 @@
 Gexip::Application.routes.draw do
   
+  resources :subprocesos
+
   resources :procesos
 
   resources :macroprocesos

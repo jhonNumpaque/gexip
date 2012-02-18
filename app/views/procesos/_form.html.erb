@@ -1,11 +1,11 @@
 <%= simple_form_for @proceso, :html => { :class => 'form-horizontal' } do |f| %>
   <%= f.error_notification %>
-  
-    <%= f.input :nombre %>
-    <%= f.input :objetivo %>
-    <%= f.input :codigo %>
- <%= f.input :cargo_id, :label => "Cargo", :collection => Cargo.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
-<%= f.input :serieproceso_id, :label => "MacroProceso", :collection => Macroproceso.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+
+  <%= f.input :nombre %>
+  <%= f.input :objetivo, :as => :text, :input_html => { :style => 'width:80%;', :rows => 7, :cols => 20  } %>
+  <%= f.input :codigo %>
+  <%= f.input :cargo_id, :label => "Cargo", :collection => Cargo.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+  <%= f.input :serieproceso_id, :label => "MacroProceso", :collection => Macroproceso.all, :label_method => :codigo_nombre, :prompt => "-- Seleccione --" %>
 
   <div class="form-actions">
     <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>

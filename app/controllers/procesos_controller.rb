@@ -44,7 +44,7 @@ class ProcesosController < ApplicationController
 
     respond_to do |format|
       if @proceso.save
-        format.html { redirect_to @proceso, notice: 'Proceso was successfully created.' }
+        format.html { redirect_to procesos_path, notice: 'Proceso Creado Correctamente.' }
         format.json { render json: @proceso, status: :created, location: @proceso }
       else
         format.html { render action: "new" }
@@ -60,7 +60,7 @@ class ProcesosController < ApplicationController
 
     respond_to do |format|
       if @proceso.update_attributes(params[:proceso])
-        format.html { redirect_to @proceso, notice: 'Proceso was successfully updated.' }
+        format.html { redirect_to procesos_path, notice: 'Proceso Modificado Correctamente.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -76,7 +76,7 @@ class ProcesosController < ApplicationController
     @proceso.destroy
 
     respond_to do |format|
-      format.html { redirect_to procesos_url }
+      format.html { redirect_to procesos_url, notice: 'Proceso Eliminado Correctamente.' }
       format.json { head :no_content }
     end
   end
