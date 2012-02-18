@@ -14,7 +14,7 @@ class ProcedimientosController < ApplicationController
   # GET /procedimientos/1.json
   def show
     @procedimiento = Procedimiento.find(params[:id])
-
+    @actividades = @procedimiento.actividades.order('orden asc')
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @procedimiento }

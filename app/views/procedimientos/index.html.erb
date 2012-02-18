@@ -28,11 +28,11 @@
                       <td><%= link_to procedimiento.nombre, procedimiento %></td>
                       <td><%= procedimiento.objetivo %></td>
                       <td><%= procedimiento.definiciones %></td>
-                      <td><%= procedimiento.elabora_fecha %></td>
+                      <td><%= l( procedimiento.elabora_fecha ) if procedimiento.elabora_fecha.present? %></td>
                       <td><%= procedimiento.elaborador.nombres %></td>
-                      <td><%= procedimiento.revisado_fecha %></td>
+                      <td><%= l( procedimiento.revisado_fecha ) if procedimiento.revisado_fecha.present? %></td>
                       <td><%= procedimiento.revisador.nombres %></td>
-                      <td><%= procedimiento.aprobado_fecha %></td>
+                      <td><%= l( procedimiento.aprobado_fecha ) if procedimiento.aprobado_fecha.present? %></td>
                       <td><%= procedimiento.aprobador.nombres %></td>
                     <td>
             

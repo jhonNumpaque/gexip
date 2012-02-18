@@ -17,7 +17,7 @@
   <fieldset>
     <legend>Actividades</legend>
     <table>
-      <thead>
+      <thead style="margin-bottom: 20px;">
 	<tr>
 	  <th>Nombre</th>
 	  <th>Orden</th>
@@ -30,7 +30,7 @@
 	<% end %>
       </tbody>
     </table>
-    <%= link_to_add_fields "Agregar Actividad", f, :actividades, :container => 'actividades' %>
+    <%= link_to_add_fields icon_tag("Agregar Actividad", :class => 'icon-plus-sign'), f, :actividades, :container => 'actividades' %>
   </fieldset>
   <div class="form-actions">
     <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>

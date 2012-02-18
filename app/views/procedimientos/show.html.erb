@@ -28,7 +28,7 @@
 
       <p>
 	<b>Elabora fecha:</b>
-	<%= @procedimiento.elabora_fecha %>
+	<%= l( @procedimiento.elabora_fecha ) if @procedimiento.elabora_fecha.present? %>
       </p>
 
       <p>
@@ -39,7 +39,7 @@
 
       <p>
 	<b>Revisado fecha:</b>
-	<%= @procedimiento.revisado_fecha %>
+	<%= l( @procedimiento.revisado_fecha) if @procedimiento.revisado_fecha.present? %>
       </p>
 
       <p>
@@ -50,7 +50,7 @@
 
       <p>
 	<b>Aprobado fecha:</b>
-	<%= @procedimiento.aprobado_fecha %>
+	<%= l( @procedimiento.aprobado_fecha ) if @procedimiento.aprobado_fecha.present? %>
       </p>
 
       <p>
@@ -68,7 +68,7 @@
 	  </tr>
 	</thead>
 	<tbody>
-	  <% for actividad in @procedimiento.actividades  %>
+	  <% for actividad in @actividades  %>
 	<tr>
 	  <td><%= actividad.orden  %></td>
 	  <td><%= actividad.descripcion  %></td>

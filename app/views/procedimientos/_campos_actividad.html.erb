@@ -1,5 +1,5 @@
 <tr>
-  <td><%= f.input :descripcion %></td>
-  <td><%= f.input :orden %></td>
-  <td><%= link_to_remove_fields 'Quitar', f %></td>
+  <td><%= f.input :descripcion, :label => false %></td>
+  <td><%= f.input :orden, :label => false %></td>
+  <td><%= link_to_remove_fields icon_tag('Quitar', :class => 'icon-remove-sign'), f %></td>
 </tr>
