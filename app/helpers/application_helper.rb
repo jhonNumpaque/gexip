@@ -8,4 +8,5 @@ module ApplicationHelper
     options[:class] ||= 'icon-list-alt'
     content_tag(:i, nil, :class => options[:class]).concat(name)
   end
+
 end

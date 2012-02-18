@@ -13,6 +13,12 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
+
+$(function() {
+    $( "input.date_picker" ).datepicker({ dateFormat: 'dd-mm-yy' });
+   
+});
+
 function markAll() {  
   $("input[type='checkbox']").attr('checked', true);      
 }
