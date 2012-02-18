@@ -13,3 +13,10 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
+function markAll() {  
+  $("input[type='checkbox']").attr('checked', true);      
+}
+
+function unmarkAll() {    
+  $("input[type='checkbox']").attr('checked', false);    
+}
