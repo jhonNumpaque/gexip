@@ -4,4 +4,9 @@ class Subproceso < Serieproceso
   belongs_to :cargo, :foreign_key => :cargo_id
   has_many :procedimientos	
 
+  
+  # Concatena codigo y nombre, especial para usar en combobox
+  def codigo_nombre
+    "#{codigo} #{nombre}"
+  end
 end
