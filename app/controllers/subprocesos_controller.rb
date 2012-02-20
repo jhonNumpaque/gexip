@@ -2,7 +2,8 @@ class SubprocesosController < ApplicationController
   # GET /subprocesos
   # GET /subprocesos.json
   def index
-    @subprocesos = Subproceso.page(params[:page])
+    #@subprocesos = Subproceso.page(params[:page])
+    @subprocesos = Subproceso.all
 
     respond_to do |format|
       format.html # index.html.erb
