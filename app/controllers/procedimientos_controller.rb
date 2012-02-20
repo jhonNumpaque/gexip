@@ -2,7 +2,7 @@ class ProcedimientosController < ApplicationController
   # GET /procedimientos
   # GET /procedimientos.json
   def index
-    @procedimientos = Procedimiento.all
+    @procedimientos = Procedimiento.page(params[:page]).per(10)
 
     respond_to do |format|
       format.html # index.html.erb

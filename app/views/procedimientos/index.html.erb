@@ -48,6 +48,7 @@
         </tr>
       <% end %>
     </table> 
+  <%= paginate @procedimientos %>
   <% else %>
     <p class="alert-message warning">
       Todavía no hay procedimientos, <%= link_to 'agregar', new_procedimiento_path %>.
