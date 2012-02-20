@@ -31,6 +31,8 @@
         </tr>
       <% end %>
     </table> 
+<%= paginate @paises %>
+
   <% else %>
     <p class="alert-message warning">
       Todavía no hay paises, <%= link_to 'agregar', new_pais_path %>.
