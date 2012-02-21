@@ -16,11 +16,9 @@
               <th>Definiciones</th>
               <th>Elabora fecha</th>
               <th>Elabora usuario</th>
-              <th>Revisado fecha</th>
-              <th>Revisado usuario</th>
               <th>Aprobado fecha</th>
               <th>Aprobado usuario</th>
-              
+              <th>Subproceso</th>
         <th></th>
       </tr>
       <% @procedimientos.each do |procedimiento| %>
@@ -30,10 +28,9 @@
                       <td><%= procedimiento.definiciones %></td>
                       <td><%= l( procedimiento.elabora_fecha ) if procedimiento.elabora_fecha.present? %></td>
                       <td><%= procedimiento.elaborador.nombres %></td>
-                      <td><%= l( procedimiento.revisado_fecha ) if procedimiento.revisado_fecha.present? %></td>
-                      <td><%= procedimiento.revisador.nombres %></td>
                       <td><%= l( procedimiento.aprobado_fecha ) if procedimiento.aprobado_fecha.present? %></td>
                       <td><%= procedimiento.aprobador.nombres %></td>
+                      <td><%= procedimiento.subproceso.codigo_nombre %></td>
                     <td>
             
             <div class="btn-group">              
