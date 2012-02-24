@@ -4,6 +4,10 @@
   </div>
 
   <div class="well">
+    <div>
+    <%= render 'campos_buscar' %>
+    </div>
+    
     <%= link_to icon_tag('Agregar', :class => 'icon-plus-sign icon-white'), new_procedimiento_path, :class => 'btn btn-primary' %>
   </div>
   <br />
@@ -27,9 +31,9 @@
                       <td><%= procedimiento.objetivo %></td>
                       <td><%= procedimiento.definiciones %></td>
                       <td><%= l( procedimiento.elabora_fecha ) if procedimiento.elabora_fecha.present? %></td>
-                      <td><%= procedimiento.elaborador.nombres %></td>
+                      <td><%= procedimiento.elaborador.nombres if procedimiento.elaborador.present? %></td>
                       <td><%= l( procedimiento.aprobado_fecha ) if procedimiento.aprobado_fecha.present? %></td>
-                      <td><%= procedimiento.aprobador.nombres %></td>
+                      <td><%= procedimiento.aprobador.nombres if procedimiento.aprobador.present? %></td>
                       <td><%= procedimiento.subproceso.codigo_nombre %></td>
                     <td>
             

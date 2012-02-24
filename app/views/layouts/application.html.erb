@@ -71,7 +71,7 @@
 
 	      </ul>
 	      <p class="navbar-text pull-right">
-		Conectado como <%= icon_tag(nil, :class => 'icon-user icon-white') %> <%= link_to current_usuario.login, '#' %> 
+		Conectado como <%= icon_tag(nil, :class => 'icon-user icon-white') %> <%= link_to current_usuario.login, usuario_path(current_usuario.id) %> 
 		<%= icon_tag(nil, :class => 'icon-share icon-white') %> <%= link_to 'Salir', logout_path %>
 	      </p>
 	    <% end %>
@@ -85,18 +85,6 @@
         <div class="span2">
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
-              <li class="nav-header">Sidebar</li>
-              <li class="active"><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li class="nav-header">Sidebar</li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
               <li class="nav-header">Procesos</li>
               <li><%= link_to 'MacroProcesos', macroprocesos_path %></li>
               <li><%= link_to 'Procesos', procesos_path %></li>

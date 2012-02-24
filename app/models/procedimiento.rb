@@ -1,4 +1,7 @@
 class Procedimiento < ActiveRecord::Base
+	validates :nombre, :presence => true	
+	validates :objetivo, :presence => true	
+	validates :elabora_usuario, :presence => true		
 	
 	has_many :actividades
 	belongs_to :elaborador, :class_name => 'Usuario', :foreign_key => 'elabora_usuario'

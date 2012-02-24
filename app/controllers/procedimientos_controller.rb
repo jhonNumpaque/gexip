@@ -2,8 +2,15 @@ class ProcedimientosController < ApplicationController
   # GET /procedimientos
   # GET /procedimientos.json
   def index
-    @procedimientos = Procedimiento.page(params[:page]).per(10)
-
+    @procedimientos = Procedimiento
+		
+    @procedimientos = @procedimientos.where(" nombre like ?", "%#{params[:nombre]}%") if params[:nombre].present?
+    @procedimientos = @procedimientos.where(" objetivo like ?", "%#{params[:objetivo]}%") if params[:objetivo].present?
+    @procedimientos = @procedimientos.where(" definicion like ?", "%#{params[:definicion]}%") if params[:definicion].present?
+    
+	@procedimientos = @procedimientos.page(params[:page]).per(10)
+		
+		
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @procedimientos }
@@ -26,7 +33,7 @@ class ProcedimientosController < ApplicationController
   def new
     @procedimiento = Procedimiento.new
 
-	actividad = @procedimiento.actividades.build
+		actividad = @procedimiento.actividades.build
 		
     respond_to do |format|
       format.html # new.html.erb
