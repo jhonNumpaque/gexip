@@ -1,0 +1,28 @@
+<%= simple_form_for @tarea, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= f.error_notification %>
+
+  <%= f.input :orden %>
+  <%= f.input :nombre %>
+  <%= f.input :metodo %>
+  <%= f.input :tiempo_ejecucion %>
+  <%= f.input :unidad_tiempo_id %>
+  <%= f.input :tipo, :collection => Tarea::TIPO_TAREA.map{|c| [c,c]}, :prompt => "-- Seleccione --" %>
+  <%= f.input :cargo_id, :label => "Cargo", :collection => Cargo.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+  <%= f.input :tarea_sgt_id %>
+  <%= f.input :tarea_alt_id %>
+  <!--
+  arreglar aca para cuando sea un nuevo tome del parametro
+  :as => :hidden
+  -->
+
+  <% if @tarea.actividad_id.present? %>
+    <%= f.input :actividad_id, :as => :hidden %>
+  <% else %>
+    <%= f.input :actividad_id, :as => :hidden,  :input_html => { :value => "4" }  %> 
+  <% end %>
+
+  <div class="form-actions">
+    <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
+    <%= link_to 'Cancelar', tareas_path(:actividad_id => params[:actividad_id]), :class => "btn" %>
+  </div>
+<% end %>

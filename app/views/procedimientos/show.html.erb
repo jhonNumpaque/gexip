@@ -7,78 +7,81 @@
     <div class="btn-group">
       <%= link_to icon_tag('Editar', :class => 'icon-edit icon-white'), edit_procedimiento_path(@procedimiento), :class => 'btn btn-primary' %>
       <%= link_to icon_tag('Borrar', :class => 'icon-trash icon-white'), @procedimiento, confirm: 'Estás seguro?', method: :delete, class: 'btn btn-primary' %>
-	<%= link_to icon_tag('Ver Todos', :class => 'icon-arrow-left icon-white'), procedimientos_path, class: 'btn btn-primary' %>
-	</div>
+        <%= link_to icon_tag('Ver Todos', :class => 'icon-arrow-left icon-white'), procedimientos_path, class: 'btn btn-primary' %>
+        </div>
       </div>
 
       <p>
-	<b>Nombre:</b>
-	<%= @procedimiento.nombre %>
+        <b>Nombre:</b>
+        <%= @procedimiento.nombre %>
       </p>
 
       <p>
-	<b>Objetivo:</b>
-	<%= @procedimiento.objetivo %>
+        <b>Objetivo:</b>
+        <%= @procedimiento.objetivo %>
       </p>
 
       <p>
-	<b>Definiciones:</b>
-	<%= @procedimiento.definiciones %>
+        <b>Definiciones:</b>
+        <%= @procedimiento.definiciones %>
       </p>
 
       <p>
-	<b>Elabora fecha:</b>
-	<%= l( @procedimiento.elabora_fecha ) if @procedimiento.elabora_fecha.present? %>
+        <b>Elabora fecha:</b>
+        <%= l( @procedimiento.elabora_fecha ) if @procedimiento.elabora_fecha.present? %>
       </p>
 
       <p>
-	<b>Elabora usuario:</b>
+        <b>Elabora usuario:</b>
     <%#= @procedimiento.elabora_usuario %>
-	<%= @procedimiento.elaborador.nombres %>
+        <%= @procedimiento.elaborador.nombres %>
       </p>
 
       <p>
-	<b>Revisado fecha:</b>
-	<%= l( @procedimiento.revisado_fecha) if @procedimiento.revisado_fecha.present? %>
+        <b>Revisado fecha:</b>
+        <%= l( @procedimiento.revisado_fecha) if @procedimiento.revisado_fecha.present? %>
       </p>
 
       <p>
-	<b>Revisado usuario:</b>
+        <b>Revisado usuario:</b>
     <%#= @procedimiento.revisado_usuario %>
-	<%= @procedimiento.revisador.nombres %>
+        <%= @procedimiento.revisador.nombres %>
       </p>
 
       <p>
-	<b>Aprobado fecha:</b>
-	<%= l( @procedimiento.aprobado_fecha ) if @procedimiento.aprobado_fecha.present? %>
+        <b>Aprobado fecha:</b>
+        <%= l( @procedimiento.aprobado_fecha ) if @procedimiento.aprobado_fecha.present? %>
       </p>
 
       <p>
-	<b>Aprobado usuario:</b>
+        <b>Aprobado usuario:</b>
     <%#= @procedimiento.aprobado_usuario %>
-	<%= @procedimiento.aprobador.nombres %>
+        <%= @procedimiento.aprobador.nombres %>
       </p>
 
       <table class="table table-striped table-bordered table-condensed">
-	<thead>
-	  <tr>
-	    <th>Orden</th>
-	    <th>Actividad</th>
-	    <th>Acci&oacute;n</th>
-	  </tr>
-	</thead>
-	<tbody>
-	  <% for actividad in @actividades  %>
-	<tr>
-	  <td><%= actividad.orden  %></td>
-	  <td><%= actividad.descripcion  %></td>
-	  <td>
-	    <%= link_to icon_tag('Agregar Tarea', :class => 'icon-plus-sign'), '#' %>
-	    <%= link_to icon_tag('Ver Tareas', :class => 'icon-list-alt'), '#' %>
-	  </td>
-	</tr>
-	  <% end %>
-	</tbody>
+        <thead>
+          <tr>
+            <th>Orden</th>
+            <th>Actividad</th>
+            <th>Acci&oacute;n</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for actividad in @actividades  %>
+            <tr>
+              <td><%= actividad.orden  %></td>
+              <td><%= actividad.descripcion  %></td>
+              <td>
+                <%= link_to icon_tag('Agregar Tarea', :class => 'icon-plus-sign'), '#' %>
+                <%= link_to icon_tag('Ver Tareas', :class => 'icon-list-alt'), '#' %>
+                <%= link_to 'Tareas', new_tarea_path, :popup => ['tareas', 'height=320, width=512'] %>
+
+
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
       </table>
 
     </section>
