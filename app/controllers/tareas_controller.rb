@@ -52,7 +52,7 @@ class TareasController < ApplicationController
         format.html { redirect_to tareas_path(:actividad_id => @tarea.actividad_id), notice: 'Tarea Creada Correctamente.' }
         format.json { render json: @tarea, status: :created, location: @tarea }
       else
-        format.html { render action: "new" }
+        format.html { render action: "new", :layout => "popup_wf" }
         format.json { render json: @tarea.errors, status: :unprocessable_entity }
       end
     end
@@ -68,7 +68,7 @@ class TareasController < ApplicationController
         format.html { redirect_to tareas_path(:actividad_id => @tarea.actividad_id), notice: 'Tarea Modificada Correctamente.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render action: "edit", :layout => "popup_wf" }
         format.json { render json: @tarea.errors, status: :unprocessable_entity }
       end
     end
