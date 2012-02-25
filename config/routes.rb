@@ -1,5 +1,7 @@
 Gexip::Application.routes.draw do
   
+  resources :unidades_tiempos
+
   resources :subprocesos
 
   resources :procesos
