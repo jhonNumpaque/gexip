@@ -1,0 +1,23 @@
+<%= form_tag controller_name, :method => :get do %>
+<fieldset>
+  <legend>Buscador</legend>
+<table>
+  <tr>
+    <td><%= label_tag 'Nombre:' %></td>
+    <td><%= text_field_tag 'nombre', params[:nombre] %></td>
+    <td>&nbsp;</td>
+    <td><%= label_tag 'Objetivo:' %></td>
+    <td><%= text_field_tag 'objetivo', params[:objetivo] %></td>
+    <td>&nbsp;</td>
+    <td><%= label_tag 'Definicion:' %></td>
+    <td><%= text_field_tag 'definicion', params[:definicion] %></td>
+    <td>&nbsp;</td>
+    <td><%= submit_tag 'Buscar' %></td>
+  </tr>
+  <tr>
+    <td><%= label_tag 'Subproceso' %> </td>
+    <td><%= select_tag "subproceso", options_from_collection_for_select( Subproceso.all, "id", "nombre" ), :prompt => "-- Seleccionar --" %> </td>
+  </tr>
+</table>
+  </fieldset>
+<% end %>

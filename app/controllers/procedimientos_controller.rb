@@ -7,6 +7,7 @@ class ProcedimientosController < ApplicationController
     @procedimientos = @procedimientos.where(" nombre like ?", "%#{params[:nombre]}%") if params[:nombre].present?
     @procedimientos = @procedimientos.where(" objetivo like ?", "%#{params[:objetivo]}%") if params[:objetivo].present?
     @procedimientos = @procedimientos.where(" definicion like ?", "%#{params[:definicion]}%") if params[:definicion].present?
+    @procedimientos = @procedimientos.where(" serieproceso_id = ?", params[:subproceso]) if params[:subproceso].present?
     
 	@procedimientos = @procedimientos.page(params[:page]).per(10)
 		
