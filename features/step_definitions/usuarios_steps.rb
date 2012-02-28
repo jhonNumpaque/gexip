@@ -1,8 +1,9 @@
 # encoding: utf-8
 
+
 def usuario_valido
-  @usuario ||= { :nombres => "Marcos", :login => 'marcos', :email => "marcos@gmail.com",
-    :password => "please", :password_confirmation => "please", :apellidos => 'Gadea', :documento => 3322323 }
+  @usuario ||= { :nombres => "Marcos", :login => 'marquitos', :email => "marcos@gmail.com",
+    :password => "dalenplease", :password_confirmation => "dalenplease", :apellidos => 'Gadea', :documento => 3322323, :rol_id => 1 }
 end
 
 def crear_usuario(usuario)
@@ -19,13 +20,20 @@ end
 
 def iniciar_sesion usuario
   visit '/usuarios/sign_in'
-  fill_in "Usuario", :with => usuario[:login]
+  fill_in "Nombre de usuario", :with => usuario[:login]
   fill_in "Contraseña", :with => usuario[:password]
-  click_button "Ingresar"
+  click_button "Iniciar"
 end
 
 Dado /^que estoy autenticado$/ do
-  #iniciar_sesion usuario_valido
+  usuario = Usuario.new usuario_valido
+  #iniciar_sesion usuario_valido  
+  visit '/usuarios/sign_in'
+  fill_in "Nombre de usuario", :with => usuario.login
+  fill_in "Contraseña", :with => usuario_valido[:password]
+  click_button 'Iniciar'
+  page.should have_content 'Ingreso de sesión exitosamente.'
+  usuario.destroy
 end
 
 Cuando /^creo un usuario con datos válidos$/ do

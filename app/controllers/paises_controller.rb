@@ -77,10 +77,15 @@ class PaisesController < ApplicationController
   # DELETE /paises/1.json
   def destroy
     @pais = Pais.find(params[:id])
-    @pais.destroy
+    begin
+      @pais.destroy
+      flash[:notice] = 'País Eliminado Correctamente.'
+    rescue ActiveRecord::DeleteRestrictionError
+      flash[:alert] = 'No se puede borrar'
+    end
 
     respond_to do |format|
-      format.html { redirect_to paises_url, notice: 'País Eliminado Correctamente.' }
+      format.html { redirect_to paises_url }
       format.json { head :no_content }
     end
   end

@@ -5,7 +5,7 @@
   <%= f.input :nombre %>
   
   <fieldset>
-    <legend>Permisos</legend>    
+    <legend>Permisos <%= link_to_function 'Marcar Todos', 'markAll()'  %>/<%= link_to_function 'Desmarcar Todos', 'unmarkAll()'  %> </legend>    
       <% @permisos.each do |permiso| %>
         <% if ant != permiso.controlador.humanize  %>
           <% if ant != '' %>

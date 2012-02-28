@@ -16,7 +16,7 @@ class RolesController < ApplicationController
   # GET /roles/1.json
   def show
     @rol = Rol.find(params[:id])
-    @permisos = Permiso.where(:permiso_id => nil).order('controlador')
+    @permisos = Permiso.where(:permiso_id => nil, :publico => false).order('controlador')
     @permisos_actuales = @rol.permisos
 
     respond_to do |format|
@@ -41,7 +41,7 @@ class RolesController < ApplicationController
   # GET /roles/1/edit
   def edit
     @rol = Rol.find(params[:id])
-    @permisos = Permiso.where(:permiso_id => nil).order('controlador')
+    @permisos = Permiso.where(:permiso_id => nil, :publico => false).order('controlador')
     @permisos_actuales = @rol.permisos
   end
 
