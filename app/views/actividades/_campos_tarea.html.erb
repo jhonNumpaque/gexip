@@ -1,7 +1,8 @@
-<%= simple_form_for @tarea, :html => { :class => 'form-horizontal' } do |f| %>
+<%= simple_form_for @tarea, :remote => true, :html => { :class => 'form-horizontal' } do |f| %>
   <%= f.error_notification %>
 
   <%#= f.input :orden %>
+  <%= f.input :orden, :as => :hidden,  :input_html => { :value => "1" }  %> 
   <%= f.input :nombre %>
   <%= f.input :metodo %>
   <%= f.input :tiempo_ejecucion %>
@@ -23,6 +24,7 @@
 
   <div class="form-actions">
     <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
-    <%= link_to 'Cancelar', tareas_path(:actividad_id => params[:actividad_id]), :class => "btn" %>
+    <%#= link_to 'Cancelar', tareas_path(:actividad_id => params[:actividad_id]), :class => "btn" %>
+    <%= link_to 'Cancelar', listar_tareas_path(:id => @tarea.actividad_id), :remote => true, :class => "btn" %>
   </div>
 <% end %>
