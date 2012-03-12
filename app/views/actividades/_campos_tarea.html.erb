@@ -1,16 +1,8 @@
-<%= simple_form_for @tarea, :html => { :class => 'form-horizontal' } do |f| %>
+<%= simple_form_for @tarea, :remote => true, :html => { :class => 'form-horizontal' } do |f| %>
   <%= f.error_notification %>
 
-  <% if Tarea.tareas_anteriores(params[:actividad_id], @tarea.id).present? %>
-    <div class="control-group integer required">
-      <%= label_tag :ant_id, raw("#{content_tag(:abbr, '*', :title => 'requerido')} Tarea Anterior"), :class => 'integer required' %>
-
-      <div class="controls">
-        <%= f.collection_select :tarea_anterior_id, Tarea.tareas_anteriores(params[:actividad_id], @tarea.id), :id, :nombre, {}, { :class => 'numeric integer required'} %>
-      </div>
-    </div>  
-  <% end %>
   <%#= f.input :orden %>
+  <%= f.input :orden, :as => :hidden,  :input_html => { :value => "1" }  %> 
   <%= f.input :nombre %>
   <%= f.input :metodo %>
   <%= f.input :tiempo_ejecucion %>
@@ -32,6 +24,7 @@
 
   <div class="form-actions">
     <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
-    <%= link_to 'Cancelar', tareas_path(:actividad_id => params[:actividad_id]), :class => "btn" %>
+    <%#= link_to 'Cancelar', tareas_path(:actividad_id => params[:actividad_id]), :class => "btn" %>
+    <%= link_to 'Cancelar', listar_tareas_path(:id => @tarea.actividad_id), :remote => true, :class => "btn" %>
   </div>
 <% end %>
