@@ -1,7 +1,7 @@
 class ActividadesController < ApplicationController
 	
 	def agregar_tarea
-		@tarea = Tarea.new(:actividad_id => params[:id])
+		@tarea = Tarea.new(:actividad_id => params[:actividad_id])
 		
 		respond_to do |format|
 			format.js
@@ -9,7 +9,7 @@ class ActividadesController < ApplicationController
 	end
 	
 	def listar_tareas
-		@tareas = Tarea.where(:actividad_id => params[:id]).order("orden")
+		@tareas = Tarea.where(:actividad_id => params[:actividad_id]).order("orden")
 
 		respond_to do |format|
 			format.js

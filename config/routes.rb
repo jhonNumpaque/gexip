@@ -34,8 +34,8 @@ Gexip::Application.routes.draw do
 
   resources :usuarios
 	
-  match '/:id/agregar_tarea' => 'actividades#agregar_tarea', :as => 'agregar_tarea'
-  match '/:id/listar_tareas' => 'actividades#listar_tareas', :as => 'listar_tareas'
+  match '/:actividad_id/agregar_tarea' => 'actividades#agregar_tarea', :as => 'agregar_tarea'
+  match '/:actividad_id/listar_tareas' => 'actividades#listar_tareas', :as => 'listar_tareas'
   match '/editar_tarea' => 'tareas#edit', :as => 'editar_tarea'
   # The priority is based upon order of creation:
   # first created -> highest priority.
