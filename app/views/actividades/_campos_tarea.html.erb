@@ -1,7 +1,15 @@
 <%= simple_form_for @tarea, :remote => true, :html => { :class => 'form-horizontal' } do |f| %>
   <%= f.error_notification %>
+  <% tareas_anteriores = Tarea.tareas_anteriores(params[:actividad_id], @tarea.id) %>
+  <% if tareas_anteriores.present? %>
+    <div class="control-group integer required">
+      <%= label_tag :ant_id, raw("#{content_tag(:abbr, '*', :title => 'requerido')} Tarea Anterior"), :class => 'integer required' %>
 
-  <%#= f.input :orden %>
+      <div class="controls">
+        <%= f.collection_select :tarea_anterior_id, tareas_anteriores, :id, :nombre, {}, { :class => 'numeric integer required'} %>
+      </div>
+    </div>  
+  <% end %>
   <%= f.input :orden, :as => :hidden,  :input_html => { :value => "1" }  %> 
   <%= f.input :nombre %>
   <%= f.input :metodo %>

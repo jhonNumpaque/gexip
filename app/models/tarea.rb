@@ -30,8 +30,13 @@ class Tarea < ActiveRecord::Base
   
   def self.tareas_anteriores(actividad_id, me_id)
     ant = []
-    ant << Tarea.where('id <> ? AND tipo = ? AND (tarea_sgt_id is ? OR tarea_alt_id is ?) AND actividad_id = ?', me_id, 'LOGICA', nil, nil, actividad_id).all
-    ant << Tarea.where('id <> ? AND tarea_sgt_id is ? AND actividad_id = ?', me_id, nil, actividad_id).order('id desc').last
-    ant
+    filtx = Tarea.where('tipo = ? AND (tarea_sgt_id is ? OR tarea_alt_id is ?) AND actividad_id = ?', 'LOGICA', nil, nil, actividad_id)
+    filtx = filtx.where('id <> ?', me_id) if me_id.present?
+    ant << filtx.all
+    filt = Tarea.where('tarea_sgt_id is ? AND actividad_id = ?', nil, actividad_id).order('id desc')
+    filt = filt.where('id <> ?', me_id) if me_id.present?
+    ant << filt.last
+    ant.delete(nil)
+    ant.flatten!
   end
 end
