@@ -49,7 +49,8 @@ class TareasController < ApplicationController
   # POST /tareas.json
   def create
     tarea = Tarea.new(params[:tarea])
-
+	params[:actividad_id] = tarea.actividad_id
+	
     respond_to do |format|
       if tarea.save
 		@tareas = Tarea.where(:actividad_id => tarea.actividad_id).order("orden")
