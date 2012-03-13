@@ -1,5 +1,5 @@
 <div class="well">
-  <%= link_to icon_tag('Agregar', :class => 'icon-plus-sign icon-white'), agregar_tarea_path(:id => params[:id]), :remote=>true, :class => 'btn btn-primary' %>
+  <%= link_to icon_tag('Agregar', :class => 'icon-plus-sign icon-white'), agregar_tarea_path(:actividad_id => params[:actividad_id]), :remote=>true, :class => 'btn btn-primary' %>
 </div>
 <section>
   <% if @tareas.present? %>

@@ -76,7 +76,7 @@
       <%#= link_to icon_tag('Agregar Tarea', :class => 'icon-plus-sign'), new_tarea_path(:id => @procedimiento.id), :target => :blank%>
 		<%#= link_to icon_tag('Agregar Tarea', :class => 'icon-plus-sign'), agregar_tarea_path(:id => actividad.id), :remote => true %>
 		<%#= link_to icon_tag('Ver Tareas', :class => 'icon-list-alt'), '#' %>
-		<%= link_to icon_tag('Ver Tareas', :class => 'icon-list-alt'), tareas_path(:actividad_id => actividad.id), :remote => true, :onclick => 'mostrarPopup()' %>
+		<%= link_to icon_tag('Ver Tareas', :class => 'icon-list-alt'), listar_tareas_path(:actividad_id => actividad.id), :remote => true, :onclick => 'mostrarPopup()' %>
       <%#= link_to 'Tareas', new_tarea_path, :popup => ['tareas', 'height=320, width=512'] %>
 
 
