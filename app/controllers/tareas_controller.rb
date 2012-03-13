@@ -7,6 +7,7 @@ class TareasController < ApplicationController
     respond_to do |format|
       format.html { render :layout => "popup_wf" } # index.html.erb
       format.json { render json: @tareas }
+	  format.js
     end
   end
 
@@ -29,6 +30,7 @@ class TareasController < ApplicationController
     respond_to do |format|
       format.html { render :layout => "popup_wf" } # new.html.erb
       format.json { render json: @tarea }
+	  format.js
     end
   end
 
@@ -39,7 +41,7 @@ class TareasController < ApplicationController
 		respond_to do |format|
 			#      format.html { render :layout => "popup_wf" } # new.html.erb
 			#      format.json { render json: @tarea }
-      format.js 
+			format.js 
     end
   end
 
@@ -50,10 +52,10 @@ class TareasController < ApplicationController
 
     respond_to do |format|
       if tarea.save
-				@tareas = Tarea.where(:actividad_id => tarea.actividad_id).order("orden")
+		@tareas = Tarea.where(:actividad_id => tarea.actividad_id).order("orden")
         format.html { redirect_to tareas_path(:actividad_id => @tarea.actividad_id), notice: 'Tarea Creada Correctamente.' }
         format.json { render json: @tarea, status: :created, location: @tarea }
-				format.js
+	    format.js
       else
         format.html { render action: "new", :layout => "popup_wf" }
         format.json { render json: @tarea.errors, status: :unprocessable_entity }

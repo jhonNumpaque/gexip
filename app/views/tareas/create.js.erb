@@ -1,4 +1,4 @@
 $('#modal-body').html("")
-$('#modal-body').html("<%= escape_javascript( render( :partial => 'actividades/listar_tareas', :locals => { :tareas => @tareas })) %>")
+$('#modal-body').html("<%= escape_javascript( render( :partial => 'index', :locals => { :tareas => @tareas })) %>")
 $('#add-tarea-modal').css('width' , '800px')
 $('#add-tarea-modal').css('height' , '600px')

@@ -76,7 +76,7 @@
       <%#= link_to icon_tag('Agregar Tarea', :class => 'icon-plus-sign'), new_tarea_path(:id => @procedimiento.id), :target => :blank%>
 		<%#= link_to icon_tag('Agregar Tarea', :class => 'icon-plus-sign'), agregar_tarea_path(:id => actividad.id), :remote => true %>
 		<%#= link_to icon_tag('Ver Tareas', :class => 'icon-list-alt'), '#' %>
-		<%= link_to icon_tag('Ver Tareas', :class => 'icon-list-alt'), listar_tareas_path(:id => actividad.id), :remote => true, :onclick => 'mostrarPopup()' %>
+		<%= link_to icon_tag('Ver Tareas', :class => 'icon-list-alt'), tareas_path(:actividad_id => actividad.id), :remote => true, :onclick => 'mostrarPopup()' %>
       <%#= link_to 'Tareas', new_tarea_path, :popup => ['tareas', 'height=320, width=512'] %>
 
 
@@ -91,7 +91,7 @@
     <div class="modal fade" id="add-tarea-modal" style="display: none">
       <div class="modal-header">
 	<a class="close" data-dismiss="modal">x</a>
-	<h3>Agregar Tarea</h3>
+	<h3>Tareas</h3>
       </div>
       <div class="modal-body" id ="modal-body">
     <%#= render 'campos_tarea' %>
