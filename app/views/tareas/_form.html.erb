@@ -6,7 +6,7 @@
       <%= label_tag :ant_id, raw("#{content_tag(:abbr, '*', :title => 'requerido')} Tarea Anterior"), :class => 'integer required' %>
 
       <div class="controls">
-        <%= f.collection_select :tarea_anterior_id, Tarea.tareas_anteriores(params[:actividad_id], @tarea.id), :id, :nombre, {}, { :class => 'numeric integer required'} %>
+        <%#= f.collection_select :tarea_anterior_id, Tarea.tareas_anteriores(params[:actividad_id], @tarea.id), :id, :nombre, {}, { :class => 'numeric integer required'} %>
       </div>
     </div>  
   <% end %>
@@ -32,6 +32,6 @@
 
   <div class="form-actions">
     <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
-    <%= link_to 'Cancelar', tareas_path(:actividad_id => params[:actividad_id]), :class => "btn" %>
+    <%= link_to 'Cancelar', tareas_path(:actividad_id => params[:actividad_id]), :remote => true, :class => "btn" %>
   </div>
 <% end %>
