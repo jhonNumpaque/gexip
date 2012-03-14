@@ -1,6 +1,7 @@
 class TareasController < ApplicationController
   # GET /tareas
   # GET /tareas.json
+	#se encuentra en actividades_controller#listar_tareas
   def index
     @tareas = Tarea.where(:actividad_id => params[:actividad_id]).order("orden")
 
@@ -15,7 +16,8 @@ class TareasController < ApplicationController
   # GET /tareas/1.json
   def show
     @tarea = Tarea.find(params[:id])
-
+	@actividad_id = @tarea.actividad_id
+		
     respond_to do |format|
       format.html { render :layout => "popup_wf" } # show.html.erb
       format.json { render json: @tarea }
@@ -24,6 +26,7 @@ class TareasController < ApplicationController
 
   # GET /tareas/new
   # GET /tareas/new.json
+	#se encuentra en actividades_controller#agregar_tarea
   def new
     @tarea = Tarea.new
 
@@ -37,7 +40,7 @@ class TareasController < ApplicationController
   # GET /tareas/1/edit
   def edit
     @tarea = Tarea.find(params[:id])
-    
+    @actividad_id = @tarea.actividad_id
 		respond_to do |format|
 			#      format.html { render :layout => "popup_wf" } # new.html.erb
 			#      format.json { render json: @tarea }
@@ -49,7 +52,7 @@ class TareasController < ApplicationController
   # POST /tareas.json
   def create
     tarea = Tarea.new(params[:tarea])
-	params[:actividad_id] = tarea.actividad_id
+	@actividad_id = tarea.actividad_id
 	
     respond_to do |format|
       if tarea.save
@@ -68,7 +71,8 @@ class TareasController < ApplicationController
   # PUT /tareas/1.json
   def update
     @tarea = Tarea.find(params[:id])
-
+	@actividad_id = @tarea.actividad_id
+		
     respond_to do |format|
       if @tarea.update_attributes(params[:tarea])
 		@tareas = Tarea.where(:actividad_id => @tarea.actividad_id).order("orden")
@@ -87,6 +91,7 @@ class TareasController < ApplicationController
   def destroy
     @tarea = Tarea.find(params[:id])
 	@tareas = Tarea.where(:actividad_id => @tarea.actividad_id).order("orden")
+	@actividad_id = @tarea.actividad_id
     @tarea.destroy
 
     respond_to do |format|
