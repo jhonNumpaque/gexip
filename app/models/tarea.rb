@@ -8,6 +8,7 @@ class Tarea < ActiveRecord::Base
   #Relaciones
   belongs_to :cargo, :foreign_key => :cargo_id
   belongs_to :actividad, :foreign_key => :actividad_id
+  belongs_to :unidad_tiempo, :foreign_key => :unidad_tiempo_id
 
   # CONSTANTE
   TIPO_TAREA = %w{INICIO PROCESO TRANSLADO ALMACENAMIENTO LOGICA FIN FIN_ALTERNANTIVO}
