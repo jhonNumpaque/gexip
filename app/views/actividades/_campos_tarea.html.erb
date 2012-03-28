@@ -10,11 +10,12 @@
       </div>
     </div>  
   <% end %>
-  <%= f.input :orden, :as => :hidden,  :input_html => { :value => "1" }  %> 
+  <% # = f.input :orden, :as => :hidden,  :input_html => { :value => "1" }  %> 
+  <%= f.input :orden  %> 
   <%= f.input :nombre %>
   <%= f.input :metodo %>
   <%= f.input :tiempo_ejecucion %>
-  <%= f.input :unidad_tiempo_id %>
+  <%= f.input :unidad_tiempo_id, :label => "Unidad de Tiempo", :collection => UnidadTiempo.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
   <%= f.input :tipo, :collection => Tarea::TIPO_TAREA.map{|c| [c,c]}, :prompt => "-- Seleccione --" %>
   <%= f.input :cargo_id, :label => "Cargo", :collection => Cargo.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
   <%#= f.input :tarea_sgt_id %>
