@@ -1,0 +1,94 @@
+<section>  
+  <div class="page-header">
+    <h1>Expediente</h1>
+  </div>
+
+   <div class="well">
+    <div class="btn-group">
+      <%= link_to icon_tag('Editar', :class => 'icon-edit icon-white'), edit_expediente_path(@expediente), :class => 'btn btn-primary' %>
+      <%= link_to icon_tag('Borrar', :class => 'icon-trash icon-white'), @expediente, confirm: 'Estás seguro?', method: :delete, class: 'btn btn-primary' %>
+      <%= link_to icon_tag('Ver Todos', :class => 'icon-arrow-left icon-white'), expedientes_path, class: 'btn btn-primary' %>
+    </div>
+  </div>
+
+      <p>
+      <b>Proceso:</b>
+      <%= @expediente.proceso_id %>
+    </p>
+    
+      <p>
+      <b>Procedimiento:</b>
+      <%= @expediente.procedimiento_id %>
+    </p>
+    
+      <p>
+      <b>Tarea actual:</b>
+      <%= @expediente.tarea_actual_id %>
+    </p>
+    
+      <p>
+      <b>Tarea anterior:</b>
+      <%= @expediente.tarea_anterior_id %>
+    </p>
+    
+      <p>
+      <b>Ente:</b>
+      <%= @expediente.ente_id %>
+    </p>
+    
+      <p>
+      <b>Usuario:</b>
+      <%= @expediente.usuario_id %>
+    </p>
+    
+      <p>
+      <b>Descripcion:</b>
+      <%= @expediente.descripcion %>
+    </p>
+    
+      <p>
+      <b>Observacion:</b>
+      <%= @expediente.observacion %>
+    </p>
+    
+      <p>
+      <b>Observacion fin:</b>
+      <%= @expediente.observacion_fin %>
+    </p>
+    
+      <p>
+      <b>Estado:</b>
+      <%= @expediente.estado %>
+    </p>
+    
+      <p>
+      <b>Usuario ingreso:</b>
+      <%= @expediente.usuario_ingreso_id %>
+    </p>
+    
+      <p>
+      <b>Fecha ingreso:</b>
+      <%= @expediente.fecha_ingreso %>
+    </p>
+    
+      <p>
+      <b>Usuario finalizo:</b>
+      <%= @expediente.usuario_finalizo_id %>
+    </p>
+    
+      <p>
+      <b>Fecha finalizo:</b>
+      <%= @expediente.fecha_finalizo %>
+    </p>
+    
+      <p>
+      <b>Numero:</b>
+      <%= @expediente.numero %>
+    </p>
+    
+      <p>
+      <b>Copia:</b>
+      <%= @expediente.copia %>
+    </p>
+    
+  </section>

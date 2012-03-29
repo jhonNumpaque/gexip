@@ -1,5 +1,7 @@
 Gexip::Application.routes.draw do
   
+  resources :expedientes
+
   resources :unidades_tiempos
   resources :tareas
 

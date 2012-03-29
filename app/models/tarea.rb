@@ -4,6 +4,8 @@ class Tarea < ActiveRecord::Base
   validates :nombre, :presence => true
   validates :tipo, :presence => true
   validates :cargo_id, :presence => true
+  validates :cargo_id, :presence => true
+  validates :tiempo_ejecucion, :presence => true
   
   #Relaciones
   belongs_to :cargo, :foreign_key => :cargo_id

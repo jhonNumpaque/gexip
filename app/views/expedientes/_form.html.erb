@@ -1,0 +1,26 @@
+<%= simple_form_for @expediente, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= f.error_notification %>
+  
+    <%= f.input :proceso_id %>
+    <%= f.input :procedimiento_id, :label => "Procedimiento", :collection => Procedimiento.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+    <%# f.input :tarea_actual_id %>
+    <%# f.input :tarea_anterior_id %>
+    <%= f.input :ente_id, :label => "Ente", :collection => Ente.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+    <%= f.input :usuario_id %>
+    <%= f.input :descripcion %>
+    <%= f.input :observacion %>
+    <%= f.input :observacion_fin %>
+    <%= f.input :estado %>
+    <%= f.input :usuario_ingreso_id %>
+    <%= f.input :fecha_ingreso %>
+    <%= f.input :usuario_finalizo_id %>
+    <%= f.input :fecha_finalizo %>
+    <%= f.input :numero %>
+    <%= f.input :copia %>
+
+
+  <div class="form-actions">
+    <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
+    <%= link_to 'Cancelar', expedientes_path, :class => "btn" %>
+  </div>
+<% end %>
