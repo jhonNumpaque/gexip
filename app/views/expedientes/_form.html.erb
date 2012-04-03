@@ -1,22 +1,63 @@
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#">Persona Física</a></li>
+  <li class="dropdown">
+    <a class="dropdown-toggle"
+       data-toggle="dropdown"
+       href="#">
+      Persona Jurídica
+      <b class="caret"></b>
+    </a>
+    <ul class="dropdown-menu">
+      <li><%= link_to 'Interno' %></li>
+      <li><%= link_to 'Externo' %></li>
+    </ul>
+</ul>
+
 <%= simple_form_for @expediente, :html => { :class => 'form-horizontal' } do |f| %>
   <%= f.error_notification %>
+
+  <div class="rows">
+    <div class="span5 well">
+      <h4>Datos Básicos</h4>
+      <div class="control-group select required">
+        <label class="optional">Fecha de Ingreso</label>
+        <div class="controls"><%= l(Time.now, :format => :fecha) %></div>
+        
+      </div>
+      <%= f.input :ente_id, :label => "Ente", :collection => Ente.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+      <%= f.input :procedimiento_id, :label => "Procedimiento", :collection => Procedimiento.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+      <%= f.input :copia, :label => 'Es Copia' %>
+    </div>
+    
+    <div class="span5 well" style="min-height:205px">
+      <h4>Documentos Adjuntos</h4>
+    </div>
+  </div>
+
+  <div class="rows">
+    <div class="span10 well">
+      <h4>Descripción</h4>
+      <%= f.text_area :descripcion, :cols => 50, :rows => 10, :style => 'width:98%' %>
+      <%#= f.input :descripcion, :as => :text, :input_html => { :cols => 50, :rows => 10, :style => 'width:90%' }, :label => false %>
+    </div>
+  </div>
+
+  <%= f.input :proceso_id %>
   
-    <%= f.input :proceso_id %>
-    <%= f.input :procedimiento_id, :label => "Procedimiento", :collection => Procedimiento.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
-    <%# f.input :tarea_actual_id %>
-    <%# f.input :tarea_anterior_id %>
-    <%= f.input :ente_id, :label => "Ente", :collection => Ente.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
-    <%= f.input :usuario_id %>
-    <%= f.input :descripcion %>
-    <%= f.input :observacion %>
-    <%= f.input :observacion_fin %>
-    <%= f.input :estado %>
-    <%= f.input :usuario_ingreso_id %>
-    <%= f.input :fecha_ingreso %>
-    <%= f.input :usuario_finalizo_id %>
-    <%= f.input :fecha_finalizo %>
-    <%= f.input :numero %>
-    <%= f.input :copia %>
+  <%# f.input :tarea_actual_id %>
+  <%# f.input :tarea_anterior_id %>
+  
+  <%= f.input :usuario_id %>
+  
+  <%= f.input :observacion %>
+  <%= f.input :observacion_fin %>
+  <%= f.input :estado %>
+  <%= f.input :usuario_ingreso_id %>
+  <%= f.input :fecha_ingreso %>
+  <%= f.input :usuario_finalizo_id %>
+  <%= f.input :fecha_finalizo %>
+  <%= f.input :numero %>
+  
 
 
   <div class="form-actions">
