@@ -41,10 +41,14 @@ class ExpedientesController < ApplicationController
   # POST /expedientes.json
   def create
     @expediente = Expediente.new(params[:expediente])
-
+    
+    @expediente.usuario_id = current_usuario.id
+    @expediente.usuario_ingreso_id = current_usuario.id
+    @expediente.fecha_ingreso = Time.now
+      
     respond_to do |format|
       if @expediente.save
-        format.html { redirect_to @expediente, notice: 'Expediente was successfully created.' }
+        format.html { redirect_to @expediente, notice: 'Expediente Creado Correctamete.' }
         format.json { render json: @expediente, status: :created, location: @expediente }
       else
         format.html { render action: "new" }
