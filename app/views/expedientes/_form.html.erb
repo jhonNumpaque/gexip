@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs">
-  <li class="active"><a href="#">Persona Física</a></li>
-  <li class="dropdown">
+  <li class="tab active"><%= link_to 'Persona Física', '#', :class => 'pf' %></a></li>
+ <!-- <li class="dropdown">
     <a class="dropdown-toggle"
        data-toggle="dropdown"
        href="#">
@@ -11,56 +11,55 @@
       <li><%= link_to 'Interno' %></li>
       <li><%= link_to 'Externo' %></li>
     </ul>
+  </li>-->
+  <li class="tab"><%= link_to 'Persona Jurídica Interna', '#', :class => 'pji'  %></li>
+  <li class="tab"><%= link_to 'Persona Jurídica Externa', '#', :class => 'pje' %></li>
 </ul>
 
 <%= simple_form_for @expediente, :html => { :class => 'form-horizontal' } do |f| %>
   <%= f.error_notification %>
 
   <div class="rows">
-    <div class="span5 well">
+    <div class="span7 well">
       <h4>Datos Básicos</h4>
+      <hr />
       <div class="control-group select required">
-        <label class="optional">Fecha de Ingreso</label>
+        <label class="optional inline-inputs">Fecha de Ingreso</label>
         <div class="controls"><%= l(Time.now, :format => :fecha) %></div>
         
+      </div>      
+      <div class="control-group">
+        <%= f.label :ente_id, 'Cédula/Nombre y Apellido' %>
+        <div class="controls">
+          <%= f.text_field :numero_documento, :style => 'margin-right: 10px; width: 80px'  %>
+            <%= f.text_field :ente_id, :style => 'width: 305px', :readonly => true %>
+            <button class="btn" type="button"><i class="icon-search"></i></button>
+        </div>
       </div>
-      <%= f.input :ente_id, :label => "Ente", :collection => Ente.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+      <%#= f.input :ente_id, :label => 'Cédula/Nombre y Apellido' %>
+      <%#= f.input :ente_id, :label => "Ente", :collection => Ente.all, :label_method => :nombre, :prompt => "-- Seleccione --", :label => 'Cédula/Nombre y Apellido' %>
       <%= f.input :procedimiento_id, :label => "Procedimiento", :collection => Procedimiento.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
       <%= f.input :copia, :label => 'Es Copia' %>
     </div>
     
-    <div class="span5 well" style="min-height:205px">
+    <div class="span3 well" style="min-height:205px">
       <h4>Documentos Adjuntos</h4>
+      <hr />
     </div>
   </div>
 
-  <div class="rows">
+  <div class="rows control-group">
     <div class="span10 well">
       <h4>Descripción</h4>
+      <hr />
       <%= f.text_area :descripcion, :cols => 50, :rows => 10, :style => 'width:98%' %>
       <%#= f.input :descripcion, :as => :text, :input_html => { :cols => 50, :rows => 10, :style => 'width:90%' }, :label => false %>
     </div>
   </div>
 
-  <%= f.input :proceso_id %>
-  
-    <%# f.input :tarea_actual_id %>
-    <%# f.input :tarea_anterior_id %>
-  
-    <%# f.input :usuario_id %>
-  
-    <%= f.input :observacion %>
-    <%# f.input :observacion_fin %>
-    <%= f.input :estado, :collection => Expediente::ESTADO.map{|c| [c,c]}, :prompt => "-- Seleccione --" %>
-    <%# f.input :usuario_ingreso_id %>
-    <%# f.input :fecha_ingreso %>
-    <%# f.input :usuario_finalizo_id %>
-    <%# f.input :fecha_finalizo %>
-    <%= f.input :numero %>
-  
 
 
-  <div class="form-actions">
+  <div class="form-actions" style="padding-left: 43px;">
     <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
     <%= link_to 'Cancelar', expedientes_path, :class => "btn" %>
   </div>

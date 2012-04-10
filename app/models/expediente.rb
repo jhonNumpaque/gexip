@@ -21,4 +21,6 @@ class Expediente < ActiveRecord::Base
   # CONSTANTE
   ESTADO = %w{NUEVO RECIBIDO TRANSITO RECHAZADO FINALIZADO ANULADO PROCESANDO}
   
+  attr_accessor :numero_documento
+  
 end
