@@ -8,4 +8,12 @@ class Ente < ActiveRecord::Base
 	has_one :cargo
 	belongs_to :tipo_documento
   belongs_to :ciudad, :foreign_key => :territorio_id
+  
+  def self.search(search)
+      if search
+        where(' nombre like ?', "%#{search}%")
+      else
+        scoped
+      end
+  end
 end

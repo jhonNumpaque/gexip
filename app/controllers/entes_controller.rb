@@ -81,4 +81,12 @@ class EntesController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def search
+    @entes = Ente.search(params[:search])
+    
+    respond_to do |format|
+      format.js
+    end
+  end
 end
