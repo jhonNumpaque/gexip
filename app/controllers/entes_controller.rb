@@ -83,7 +83,9 @@ class EntesController < ApplicationController
   end
   
   def search
-    @entes = Ente.search(params[:search])
+    @entes = Ente
+    @entes = @entes.search(params[:search])
+    @entes = @entes.page(params[:page]).per(10)
     
     respond_to do |format|
       format.js

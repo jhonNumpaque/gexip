@@ -47,15 +47,16 @@
       </thead>
       <tbody>
         <% entes = Ente.all %>
-        <% entes.each do |ente|  %>
+        <% entes.take(10).each do |ente|  %>
           <tr>
-            <td><%= ente.documento %> </td>
-            <td><%= ente.apellido + " " + ente.nombre%> </td>
+            <td><%= ente.documento %></td>
+            <td><%= ente.apellido + " " + ente.nombre %></td>
             <td><%= ente.telefono %></td>
-            <td><%= ente.direccion %></td>
+              <td><%= ente.direccion %></td>
             <td><%= link_to icon_tag('Seleccionar', :class => 'icon-plus'), '#', :onclick => "seleccionarEnte('#{ente.id}', '#{ente.apellido + " " + ente.nombre}', '#{ente.documento}')" %></td>
           </tr>
         <% end %>
+
       </tbody>
     </table>
   </fieldset>

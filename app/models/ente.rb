@@ -11,7 +11,7 @@ class Ente < ActiveRecord::Base
   
   def self.search(search)
       if search
-        where(' nombre like ?', "%#{search}%")
+        where(' nombre like ? or apellido like ? or documento like ?', "%#{search}%", "%#{search}%", "%#{search}%")
       else
         scoped
       end
