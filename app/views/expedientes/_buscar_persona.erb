@@ -1,16 +1,24 @@
 <div>
   <fieldset>
     <legend>Formulario de B&uacute;squeda</legend>
-    <%= form_tag search_ente_path, :remote => true, :method => :get do%>
 
-      <h3>Buscar Persona</h3>
-      <div id="busqueda-simple">
+
+    <h3>Buscar Persona</h3>
+    <div id="busqueda-simple">
+      <%= form_tag search_ente_path, :remote => true, :method => :get do%>
         <%= text_field_tag 'search', params[:search] %>
         <%= submit_tag 'Buscar', :class => 'btn', :name => nil %>
         <p><%= link_to 'Busqueda Avanzada', '#', :onclick => 'mostrarAvanzada();' %></p>
-      </div>
-      <div id="busqueda-avanzada" style="display: none">
+        <%= hidden_field_tag 'form', 'simple' %>
+      <% end %>
+    </div>
+    <div id="busqueda-avanzada" style="display: none">
+      <%= form_tag search_ente_path, :remote => true, :method => :get do%>
         <table>
+          <tr>
+            <td><%= label_tag 'Documento' %></td>
+            <td><%= text_field_tag 'documento', params[:documento] %></td>
+          </tr>
           <tr>
             <td><%= label_tag 'Nombre' %></td>
             <td><%= text_field_tag 'nombre', params[:nombre] %></td>
@@ -25,9 +33,11 @@
             <td><%= submit_tag 'Buscar', :class => 'btn' %></td>
           </tr>
         </table>
-        <p><%= link_to 'Busqueda Simple', '#', :onclick => 'mostrarSimple();' %></p>
-      </div>
-    <% end %>
+      <%= hidden_field_tag 'form', 'avanzado' %>
+      <% end %>
+      <p><%= link_to 'Busqueda Simple', '#', :onclick => 'mostrarSimple();' %></p>
+    </div>
+
 
   </fieldset>
 </div>
@@ -52,7 +62,7 @@
             <td><%= ente.documento %></td>
             <td><%= ente.apellido + " " + ente.nombre %></td>
             <td><%= ente.telefono %></td>
-              <td><%= ente.direccion %></td>
+            <td><%= ente.direccion %></td>
             <td><%= link_to icon_tag('Seleccionar', :class => 'icon-plus'), '#', :onclick => "seleccionarEnte('#{ente.id}', '#{ente.apellido + " " + ente.nombre}', '#{ente.documento}')" %></td>
           </tr>
         <% end %>

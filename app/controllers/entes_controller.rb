@@ -84,7 +84,7 @@ class EntesController < ApplicationController
   
   def search
     @entes = Ente
-    @entes = @entes.search(params[:search])
+    @entes = @entes.search(params[:form], params[:search], params[:documento], params[:nombre])
     @entes = @entes.page(params[:page]).per(10)
     
     respond_to do |format|
