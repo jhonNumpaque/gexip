@@ -10,20 +10,18 @@ class Ente < ActiveRecord::Base
   belongs_to :ciudad, :foreign_key => :territorio_id
   
   def self.search(form, search = nil, documento = nil, nombre = nil, apellido = nil, direccion = nil, telefono = nil)
-#    filtro = scoped
+    filtro = self
     if form == 'avanzado'      
       
-#      filtro.where('documento = ?', documento) if documento
-      where(' nombre like ?', "%#{nombre}%") if nombre
-      where(' apellido like ?', "%#{apellido}%") if apellido
-#      filtro.where(' direccion like ?', "%#{direccion}%") if direccion
-#      filtro.where(' telefono like ?', "%#{telefono}%") if telefono
+      filtro = filtro.where('documento = ?', documento.to_s) if documento.present?
+      filtro = filtro.where(' nombre like ?', "%#{nombre}%") if nombre.present?
+      filtro = filtro.where(' apellido like ?', "%#{apellido}%") if apellido.present?
+      filtro = filtro.where(' direccion like ?', "%#{direccion}%") if direccion.present?
+      filtro = filtro.where(' telefono like ?', "%#{telefono}%") if telefono.present?
     
-    else
-      if search
-        filtro.where(' nombre like ? or apellido like ? or documento like ?', "%#{search}%", "%#{search}%", "%#{search}%")          
-      end
+    elsif search      
+      filtro = filtro.where(' nombre like ? or apellido like ? or documento like ?', "%#{search}%", "%#{search}%", "%#{search}%")                
     end
-#    filtro
+    filtro
   end
 end
