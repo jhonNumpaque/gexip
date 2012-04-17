@@ -1,0 +1,61 @@
+<section>
+
+  <% if @procesos.present? %>
+
+    <div>
+      <p style="text-align: left;">INSTITUCIÓN:</p>
+
+      <h3 style="text-align: center;">MODELO ESTÁNDAR DE CONTROL INTERNO - MECIP</h3>
+      <h3 style="text-align: center;">COMPONENTE CORPORATIVO DE CONTROL ESTRATÉGICO</h3>
+
+      <p style="text-align: left;">COMPONENTE: DIRECCIONAMIENTO ESTRATÉGICO</p>
+      <p style="text-align: left;">ESTÁNDAR: MODELO DE GESTIÓN POR PROCESOS</p>
+      <p style="text-align: left;">FORMATO: Indentificación de Procesos</p>
+      <p style="text-align: left;">NRO: 38</p>
+
+    </div>
+
+    <table class="table table-striped table-bordered table-condensed">
+      <tr>
+        <td>(1) MACROPROCESO: <%= @macroproceso.nombre %> </td>
+        <td>CODIGO: <%= @macroproceso.codigo %></td>
+      </tr>
+      <tr>
+        <td>(2) OBJETIVO: <%= @macroproceso.objetivo %></td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+
+    <table class="table table-striped table-bordered table-condensed">
+      <tr>
+        <th>(3) PROCESO - CODIGO</th>
+        <th>(4) OBJETIVO</th>
+        <th>(5) CARGO RESPONSABLE</th>
+      </tr>
+      <% @procesos.each do |proceso| %>
+        <tr>
+          <td><%= proceso.codigo_nombre %></td>
+          <td><%= proceso.objetivo %></td>
+          <td><%= proceso.cargo.nombre %></td>
+        </tr>
+      <% end %>
+    </table>
+
+    <table class="table table-striped table-bordered table-condensed" style="font-size: 10px;">
+      <tr>
+        <td width="50%">Hecho por: </td>
+        <td>Fecha: </td>
+      </tr>
+      <tr>
+        <td>Revisado por: </td>
+        <td>Fecha: </td>
+      </tr>
+      <tr>
+        <td>Aprobado por: </td>
+        <td>Fecha: </td>
+      </tr>
+    </table> 
+  
+  <% end %>
+
+</section>

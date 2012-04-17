@@ -79,4 +79,14 @@ class MacroprocesosController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  # GET /macroprocesos/imprimir/reporte_formato_37
+  def reporte_formato_37
+    @macroprocesos = Macroproceso.all
+
+    respond_to do |format|
+      format.html { render :layout => "popup_wf" } # show.html.erb
+      format.json { render json: @macroproceso }
+    end
+  end
 end

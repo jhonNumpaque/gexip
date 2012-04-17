@@ -2,7 +2,11 @@ class ProcesosController < ApplicationController
   # GET /procesos
   # GET /procesos.json
   def index
-    @procesos = Proceso.all
+    @procesos = Proceso
+    @procesos = @procesos.where(:serieproceso_id => params[:macroproceso_id]) if (params[:macroproceso_id].present?)
+    @procesos = @procesos.all
+    
+    @macroprocesos = Macroproceso.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -80,4 +84,20 @@ class ProcesosController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  # GET /procesos/imprimir/reporte_formato_38?
+  def reporte_formato_38
+    #    @procesos = Proceso
+    #    @macroproceso = MacroProceso
+    #    if (params[:macroproceso_id].present?)
+    @procesos = Proceso.where(:serieproceso_id => params[:macroproceso_id])
+    @macroproceso = Macroproceso.find(params[:macroproceso_id])
+    #    end
+    
+    respond_to do |format|
+      format.html { render :layout => "popup_wf" } # show.html.erb
+      #format.json { render json: @macroproceso }
+    end
+  end
+  
 end

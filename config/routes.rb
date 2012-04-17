@@ -6,10 +6,13 @@ Gexip::Application.routes.draw do
   resources :tareas
 
   resources :subprocesos
+  match 'subprocesos/imprimir/reporte_formato_39' => 'subprocesos#reporte_formato_39', :as => :reporte_formato_39
 
   resources :procesos
-  
+  match 'procesos/imprimir/reporte_formato_38' => 'procesos#reporte_formato_38', :as => :reporte_formato_38
+    
   resources :macroprocesos
+  match 'macroprocesos/imprimir/reporte_formato_37/' => 'macroprocesos#reporte_formato_37', :as => :reporte_formato_37
 
   resources :procedimientos
 
@@ -88,7 +91,7 @@ Gexip::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-   root :to => 'usuarios#index'
+  root :to => 'usuarios#index'
 
   # See how all your routes lay out with "rake routes"
 

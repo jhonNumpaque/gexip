@@ -35,25 +35,31 @@
   <body>
     <% if usuario_signed_in? %>            
     <% end %>
+    <!--
     <div class="container-fluid">
       <div class="row-fluid">
         <div class="span10">
-          <% if notice %>
-            <div class="alert alert-success">
-              <p><%= notice %></p>
-            </div>
-          <% end %>
-
-          <% if alert  %>
-            <div class="alert alert-error">
-              <p><%= alert %></p>
-            </div>
-          <% end %>
-
-          <%= yield %>
-        </div>
+    -->
+    <div style="padding:10px;">
+    <% if notice %>
+      <div class="alert alert-success">
+        <p><%= notice %></p>
       </div>
-    </div>
+    <% end %>
+
+    <% if alert  %>
+      <div class="alert alert-error">
+        <p><%= alert %></p>
+      </div>
+    <% end %>
+
+    <%= yield %>
+      </div>
+    <!--
+  </div>
+</div>
+</div>
+    -->
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster 

@@ -2,9 +2,12 @@ class SubprocesosController < ApplicationController
   # GET /subprocesos
   # GET /subprocesos.json
   def index
-    #@subprocesos = Subproceso.page(params[:page])
-    @subprocesos = Subproceso.all
-
+    @subprocesos = Subproceso
+    @subprocesos = @subprocesos.where(:serieproceso_id => params[:proceso_id]) if (params[:proceso_id].present?)
+    @subprocesos = @subprocesos.all
+    
+    @procesos = Proceso.all
+    
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @subprocesos }
@@ -81,4 +84,16 @@ class SubprocesosController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  # GET /subprocesos/imprimir/reporte_formato_39?
+  def reporte_formato_39
+    @subprocesos = Subproceso.where(:serieproceso_id => params[:proceso_id])
+    @proceso = Proceso.find(params[:proceso_id])
+    
+    respond_to do |format|
+      format.html { render :layout => "popup_wf" } # show.html.erb
+      #format.json { render json: @macroproceso }
+    end
+  end
+  
 end

@@ -4,7 +4,26 @@
   </div>
 
   <div class="well">
-    <%= link_to icon_tag('Agregar', :class => 'icon-plus-sign icon-white'), new_subproceso_path, :class => 'btn btn-primary' %>
+    <div class="btn-toolbar">
+      <div class="btn-group">
+        <%= link_to icon_tag('Agregar', :class => 'icon-plus-sign icon-white'), new_subproceso_path, :class => 'btn btn-primary' %>
+      </div>
+      <div class="btn-group">
+        <%= link_to 'Filtrar <b class="caret"></b>'.html_safe, '#', :class => 'btn btn-primary dropdown-toggle', 'data-toggle' => 'dropdown' %>
+        <ul id="menu1" class="dropdown-menu" style="max-width: 500px;">
+          <% @procesos.each do |proceso| %>
+            <li><%= link_to proceso.codigo_nombre, subprocesos_path(proceso_id: proceso.id) %></li>
+          <% end %>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <% if(params[:proceso_id].present? and @subprocesos.present?) %>
+          <%= link_to icon_tag('Formato 39', :class => 'icon-print icon-white'), reporte_formato_39_path(proceso_id: params[:proceso_id]), :class => 'btn btn-primary popupWindow' %>
+        <% else %>
+          <%= link_to icon_tag('Formato 39', :class => 'icon-print'), "javascript:;", :class => 'btn disabled' %>
+        <% end %>
+      </div>
+    </div>
   </div>
   <br />
 

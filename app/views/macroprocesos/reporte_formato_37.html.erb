@@ -1,0 +1,63 @@
+<section>  
+
+
+  <% if @macroprocesos.present? %>
+    <table class="table table-striped table-bordered table-condensed" style="font-size: 10px;">
+      <caption>
+        <p style="text-align: left;">INSTITUCIÓN:</p>
+
+        <h3>MODELO ESTÁNDAR DE CONTROL INTERNO - MECIP</h3>
+        <h3>COMPONENTE CORPORATIVO DE CONTROL ESTRATÉGICO</h3>
+
+        <p style="text-align: left;">COMPONENTE: DIRECCIONAMIENTO ESTRATÉGICO</p>
+        <p style="text-align: left;">ESTÁNDAR: MODELO DE GESTIÓN POR PROCESOS</p>
+        <p style="text-align: left;">FORMATO: Definición Macroprocesos</p>
+        <p style="text-align: left;">NRO: 37</p>
+
+      </caption>
+      <tr>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+        <th colspan="3">(3)Tipo Macroproceso</th>
+        <th>&nbsp;</th>
+      </tr>
+      <tr>
+        <th>(1)Codigo</th>
+        <th>(2)Objetivo</th>
+        <th>Estrategico</th>
+        <th>Misional</th>
+        <th>Apoyo</th>
+        <th>(4)Cargo</th>
+      </tr>
+      <% @macroprocesos.each do |macroproceso| %>
+        <tr>
+          <td><%= macroproceso.codigo_nombre %></td>
+          <td><%= macroproceso.objetivo %></td>
+          <td><%= "OK" if(macroproceso.clasificacion=="ESTRATEGICO") %></td>
+          <td><%= "OK" if(macroproceso.clasificacion=="MISIONAL") %></td>
+          <td><%= "OK" if(macroproceso.clasificacion=="APOYO") %></td>
+          <td><%= macroproceso.cargo.nombre %></td>
+        </tr>
+      <% end %>
+    </table> 
+      <table class="table table-striped table-bordered table-condensed" style="font-size: 10px;">
+        <tr>
+          <td width="50%">Hecho por: </td>
+          <td>Fecha: </td>
+        </tr>
+        <tr>
+          <td>Revisado por: </td>
+          <td>Fecha: </td>
+        </tr>
+        <tr>
+          <td>Aprobado por: </td>
+          <td>Fecha: </td>
+        </tr>
+    </table> 
+  <% else %>
+    <p class="alert-message warning">
+      Todavía no hay macroprocesos, <%= link_to 'agregar', new_macroproceso_path %>.
+    </p>
+  <% end %>
+
+</section>
