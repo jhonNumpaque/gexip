@@ -59,8 +59,8 @@
         <% entes = Ente.all %>
         <% entes.take(10).each do |ente|  %>
           <tr>
-            <td><%= ente.documento %></td>
-            <td><%= ente.apellido + " " + ente.nombre %></td>
+            <td><%= link_to ente.documento, '#', :onclick =>  "seleccionarEnte('#{ente.id}', '#{ente.apellido + " " + ente.nombre}', '#{ente.documento}')" %></td>
+            <td><%= link_to ente.apellido + " " + ente.nombre, '#', :onclick =>  "seleccionarEnte('#{ente.id}', '#{ente.apellido + " " + ente.nombre}', '#{ente.documento}')" %></td>
             <td><%= ente.telefono %></td>
             <td><%= ente.direccion %></td>
             <td><%= link_to icon_tag('Seleccionar', :class => 'icon-plus'), '#', :onclick => "seleccionarEnte('#{ente.id}', '#{ente.apellido + " " + ente.nombre}', '#{ente.documento}')" %></td>
