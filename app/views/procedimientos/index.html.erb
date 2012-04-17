@@ -34,7 +34,7 @@
                       <td><%= procedimiento.elaborador.nombres if procedimiento.elaborador.present? %></td>
                       <td><%= l( procedimiento.aprobado_fecha ) if procedimiento.aprobado_fecha.present? %></td>
                       <td><%= procedimiento.aprobador.nombres if procedimiento.aprobador.present? %></td>
-                      <td><%= procedimiento.subproceso.codigo_nombre %></td>
+                      <td><%= procedimiento.subproceso.codigo_nombre if procedimiento.subproceso.present? %></td>
                     <td>
             
             <div class="btn-group">              

@@ -45,7 +45,7 @@
       <p>
 	<b>Revisado usuario:</b>
     <%#= @procedimiento.revisado_usuario %>
-	<%= @procedimiento.revisador.nombres %>
+	<%= @procedimiento.revisador.nombres if @procedimiento.revisador.present?  %>
       </p>
 
       <p>
@@ -56,7 +56,7 @@
       <p>
 	<b>Aprobado usuario:</b>
     <%#= @procedimiento.aprobado_usuario %>
-	<%= @procedimiento.aprobador.nombres %>
+	<%= @procedimiento.aprobador.nombres if @procedimiento.aprobador.present?  %>
       </p>
 
       <table class="table table-striped table-bordered table-condensed">
