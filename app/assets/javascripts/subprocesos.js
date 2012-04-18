@@ -64,8 +64,8 @@
     <p><a href="http://www.yahoo.com" title="yahoo.com" class="example1demo">open popup</a></p> 
  */
 //$(function(){
-    $('.popupWindow').click(function(){
-        $(this).popupWindow({ 
+   // $('.popupWindow').click(function(){
+        $('.popupWindow').popupWindow({ 
             height:500, 
             width:700, 
             centerBrowser:1,
@@ -74,6 +74,6 @@
             resizable:1,
             scrollbars:1
         }); 
-        return false;
-    });
+       // return false;
+   // });
 //}); 

@@ -11,8 +11,10 @@
       <div class="btn-group">
         <%= link_to 'Filtrar <b class="caret"></b>'.html_safe, '#', :class => 'btn btn-primary dropdown-toggle', 'data-toggle' => 'dropdown' %>
         <ul id="menu1" class="dropdown-menu" style="max-width: 500px;">
+          <li>&nbsp;MacroProceso =&GT; Proceso</li>
+          <li class="divider"></li>
           <% @procesos.each do |proceso| %>
-            <li><%= link_to proceso.codigo_nombre, subprocesos_path(proceso_id: proceso.id) %></li>
+            <li><%= link_to proceso.macroproceso.codigo + ' => ' + proceso.codigo_nombre, subprocesos_path(proceso_id: proceso.id) %></li>
           <% end %>
         </ul>
       </div>
