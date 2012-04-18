@@ -15,7 +15,7 @@ class CreateExpedientes < ActiveRecord::Migration
       t.datetime :fecha_ingreso, :null => false
       t.integer :usuario_finalizo_id
       t.datetime :fecha_finalizo
-      t.integer :numero, :null => false, :length => 8
+      t.integer :numero, :null => false, :limit => 8
       t.boolean :copia, :default => 'false'
 
       t.timestamps
