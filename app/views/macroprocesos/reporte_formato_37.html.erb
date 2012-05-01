@@ -33,26 +33,38 @@
         <tr>
           <td><%= macroproceso.codigo_nombre %></td>
           <td><%= macroproceso.objetivo %></td>
-          <td><%= "OK" if(macroproceso.clasificacion=="ESTRATEGICO") %></td>
-          <td><%= "OK" if(macroproceso.clasificacion=="MISIONAL") %></td>
-          <td><%= "OK" if(macroproceso.clasificacion=="APOYO") %></td>
+          <td style="text-align: center;">
+            <% if(macroproceso.clasificacion=="ESTRATEGICO") %>
+              <input type="checkbox" value="1" checked="true" readonly="" />
+            <% end %>
+          </td>
+          <td style="text-align: center;">
+            <% if(macroproceso.clasificacion=="MISIONAL") %>
+              <input type="checkbox" value="1" checked="true" readonly="" />
+            <% end %>
+          </td>
+          <td style="text-align: center;">
+            <% if(macroproceso.clasificacion=="APOYO") %>
+              <input type="checkbox" value="1" checked="true" readonly="" />
+            <% end %>
+          </td>
           <td><%= macroproceso.cargo.nombre %></td>
         </tr>
       <% end %>
     </table> 
-      <table class="table table-striped table-bordered table-condensed" style="font-size: 10px;">
-        <tr>
-          <td width="50%">Hecho por: </td>
-          <td>Fecha: </td>
-        </tr>
-        <tr>
-          <td>Revisado por: </td>
-          <td>Fecha: </td>
-        </tr>
-        <tr>
-          <td>Aprobado por: </td>
-          <td>Fecha: </td>
-        </tr>
+    <table class="table table-striped table-bordered table-condensed" style="font-size: 10px;">
+      <tr>
+        <td width="50%">Hecho por: </td>
+        <td>Fecha: </td>
+      </tr>
+      <tr>
+        <td>Revisado por: </td>
+        <td>Fecha: </td>
+      </tr>
+      <tr>
+        <td>Aprobado por: </td>
+        <td>Fecha: </td>
+      </tr>
     </table> 
   <% else %>
     <p class="alert-message warning">
