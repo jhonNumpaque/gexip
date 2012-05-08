@@ -13,12 +13,12 @@ class Expediente < ActiveRecord::Base
       
   #Relaciones
   belongs_to :procedimiento, :foreign_key => :procedimiento_id
-  belongs_to :tarea, :foreign_key => :tarea_actual_id
-  belongs_to :tarea, :foreign_key => :tarea_anterior_id
+  belongs_to :tarea_actual, :foreign_key => :tarea_actual_id, :class_name => 'Tarea'
+  belongs_to :tarea_anterior, :foreign_key => :tarea_anterior_id, :class_name => 'Tarea'
   belongs_to :ente, :foreign_key => :ente_id
-  belongs_to :usuario, :foreign_key => :usuario_id
-  belongs_to :usuario, :foreign_key => :usuario_ingreso_id
-  belongs_to :usuario, :foreign_key => :usuario_finalizo_id
+  belongs_to :usuario
+  belongs_to :usuario_ingreso, :foreign_key => :usuario_ingreso_id, :class_name => 'Usuario'
+  belongs_to :usuario_finalizado, :foreign_key => :usuario_finalizo_id, :class_name => 'Usuario'
   
   # CONSTANTE
   ESTADO = %w{NUEVO RECIBIDO TRANSITO RECHAZADO FINALIZADO ANULADO PROCESANDO}
@@ -27,6 +27,7 @@ class Expediente < ActiveRecord::Base
   
   # callbacks
   before_validation :generar_numero, :establecer_estado
+  after_create :iniciar_proceso
   
   def generar_numero
     return true unless self.new_record?
@@ -54,10 +55,36 @@ class Expediente < ActiveRecord::Base
     n[4..n.length].next
   end
   
+  def tarea_siguiente
+    actividad = self.tarea_actual.actividad
+    actividad.tareas.where(:orden => self.tarea_actual.orden.next).first
+  end
+  
+  private
   def establecer_estado
     return true unless self.new_record?
     
     self.estado = ESTADO[0]
   end
   
+  def iniciar_proceso
+    procedimiento = self.procedimiento
+    actividad = procedimiento.actividades.first
+    tarea = actividad.tareas.first
+    
+    tarea_expediente = TareaExpediente.new
+    tarea_expediente.procedimiento = procedimiento
+    tarea_expediente.expediente = self
+    tarea_expediente.tarea = tarea
+    tarea_expediente.usuario_inicio_id = self.usuario_id
+    tarea_expediente.fecha_inicio = Time.now
+    tarea_expediente.estado = TareaExpediente::INICIO
+    tarea_expediente.observacion_envio = 'Inicio del procedimiento (automático)'
+    tarea_expediente.fecha_fin = Time.now
+    tarea_expediente.save
+    
+    self.update_attribute(:tarea_actual_id, tarea.id)
+    
+  end
+
 end
