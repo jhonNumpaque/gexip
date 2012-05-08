@@ -17,7 +17,19 @@
 </ul>
 
 <%= simple_form_for @expediente, :html => { :class => 'form-horizontal' } do |f| %>
-  <%= f.error_notification %>
+  <%#= f.error_notification %>
+
+  <% if @expediente.errors.any? %>  
+    <div class="alert alert-block alert-error">  
+      <h4 class="alert-heading"><%= pluralize(@expediente.errors.count, "error") %> 
+<%= @expediente.errors.count > 1 ? 'han' : 'ha' %> impedido que el registro sea guardado:</h4>  
+      <ul>  
+        <% @expediente.errors.full_messages.each do |msg| %>  
+          <li><%= msg %></li>  
+        <% end %>  
+      </ul>  
+    </div>  
+  <% end %>  
 
   <div class="rows">
     <div class="span7 well">
