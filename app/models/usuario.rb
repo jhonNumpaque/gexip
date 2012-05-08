@@ -23,4 +23,8 @@ class Usuario < ActiveRecord::Base
     login = conditions.delete(:login)
     where(conditions).where(["lower(login) = :value OR lower(email) = :value", { :value => login.strip.downcase }]).first
   end
+  
+  def nombre_completo
+    "#{self.nombres} #{self.apellidos}".strip
+  end
 end

@@ -24,4 +24,8 @@ class Ente < ActiveRecord::Base
     end
     filtro
   end
+  
+  def nombre_completo
+    "#{self.nombre} #{self.apellido}".strip
+  end
 end
