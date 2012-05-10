@@ -1,0 +1,84 @@
+<div>
+  <fieldset>
+    <legend>Formulario de B&uacute;squeda</legend>
+
+
+    <h3>Buscar Persona</h3>
+    <div id="busqueda-simple">
+      <%= form_tag search_ente_path, :remote => true, :method => :get do%>
+        <%= text_field_tag 'search', params[:search] %>
+        <%= submit_tag 'Buscar', :class => 'btn', :name => nil %>
+        <p><%= link_to 'Busqueda Avanzada', '#', :onclick => 'mostrarAvanzada();' %></p>
+        <%= hidden_field_tag 'form', 'simple' %>
+      <% end %>
+    </div>
+    <div id="busqueda-avanzada" style="display: none">
+      <%= form_tag search_ente_path, :remote => true, :method => :get do%>
+        <table>
+          <tr>
+            <td><%= label_tag 'Documento' %></td>
+            <td><%= text_field_tag 'documento', params[:documento] %></td>
+          </tr>
+          <tr>
+            <td><%= label_tag 'Nombre' %></td>
+            <td><%= text_field_tag 'nombre', params[:nombre] %></td>
+            <td><%= label_tag 'Apellido' %></td>
+            <td><%= text_field_tag 'apellido', params[:apellido] %></td>
+          </tr>  
+          <tr>
+            <td><%= label_tag 'Direccion' %></td>
+            <td><%= text_field_tag 'direccion', params[:apellido] %></td>
+            <td><%= label_tag 'Telefono' %></td>
+            <td><%= text_field_tag 'telefono', params[:apellido] %></td>
+            <td><%= submit_tag 'Buscar', :class => 'btn' %></td>
+          </tr>
+        </table>
+      <%= hidden_field_tag 'form', 'avanzado' %>
+      <% end %>
+      <p><%= link_to 'Busqueda Simple', '#', :onclick => 'mostrarSimple();' %></p>
+    </div>
+
+
+  </fieldset>
+</div>
+
+<div>
+  <fieldset>
+    <legend>Resultados</legend>
+    <table id="tabla-resultados" class="table table-striped table-bordered table-condensed">
+      <thead>
+        <tr>
+          <th>C&eacute;dula</th>
+          <th>Apellido y Nombre</th>
+          <th>Tel&eacute;fono</th>
+          <th>Direcci&oacute;n</th>
+          <th>Acci&oacute;n</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% entes = Ente.all %>
+        <% entes.take(10).each do |ente|  %>
+          <tr>
+            <td><%= link_to ente.documento, '#', :onclick =>  "seleccionarEnte('#{ente.id}', '#{ente.apellido + " " + ente.nombre}', '#{ente.documento}')" %></td>
+            <td><%= link_to ente.apellido + " " + ente.nombre, '#', :onclick =>  "seleccionarEnte('#{ente.id}', '#{ente.apellido + " " + ente.nombre}', '#{ente.documento}')" %></td>
+            <td><%= ente.telefono %></td>
+            <td><%= ente.direccion %></td>
+            <td><%= link_to icon_tag('Seleccionar', :class => 'icon-plus'), '#', :onclick => "seleccionarEnte('#{ente.id}', '#{ente.apellido + " " + ente.nombre}', '#{ente.documento}')" %></td>
+          </tr>
+        <% end %>
+
+      </tbody>
+    </table>
+  </fieldset>
+</div>
+
+<script type="text/javascript">
+  function mostrarAvanzada(){
+    $("#busqueda-simple").hide();
+    $("#busqueda-avanzada").show();
+  }
+  function mostrarSimple(){
+    $("#busqueda-avanzada").hide();
+    $("#busqueda-simple").show();
+  }
+</script>

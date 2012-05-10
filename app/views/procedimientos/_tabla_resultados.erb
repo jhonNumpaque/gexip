@@ -1,0 +1,7 @@
+<% @procedimientos.each do |procedimiento| %>
+  <tr>
+    <td><%= link_to procedimiento.nombre, '#', :onclick =>  "seleccionarProcedimiento('#{procedimiento.id}', '#{procedimiento.nombre}')" %></td>
+    <td><%= link_to icon_tag('Seleccionar', :class => 'icon-plus'), '#', :onclick => "seleccionarProcedimiento('#{procedimiento.id}', '#{procedimiento.nombre}')"%></td> 
+  </tr>
+<% end %>
+  <tr><td colspan="5"><%= paginate @procedimientos, :remote => true %></td></tr>
