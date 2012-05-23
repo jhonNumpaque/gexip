@@ -3,7 +3,12 @@ class EntesController < ApplicationController
   # GET /entes
   # GET /entes.json
   def index
-    @entes = Ente.all
+    @entes = Ente
+    
+    @entes = @entes.where(" documento = ?", params[:documento]) if params[:documento].present?
+    @entes = @entes.where(" nombre like ? or apellido like ?", "%#{params[:nombre]}%", "%#{params[:nombre]}%") if params[:nombre].present?
+    
+    @entes = @entes.page(params[:page]).per(10)
 
     respond_to do |format|
       format.html # index.html.erb

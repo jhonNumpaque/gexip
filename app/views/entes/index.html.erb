@@ -4,6 +4,22 @@
   </div>
 
   <div class="well">
+    <%= form_tag controller_name, :method => :get do %>
+    <fieldset>
+      <legend>Buscador</legend>
+      <table>
+        <tr>
+          <td><%= label_tag "Documento"  %></td>
+          <td><%= text_field_tag "documento", params[:documento]%></td>
+          <td>&nbsp;</td>
+          <td><%= label_tag "Nombre" %></td>
+          <td><%= text_field_tag "nombre", params[:nombre]%></td>
+          <td><%= submit_tag 'Buscar', :class => 'btn'%> </td>
+        </tr>
+      </table>
+    </fieldset>
+    <% end %>
+    
     <%= link_to icon_tag('Agregar', :class => 'icon-plus-sign icon-white'), new_ente_path, :class => 'btn btn-primary' %>
   </div>
   <br />
