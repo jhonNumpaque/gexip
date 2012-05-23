@@ -37,7 +37,7 @@ module Gexip
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-   config.i18n.default_locale = :es
+    config.i18n.default_locale = :es
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
@@ -71,5 +71,9 @@ module Gexip
     # turn on autoloading of lib directory and all its subdirectories
     config.autoload_paths += %W(#{config.root}/lib)
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
+    
+    config.time_zone = 'America/Asuncion'
+    config.active_record.default_timezone = :local
+    config.active_record.time_zone_aware_attributes = false
   end
 end

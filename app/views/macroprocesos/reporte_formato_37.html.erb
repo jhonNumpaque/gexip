@@ -35,17 +35,20 @@
           <td><%= macroproceso.objetivo %></td>
           <td style="text-align: center;">
             <% if(macroproceso.clasificacion=="ESTRATEGICO") %>
-              <input type="checkbox" value="1" checked="true" readonly="" />
+              <%#*<input type="checkbox" value="1" checked="true" readonly="" />%>
+              <%= content_tag(:span, icon_tag('', :class => 'icon-ok')) %>
             <% end %>
           </td>
           <td style="text-align: center;">
             <% if(macroproceso.clasificacion=="MISIONAL") %>
-              <input type="checkbox" value="1" checked="true" readonly="" />
+              <%#*<input type="checkbox" value="1" checked="true" readonly="" />%>
+              <%= content_tag(:span, icon_tag('', :class => 'icon-ok')) %>
             <% end %>
           </td>
           <td style="text-align: center;">
             <% if(macroproceso.clasificacion=="APOYO") %>
-              <input type="checkbox" value="1" checked="true" readonly="" />
+              <%#*<input type="checkbox" value="1" checked="true" readonly="" />%>
+              <%= content_tag(:span, icon_tag('', :class => 'icon-ok')) %>
             <% end %>
           </td>
           <td><%= macroproceso.cargo.nombre %></td>

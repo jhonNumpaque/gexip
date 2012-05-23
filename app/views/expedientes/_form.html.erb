@@ -22,7 +22,7 @@
   <% if @expediente.errors.any? %>  
     <div class="alert alert-block alert-error">  
       <h4 class="alert-heading"><%= pluralize(@expediente.errors.count, "error") %> 
-<%= @expediente.errors.count > 1 ? 'han' : 'ha' %> impedido que el registro sea guardado:</h4>  
+        <%= @expediente.errors.count > 1 ? 'han' : 'ha' %> impedido que el registro sea guardado:</h4>  
       <ul>  
         <% @expediente.errors.full_messages.each do |msg| %>  
           <li><%= msg %></li>  
@@ -49,9 +49,19 @@
           <button class="btn" type="button" onclick="mostrarPopup()"><i class="icon-search"></i></button>
         </div>
       </div>
-  <%#= f.input :ente_id, :label => 'Cédula/Nombre y Apellido' %>
+       <%#= f.input :ente_id, :label => 'Cédula/Nombre y Apellido' %>
   <%#= f.input :ente_id, :label => "Ente", :collection => Ente.all, :label_method => :nombre, :prompt => "-- Seleccione --", :label => 'Cédula/Nombre y Apellido' %>
-      <%= f.input :procedimiento_id, :label => "Procedimiento", :collection => Procedimiento.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+      
+      <div class="control-group">
+        <%= f.label :procedimiento_id, 'Procedimiento' %>
+        <div class="controls">
+          <%= f.text_field :procedimiento_id, :style => 'margin-right: 10px; width: 180px', :id => 'nombre-procedimiento'  %>
+          <%= f.hidden_field :procedimiento_id %>
+          <button class="btn" type="button" onclick="mostrarPopupProcedimientos()"><i class="icon-search"></i></button>
+        </div>
+      </div>
+ 
+      <%#= f.input :procedimiento_id, :label => "Procedimiento", :collection => Procedimiento.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
       <%= f.input :copia, :label => 'Es Copia' %>
     </div>
 
@@ -70,8 +80,6 @@
     </div>
   </div>
 
-
-
   <div class="form-actions" style="padding-left: 43px;">
     <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
     <%= link_to 'Cancelar', expedientes_path, :class => "btn" %>
@@ -83,9 +91,18 @@
   <%= render 'buscar_persona' %>
 </div>
 
+<div class="modal" id="buscar-procedimiento-modal" style="display: none; width: 660px; padding: 10px">
+  <a class="close" data-dismiss="modal">x</a>
+  <%= render 'buscar_procedimiento' %>
+</div>
+
 <script type="text/javascript">
   function mostrarPopup(){
     $('#buscar-modal').modal('toggle');
+    $('#search').focus();
+  }
+  function mostrarPopupProcedimientos(){
+    $('#buscar-procedimiento-modal').modal('toggle');
     $('#search').focus();
   }
   
@@ -93,6 +110,12 @@
     $("#expediente_ente_id").val(id);
     $("#nombre-ente").val(nombre);
     $("#expediente_numero_documento").val(documento);
-    $('#buscar-modal').modal('hide')
+    $('#buscar-modal').modal('hide');
+  }
+  
+  function seleccionarProcedimiento(id, nombre){
+    $("#expediente_procedimiento_id").val(id);
+    $("#nombre-procedimiento").val(nombre);
+    $('#buscar-procedimiento-modal').modal('hide');
   }
 </script>
