@@ -50,6 +50,10 @@ class Expediente < ActiveRecord::Base
     self.numero.to_s[0..3]
   end
   
+  def numero_corto
+    self.numero.to_s[4...self.numero.to_s.length]
+  end
+  
   def siguiente_numero
     n = self.numero.to_s
     n[4..n.length].next
@@ -69,8 +73,8 @@ class Expediente < ActiveRecord::Base
   
   def iniciar_proceso
     procedimiento = self.procedimiento
-    actividad = procedimiento.actividades.first
-    tarea = actividad.tareas.first
+    actividad = procedimiento.actividades.order('orden').first
+    tarea = actividad.tareas.order('orden').first()
     
     tarea_expediente = TareaExpediente.new
     tarea_expediente.procedimiento = procedimiento

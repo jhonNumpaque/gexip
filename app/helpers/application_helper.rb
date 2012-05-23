@@ -1,3 +1,4 @@
+# encoding:utf-8
 module ApplicationHelper
   
   # Permite crear un icono para bootstrap con un nombre dado
@@ -7,6 +8,14 @@ module ApplicationHelper
   def icon_tag(name, options = {})
     options[:class] ||= 'icon-list-alt'
     content_tag(:i, nil, :class => options[:class]).concat(name)
+  end
+  
+  # Imprime Sí o No dependiendo del valor del parámetro
+  # Ejemplo:
+  #  si_no(true) #=> Sí
+  #  si_no(false) #=> No
+  def si_no(valor)
+    valor ? 'Sí' : 'No'
   end
 
 end
