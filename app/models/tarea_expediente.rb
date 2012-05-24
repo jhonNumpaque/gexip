@@ -3,5 +3,8 @@ class TareaExpediente < ActiveRecord::Base
   belongs_to :expediente
   belongs_to :tarea
   
-  INICIO = 'INICIO'
+  INICIO = 'INICIO' # no sirve porque ya tiene sus estados
+  
+  # CONSTANTE
+  ESTADO = %w{PROCESANDO FINALIZADO CANCELADO}
 end
