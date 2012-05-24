@@ -24,7 +24,7 @@
         <tr>
           <td>
             <span class="label label-info"><%= expediente.estado %></span>
-            <%= expediente.procedimiento.nombre %>
+            <%= link_to expediente.procedimiento.nombre, expediente %>
           </td>
           <td><%= expediente.ente.nombre_completo %></td>
           <td><%= expediente.usuario_ingreso.nombre_completo %></td>
