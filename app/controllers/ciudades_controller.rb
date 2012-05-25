@@ -2,7 +2,7 @@ class CiudadesController < ApplicationController
   # GET /ciudades
   # GET /ciudades.json
   def index
-    @ciudades = Ciudad.all
+    @ciudades = Ciudad.page(params[:page]).order('type, nombre').per(50)
 
     respond_to do |format|
       format.html # index.html.erb

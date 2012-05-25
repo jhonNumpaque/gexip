@@ -2,7 +2,7 @@
   <%= f.error_notification %>
   
     <%= f.input :nombre %>
-    <%= f.input :territorio_id, :label => "País", :collection => Pais.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+    <%= f.input :territorio_id, :label => "País", :collection => Pais.order('type, nombre').all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
 
 
   <div class="form-actions">
