@@ -61,25 +61,32 @@
             <legend>Tareas</legend>
             <div class="btn-group">
               <%= link_to icon_tag('Inicar', :class => 'icon-play icon-white'), '#', :class => 'btn btn-primary' %>
-              <%= link_to icon_tag('Finalizar', :class => 'icon-ok-sign icon-white'), '#', class: 'btn btn-primary', :disabled => true %>
-                <%= link_to icon_tag('Cancelar', :class => 'icon-stop icon-white'), '#', class: 'btn btn-primary', :disabled => true %>
+              <%= link_to icon_tag('Finalizar', :class => 'icon-ok-sign icon-white'), '#', class: 'btn', :disabled => true %>
+                <%= link_to icon_tag('Cancelar', :class => 'icon-stop icon-white'), '#', class: 'btn', :disabled => true %>
                 </div>
 
-                <table>
+                <table class="table">
                   <thead>
                     <tr>
                       <th>&nbsp;</th>
-                      <th>Nombre</th>
-                      <th>Fecha Inicio</th>
+                      <th>Nombre</th>                      
                       <th>Tiempo Transc.</th>
                     </tr>              
                   </thead>
                   <tbody class="table table-condensed table-striped">
                     <% @expediente.tarea_siguiente.actividad.tareas.order('orden').limit(3).where('orden >= ?', @expediente.tarea_siguiente.orden).each do |tarea| %>
-                      <tr>
-                        <td><%= check_box_tag :tarea, tarea.id, false, :disabled => tarea.id != @expediente.tarea_siguiente.id %></td>
-                        <td><%= tarea.nombre %></td>
-                        <td><%=  %></td>
+                      <tr class="alert <%= @expediente.tarea_siguiente == tarea ? 'alert-info' : '' %>">
+                        <td>
+                          <% if @expediente.tarea_siguiente == tarea %>                            
+                              <i class="icon-inbox"></i>               
+                          <% else %>
+                              <i class="icon-lock"></i>                            
+                          <% end %>
+                        </td>
+                        <td>
+                          <%= tarea.nombre %><br />
+                          <small>Inicio: 24/12/2012 16:30 hs.</small>
+                        </td>                        
                         <td><%=  %></td>
                       </tr>
                     <% end %>
