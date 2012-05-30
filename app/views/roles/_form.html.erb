@@ -5,7 +5,7 @@
   <%= f.input :nombre %>
   
   <fieldset>
-    <legend>Permisos <%= link_to_function 'Marcar Todos', 'markAll()'  %>/<%= link_to_function 'Desmarcar Todos', 'unmarkAll()'  %> </legend>    
+    <legend>Permisos <%= link_to_function icon_tag('Marcar Todos', :class => "icon-check icon-white"), 'markAll()', :class => 'btn btn-primary' %>&nbsp;<%= link_to_function icon_tag('Desmarcar Todos', :class => 'icon-remove icon-white'), 'unmarkAll()', :class => 'btn btn-primary'   %> </legend>    
       <% @permisos.each do |permiso| %>
         <% if ant != permiso.controlador.humanize  %>
           <% if ant != '' %>

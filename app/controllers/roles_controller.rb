@@ -4,7 +4,11 @@ class RolesController < ApplicationController
   # GET /roles
   # GET /roles.json
   def index
-    @roles = Rol.all
+    @roles = Rol
+    
+    @roles = @roles.where("nombre like ?", "%#{params[:nombre]}%") if params[:nombre].present?
+    
+    @roles = @roles.page(params[:page]).per(10)    
 
     respond_to do |format|
       format.html # index.html.erb
