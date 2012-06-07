@@ -64,7 +64,7 @@ class RolesController < ApplicationController
         @permisos = Permiso.where(:permiso_id => nil, :publico => false)
         @permisos_actuales = permisos
         
-        format.html { render action: "new" }
+        format.html { render action: "new"}
         format.json { render json: @rol.errors, status: :unprocessable_entity }
       end
     end
@@ -95,11 +95,24 @@ class RolesController < ApplicationController
   # DELETE /roles/1.json
   def destroy
     @rol = Rol.find(params[:id])
-    @rol.destroy
-
-    respond_to do |format|
-      format.html { redirect_to roles_url, notice: 'Rol eliminado!.' }
-      format.json { head :no_content }
+    begin
+      @rol.destroy
+    rescue
+      
+      respond_to do |format|
+        format.html { redirect_to roles_url, alert: 'No se puede eliminar el Rol!.' }
+        format.json { head :no_content }
+      end
+      
+    else
+      
+      respond_to do |format|
+        format.html { redirect_to roles_url, notice: 'Rol eliminado!.' }
+        format.json { head :no_content }
+      end
+      
     end
+
+    
   end
 end
