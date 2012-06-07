@@ -9,6 +9,7 @@ gem 'pg'
 gem "simple_form", "~> 2.0.0.rc"
 gem 'devise'
 gem 'kaminari'
+gem 'time_diff'
 
 group :development do 
   gem 'mongrel'

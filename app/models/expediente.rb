@@ -15,10 +15,13 @@ class Expediente < ActiveRecord::Base
   belongs_to :procedimiento, :foreign_key => :procedimiento_id
   belongs_to :tarea_actual, :foreign_key => :tarea_actual_id, :class_name => 'Tarea'
   belongs_to :tarea_anterior, :foreign_key => :tarea_anterior_id, :class_name => 'Tarea'
+  belongs_to :tarea_expediente_actual, :foreign_key => :tarea_expediente_actual_id, :class_name => 'TareaExpediente'
   belongs_to :ente, :foreign_key => :ente_id
   belongs_to :usuario
   belongs_to :usuario_ingreso, :foreign_key => :usuario_ingreso_id, :class_name => 'Usuario'
   belongs_to :usuario_finalizado, :foreign_key => :usuario_finalizo_id, :class_name => 'Usuario'
+  
+  #has_many :tareas_expedientes, :dependent => :destroy
   
   # CONSTANTE
   ESTADO = %w{NUEVO RECIBIDO TRANSITO RECHAZADO FINALIZADO ANULADO PROCESANDO}
@@ -60,10 +63,15 @@ class Expediente < ActiveRecord::Base
   end
   
   def tarea_siguiente
-    actividad = self.tarea_actual.actividad
-    actividad.tareas.where(:orden => self.tarea_actual.orden.next).first
+    tarea = self.tarea_actual
+    actividad = tarea.actividad
+    actividad.tareas.where(:orden => tarea.orden.next).first
   end
   
+  def tarea_actual_terminada?
+    self.tarea_expediente_actual.fecha_fin.present?
+  end
+
   private
   def establecer_estado
     return true unless self.new_record?
@@ -87,7 +95,8 @@ class Expediente < ActiveRecord::Base
     tarea_expediente.fecha_fin = Time.now
     tarea_expediente.save
     
-    self.update_attribute(:tarea_actual_id, tarea.id)
+    self.update_attributes(:tarea_actual_id => tarea.id,
+      :tarea_expediente_id => tarea_expediente.id)
     
   end
 

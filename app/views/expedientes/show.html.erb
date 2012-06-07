@@ -56,45 +56,7 @@
           
         </div>
 
-        <div class="span5 well-simple">          
-          <fieldset>
-            <legend>Tareas</legend>
-            <div class="btn-group">
-              <%= link_to icon_tag('Inicar', :class => 'icon-play icon-white'), '#', :class => 'btn btn-primary' %>
-              <%= link_to icon_tag('Finalizar', :class => 'icon-ok-sign icon-white'), '#', class: 'btn', :disabled => true %>
-                <%= link_to icon_tag('Cancelar', :class => 'icon-stop icon-white'), '#', class: 'btn', :disabled => true %>
-                </div>
-
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>&nbsp;</th>
-                      <th>Nombre</th>                      
-                      <th>Tiempo Transc.</th>
-                    </tr>              
-                  </thead>
-                  <tbody class="table table-condensed table-striped">
-                    <% @expediente.tarea_siguiente.actividad.tareas.order('orden').limit(3).where('orden >= ?', @expediente.tarea_siguiente.orden).each do |tarea| %>
-                      <tr class="alert <%= @expediente.tarea_siguiente == tarea ? 'alert-info' : '' %>">
-                        <td>
-                          <% if @expediente.tarea_siguiente == tarea %>                            
-                              <i class="icon-inbox"></i>               
-                          <% else %>
-                              <i class="icon-lock"></i>                            
-                          <% end %>
-                        </td>
-                        <td>
-                          <%= tarea.nombre %><br />
-                          <small>Inicio: 24/12/2012 16:30 hs.</small>
-                        </td>                        
-                        <td><%=  %></td>
-                      </tr>
-                    <% end %>
-                  </tbody>
-                </table>
-              </fieldset>                      
-            </div>
-
+          <%= render 'tareas', :tareas => @tareas %>
 
             <div class="span11 well-simple">
               <fieldset>
@@ -114,86 +76,26 @@
               </ul>
             </div>
             <div class="span11">
-              <div id="tabContent" class="tab-content">
-                <div id="tab-registros" class="tab-pane active">
-                  <table class="table table-condensed table-striped">
-                    <thead>
-                      <tr>
-                        <th>Registros Aplicables - Tarea Actual</th>
-                        <th>Tipo</th>
-                        <th>Estado</th>
-                        <th>&nbsp;</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <% 10.times do %>
-                        <tr>                      
-                          <td>Lorem Ipsum has been the</td>
-                          <td><span class="label label-success">Requerido</span></td>
-                          <td><span class="label label-success">Íntegro</span></td>
-                          <td><button class="btn btn-primary">Acciones</button></td>
-                        </tr>
-                      <% end %>
-                    </tbody>
-                  </table>
-                </div>
-                
-                <div id="tab-documentos" class="tab-pane">
-                  
-                  <ul class="nav nav-tabs" id="tabDocs">
-                    <li class="active">
-                      <%= link_to 'Aportados por el ciudadano', '#tab-docs-ciudadano' %>                
-                    </li>
-                    <li><%= link_to 'Todos los documentos', '#tab-docs-all', 'data-togle' => 'tab' %></li>                    
-                  </ul>                  
-
-                  <div id="tabDocContent" class="tab-content">
-                    <div id="tab-docs-ciudadano" class="tab-pane active well">
-                      <div class="btn-group">
-                        <%= link_to icon_tag('Nuevo documento', :class => 'icon-play icon-white'), '#', :class => 'btn btn-primary' %>
-                        <%= link_to icon_tag('Descargar en zip', :class => 'icon-ok-sign icon-white'), '#', class: 'btn btn-primary' %>                        
-                      </div>
-
-                      <table class="table table-condensed table-striped">                        
-                        <tbody>
-                          <% 10.times do %>
-                            <tr>                      
-                              <td>Lorem Ipsum has been the</td>                              
-                              <td><button class="btn btn-primary">Acciones</button></td>
-                            </tr>
-                          <% end %>
-                        </tbody>
-                      </table>
-                    </div>
-
-                    <div id="tab-docs-all" class="tab-pane">
-                      all docs
-                    </div>
-                  </div>                                      
-                </div>
-                
-                <div id="tab-observaciones" class="tab-pane">
-                  observaciones
-                </div>
-                
-                <div id="tab-seguimiento" class="tab-pane">
-                  seguimiento
-                </div>
+              <div id="tabContent" class="tab-content">                
+                <%= render 'registros_aplicables' %>                
+                <%= render 'documentos' %>                
+                <%= render 'observaciones' %>                                
+                <%= render 'seguimiento' %>                                
               </div>              
             </div>
           </div>
         </section>
 
   <% content_for :javascripts do %>
-  <script type="text/javascript">
-    $('#tab a').click(function (e) {
-      e.preventDefault();
-      $(this).tab('show');
-    });
-    
-    $('#tabDocs a').click(function (e) {
-      e.preventDefault();
-      $(this).tab('show');
-    })
-  </script>  
+    <script type="text/javascript">
+      $('#tab a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+      });
+
+      $('#tabDocs a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+      })
+    </script>  
   <% end %>

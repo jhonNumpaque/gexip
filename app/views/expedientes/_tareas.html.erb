@@ -1,0 +1,45 @@
+<div class="span5 well-simple">          
+  <fieldset>
+    <legend>Tareas</legend>
+    <div class="btn-group">
+      <%= link_iniciar_tarea(@expediente) %>
+      <%= link_finalizar_tarea(@expediente) %>
+      <%= link_cancelar_tarea(@expediente) %>
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>&nbsp;</th>
+          <th>Nombre</th>                      
+          <th>Tiempo Transc.</th>
+        </tr>              
+      </thead>
+      <tbody class="table table-condensed table-striped">
+        <% tareas.each do |tarea| %>
+          <% clase_fila =  'alert-info' if @tarea_siguiente == tarea && @tarea_expediente_actual.finalizado? %>
+          <% clase_fila ||=  'alert-success' if @tarea_actual == tarea %>
+          <tr class="alert <%= clase_fila %>" rel="<%= @expediente.id %>-<%= tarea.id %>">
+            <td>
+              <% case clase_fila
+                  when 'alert-info' %>                            
+                <i class="icon-inbox"></i>               
+              <% when 'alert-success' %>
+                <i class="icon-chevron-right"></i>
+              <% else %>
+                <i class="icon-lock"></i>                            
+              <% end %>
+            </td>
+            <td>
+              <%= tarea.nombre %><br />
+              <% if @tarea_actual == tarea %>
+              <small>Inicio: <%= l(@tarea_expediente_actual.created_at, :format => :fechahora)  %> </small>
+              <% end %>
+            </td>                        
+            <td><%= "#{content_tag(:i, '', :class => 'icon-time')} #{@tarea_expediente_actual.tiempo_ejecucion[:diff]}".html_safe if @tarea_actual == tarea %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </fieldset>                      
+</div>
