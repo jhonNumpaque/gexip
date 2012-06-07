@@ -4,7 +4,32 @@ class UsuariosController < ApplicationController
   # GET /usuarios
   # GET /usuarios.json
   def index
-    @usuarios = Usuario.all
+    
+    @usuarios = Usuario
+    
+    
+    if params[:valor].present?
+      case params[:tipo_busqueda]
+      when "USUARIO"
+        @usuarios = @usuarios.where(" login LIKE ? ", "%"+params[:valor]+"%")
+      when "NOMBRE"
+        @usuarios = @usuarios.where(" nombres LIKE ? ", "%"+params[:valor]+"%")
+      when "APELLIDO"
+        @usuarios = @usuarios.where(" apellidos LIKE ? ", "%"+params[:valor]+"%")
+      when "DOCUMENTO"
+        @usuarios = @usuarios.where(" documento LIKE ? ", "%"+params[:valor]+"%")
+      else
+        @usuarios = @usuarios.where(" login LIKE ? OR nombres LIKE ? OR apellidos LIKE ? OR documento LIKE ? ", "%"+params[:valor]+"%","%"+params[:valor]+"%","%"+params[:valor]+"%","%"+params[:valor]+"%")
+      end
+      @usuarios = @usuarios.page(params[:page]).order('login').per(50)
+    elsif params[:filtro_rol].present?
+      @usuarios = @usuarios.where(" rol_id = ? ", params[:filtro_rol])
+      @usuarios = @usuarios.page(params[:page]).order('login').per(50)
+    else
+      #@usuarios = Usuario.all
+      @usuarios = Usuario.page(params[:page]).order('login').per(50)
+    end
+    
 
     respond_to do |format|
       format.html # index.html.erb
@@ -46,7 +71,8 @@ class UsuariosController < ApplicationController
 
     respond_to do |format|
       if @usuario.save
-        format.html { redirect_to @usuario, notice: 'Usuario creado!' }
+        #format.html { redirect_to @usuario, notice: 'Usuario creado!' }
+        format.html { redirect_to usuarios_path, notice: 'Usuario Creado Correctame.' }
         format.json { render json: @usuario, status: :created, location: @usuario }
       else
         format.html { render action: "new" }
@@ -62,7 +88,8 @@ class UsuariosController < ApplicationController
 
     respond_to do |format|
       if @usuario.update_attributes(params[:usuario])
-        format.html { redirect_to @usuario, notice: 'Usuario was successfully updated.' }
+        #format.html { redirect_to @usuario, notice: 'Usuario was successfully updated.' }
+        format.html { redirect_to usuarios_path, notice: 'Usuario Modificado Correctame.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -71,6 +98,11 @@ class UsuariosController < ApplicationController
     end
   end
 
+  # GET /usuarios/1/edit
+  def cambiar_clave
+    @usuario = Usuario.find(params[:id])
+  end
+  
   # DELETE /usuarios/1
   # DELETE /usuarios/1.json
   def destroy

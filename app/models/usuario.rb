@@ -15,7 +15,8 @@ class Usuario < ActiveRecord::Base
   #validates :documento, :presence => true
   
   # asociaciones
-  belongs_to :rol  
+  belongs_to :rol, :foreign_key => :rol_id
+  belongs_to :ente, :foreign_key => :ente_id
   has_many :procedimientos
   
   def self.find_for_database_authentication(warden_conditions)
@@ -24,7 +25,15 @@ class Usuario < ActiveRecord::Base
     where(conditions).where(["lower(login) = :value OR lower(email) = :value", { :value => login.strip.downcase }]).first
   end
   
+  # CONSTANTE
+  TIPO_BUSQUEDA = %w{TODOS USUARIO NOMBRE APELLIDO DOCUMENTO}
+  
+  #Concatena nombre y apellido
   def nombre_completo
     "#{self.nombres} #{self.apellidos}".strip
+  end
+  #Concatena apellido y nombre
+  def apellido_nombre
+    "#{self.apellidos}, #{self.nombres}".strip
   end
 end
