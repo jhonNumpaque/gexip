@@ -6,6 +6,7 @@ class Rol < ActiveRecord::Base
   # relaciones
   has_many :roles_permisos, :dependent => :destroy
   has_many :permisos, :through => :roles_permisos
+  has_one :usuario, :dependent => :restrict
   
   def al_menos_un_permiso
     errors.add(:permisos, 'debe tener al menos un permiso') if permisos_vacio?

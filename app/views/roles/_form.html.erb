@@ -1,11 +1,22 @@
+ <% if @rol.errors.any? %>  
+    <div class="alert alert-block alert-error">  
+      <h4 class="alert-heading"><%= pluralize(@rol.errors.count, "error") %> 
+        <%= @rol.errors.count > 1 ? 'han' : 'ha' %> impedido que el registro sea guardado:</h4>  
+      <ul>  
+        <% @rol.errors.full_messages.each do |msg| %>  
+          <li><%= msg %></li>  
+        <% end %>  
+      </ul>  
+    </div>  
+  <% end %>  
 <% ant = '' %>
 <%= simple_form_for @rol, :html => { :class => 'form-horizontal' } do |f| %>
-  <%= f.error_notification %>
+  <%#= f.error_notification %>
 
   <%= f.input :nombre %>
   
   <fieldset>
-    <legend>Permisos <%= link_to_function 'Marcar Todos', 'markAll()'  %>/<%= link_to_function 'Desmarcar Todos', 'unmarkAll()'  %> </legend>    
+    <legend>Permisos <%= link_to_function icon_tag('Marcar Todos', :class => "icon-check icon-white"), 'markAll()', :class => 'btn btn-primary' %>&nbsp;<%= link_to_function icon_tag('Desmarcar Todos', :class => 'icon-remove icon-white'), 'unmarkAll()', :class => 'btn btn-primary'   %> </legend>    
       <% @permisos.each do |permiso| %>
         <% if ant != permiso.controlador.humanize  %>
           <% if ant != '' %>
