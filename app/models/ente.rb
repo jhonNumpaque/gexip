@@ -5,9 +5,9 @@ class Ente < ActiveRecord::Base
 	validates :tipo_documento_id, :presence => true
 	
   # asociaciones
-	has_one :cargo
+	belongs_to :cargo
 	belongs_to :tipo_documento
-  belongs_to :ciudad, :foreign_key => :territorio_id
+    belongs_to :ciudad, :foreign_key => :territorio_id
   
   def self.search(form, search = nil, documento = nil, nombre = nil, apellido = nil, direccion = nil, telefono = nil)
     filtro = self

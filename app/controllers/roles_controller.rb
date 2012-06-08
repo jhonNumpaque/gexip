@@ -97,22 +97,14 @@ class RolesController < ApplicationController
     @rol = Rol.find(params[:id])
     begin
       @rol.destroy
-    rescue
-      
-      respond_to do |format|
-        format.html { redirect_to roles_url, alert: 'No se puede eliminar el Rol!.' }
-        format.json { head :no_content }
-      end
-      
-    else
-      
-      respond_to do |format|
-        format.html { redirect_to roles_url, notice: 'Rol eliminado!.' }
-        format.json { head :no_content }
-      end
-      
+      flash[:notice] = "Rol Eliminado Correctamente."
+    rescue ActiveRecord::DeleteRestrictionError
+      flash[:alert] = 'No se puede eliminar el Rol!.'  
     end
-
+    respond_to do |format|
+      format.html { redirect_to roles_url}
+      format.json { head :no_content }
+    end
     
   end
 end

@@ -73,11 +73,16 @@ class UnidadesTiemposController < ApplicationController
   # DELETE /unidades_tiempos/1.json
   def destroy
     @unidad_tiempo = UnidadTiempo.find(params[:id])
-    @unidad_tiempo.destroy
-
+    begin
+      @unidad_tiempo.destroy
+      flash[:alert] = "Unidad de Tiempo Eliminada Correctamente."
+    rescue ActiveRecord::DeleteRestrictionError
+      flash[:alert] = "No se puede eliminar esta Unidad de Tiempo!"        
+    end
     respond_to do |format|
       format.html { redirect_to unidades_tiempos_url }
       format.json { head :no_content }
     end
+    
   end
 end

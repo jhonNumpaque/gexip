@@ -73,10 +73,15 @@ class CiudadesController < ApplicationController
   # DELETE /ciudades/1.json
   def destroy
     @ciudad = Ciudad.find(params[:id])
-    @ciudad.destroy
-
+    begin
+      @ciudad.destroy
+      flash[:notice] = 'Ciudad Eliminada Correctamente.'
+    rescue ActiveRecord::DeleteRestrictionError
+      flash[:alert] = 'No se puede eliminar la Ciudad!'
+    end
+   
     respond_to do |format|
-      format.html { redirect_to ciudades_url, notice: 'Ciudad Eliminada Correctamente.'}
+      format.html { redirect_to ciudades_url }
       format.json { head :no_content }
     end
   end
