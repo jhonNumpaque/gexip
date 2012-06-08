@@ -1,23 +1,23 @@
 <section>
   <div class="page-header">
     <h1>Roles <small>Lista de roles</small></h1>
-    <fieldset>
-      <legend>Busqueda</legend>
-      <%= form_for controller_name, :method => :get do %>
-      <table>
-        <tr>
-          <td><%= label_tag 'Nombre'%> </td>
-          <td><%= text_field_tag 'nombre', params[:nombre]%> </td>
-          <td>&nbsp;</td>
-          <td><%= submit_tag 'Buscar', :class => 'btn'%></td>
-        </tr>
-      </table>
-      <% end %>
-    </fieldset>
-    
   </div>
 
   <div class="well">
+    <fieldset>
+      <legend>Busqueda</legend>
+      <%= form_for controller_name, :method => :get do %>
+        <table>
+          <tr>
+            <td><%= label_tag 'Nombre'%> </td>
+            <td><%= text_field_tag 'nombre', params[:nombre]%> </td>
+            <td>&nbsp;</td>
+            <td><%= submit_tag 'Buscar', :class => 'btn btn-primary'%></td>
+          </tr>
+        </table>
+      <% end %>
+    </fieldset>
+
     <%= link_to icon_tag('Agregar', :class => 'icon-plus-sign icon-white'), new_rol_path, :class => 'btn btn-primary' %>
   </div>
   <br />
@@ -31,9 +31,9 @@
       </tr>
       <% @roles.each do |rol| %>
         <tr>
-                      <td><%= link_to rol.nombre, rol %></td>
-                    <td>
-            
+          <td><%= link_to rol.nombre, rol %></td>
+          <td>
+
             <div class="btn-group">              
               <%= link_to 'Acciones <b class="caret"></b>'.html_safe, '#', :class => 'btn btn-primary dropdown-toggle', 'data-toggle' => 'dropdown' %>
               <ul id="menu1" class="dropdown-menu">
