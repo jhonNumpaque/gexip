@@ -13,14 +13,14 @@
       <%= f.input :login, :label => 'Usuario' %>
 
       <%= f.input :email %>
-
+      <% if @usuario.new_record? %>
       <%= f.input :password, :as => :password, :label => 'Contraseña' %>
 
       <%= f.input :password_confirmation, :as => :password, :label =>  'Confirmar Contraseña' %>
+      <% end #if @usuario.new_record? %>
+      <%= f.input :ente_id, :collection => Ente.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Organismo" %>
 
-      <%= f.input :ente_id %>
-
-      <%= f.input :rol_id, :collection => Rol.all, :label_method => :nombre, :prompt => '-- Seleccione --' %>    
+      <%= f.input :rol_id, :collection => Rol.all, :label_method => :nombre, :prompt => '-- Seleccione --' %>
 
     <div class="form-actions">
       <%= f.button :submit, 'Guardar', class: 'btn btn-success' %>

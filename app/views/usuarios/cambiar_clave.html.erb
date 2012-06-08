@@ -1,0 +1,25 @@
+<section>
+  <div class="page-header">
+    <h1>Cambiar Clave</h1>
+  </div>
+
+  <%= simple_form_for @usuario, :html => { :class => 'form-horizontal' }  do |f| %>
+    <fieldset>
+      <%= f.error_notification %>
+      <div class="well">
+        <h3><%= @usuario.nombre_completo %></h3>
+        <p><strong>Usuario: <%= @usuario.login %></strong></p>
+      </div>
+      <%= f.input :password, :as => :password, :label => 'Contraseña' %>
+
+      <%= f.input :password_confirmation, :as => :password, :label =>  'Confirmar Contraseña' %>
+
+      <div class="form-actions">
+        <%= f.button :submit, 'Guardar', class: 'btn btn-success' %>
+          <%= link_to 'Cancelar', usuarios_path, :class => "btn" %>
+        </div>
+      </fieldset>
+    <% end %>
+
+
+  </section>
