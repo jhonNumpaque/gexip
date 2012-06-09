@@ -3,8 +3,11 @@ class PaisesController < ApplicationController
   # GET /paises
   # GET /paises.json
   def index
-    #@paises = Pais.all
-    @paises = Pais.page(params[:page]).order('type, nombre').per(50)
+    @paises = Pais
+    
+    @paises = @paises.where('nombre like ?', "%#{params[:nombre]}%") if params[:nombre].present?
+    
+    @paises = @paises.page(params[:page]).order('type, nombre').per(50)
 
     respond_to do |format|
       format.html # index.html.erb

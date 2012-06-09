@@ -111,7 +111,7 @@ es:
       long: "%A, %d de %B de %Y"
   time:
     formats:
-      fechahora: "%d-%b-%Y %H:%M"
+      fechahora: "%d-%b-%Y %H:%M hs"
       fecha: "%d-%b-%Y"
       short: "%d de %b a las %H:%M hrs"
       default: "%a, %d de %B de %Y a las %H:%M hs"

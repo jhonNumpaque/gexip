@@ -1,4 +1,5 @@
 class ExpedientesController < ApplicationController
+  before_filter :authenticate_usuario!  
   # GET /expedientes
   # GET /expedientes.json
   def index
@@ -14,6 +15,14 @@ class ExpedientesController < ApplicationController
   # GET /expedientes/1.json
   def show
     @expediente = Expediente.find(params[:id])
+    
+    @tarea_expediente_actual = @expediente.tarea_expediente_actual
+    @tarea_actual = @expediente.tarea_actual
+    @tarea_siguiente = @expediente.tarea_siguiente
+    actividad = @tarea_actual.actividad      
+    orden = @tarea_expediente_actual.finalizado? ? @tarea_siguiente.orden : @tarea_actual.orden
+    
+    @tareas = actividad.tareas.order('orden').limit(2).where('orden >= ?', orden)
 
     respond_to do |format|
       format.html # show.html.erb

@@ -44,6 +44,7 @@ Gexip::Application.routes.draw do
   match '/:actividad_id/agregar_tarea' => 'actividades#agregar_tarea', :as => 'agregar_tarea'
   match '/:actividad_id/listar_tareas' => 'actividades#listar_tareas', :as => 'listar_tareas'
   match '/editar_tarea' => 'tareas#edit', :as => 'editar_tarea'
+  match 'iniciar_tarea' => 'tareas#iniciar_tarea', :as => 'iniciar_tarea'
   
   #entes
   match '/search' => 'entes#search', :as => 'search_ente'
@@ -96,7 +97,7 @@ Gexip::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'usuarios#index'
+  root :to => 'expedientes#index'
 
   # See how all your routes lay out with "rake routes"
 

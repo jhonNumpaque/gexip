@@ -4,4 +4,5 @@ class Ciudad < Territorio
   
     # asociaciones
     belongs_to :pais, :foreign_key => :territorio_id
+    has_many :entes, :dependent => :restrict, :foreign_key => :territorio_id
 end
