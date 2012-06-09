@@ -2,7 +2,12 @@ class CiudadesController < ApplicationController
   # GET /ciudades
   # GET /ciudades.json
   def index
-    @ciudades = Ciudad.page(params[:page]).order('type, nombre').per(50)
+    @ciudades = Ciudad
+    
+    @ciudades = @ciudades.where("nombre like ?", "%#{params[:nombre]}%") if params[:nombre].present?
+    @ciudades = @ciudades.where("territorio_id = ?", params[:territorio_id]) if params[:territorio_id].present?
+    
+    @ciudades = @ciudades.page(params[:page]).order('type, nombre').per(50)
 
     respond_to do |format|
       format.html # index.html.erb
