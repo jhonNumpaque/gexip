@@ -38,7 +38,8 @@ Gexip::Application.routes.draw do
   end
 
   resources :usuarios
-	match '/usuarios/clave/cambiar_clave/:id' => 'usuarios#cambiar_clave', :as => :cambiar_clave
+	match '/usuarios/datos/cambiar_clave/:id' => 'usuarios#cambiar_clave', :as => :cambiar_clave
+  match '/usuarios/datos/modificar_datos/:id' => 'usuarios#modificar_datos', :as => :modificar_datos
   
   match '/:actividad_id/agregar_tarea' => 'actividades#agregar_tarea', :as => 'agregar_tarea'
   match '/:actividad_id/listar_tareas' => 'actividades#listar_tareas', :as => 'listar_tareas'

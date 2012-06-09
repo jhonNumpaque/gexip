@@ -98,10 +98,16 @@ class UsuariosController < ApplicationController
     end
   end
 
-  # GET /usuarios/1/edit
+  # GET /usuarios/datos/cambiar_clave/2
   def cambiar_clave
     @usuario = Usuario.find(params[:id])
   end
+  
+  # GET /usuarios/datos/modificar/1
+  def modificar_datos
+    @usuario = Usuario.find(params[:id])
+  end
+  
   
   # DELETE /usuarios/1
   # DELETE /usuarios/1.json
