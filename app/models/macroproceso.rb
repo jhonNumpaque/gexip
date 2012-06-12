@@ -14,6 +14,7 @@ class Macroproceso < Serieproceso
   # Estratégico, Misional y de Apoyo.
   # @v_clasificacion_array = %w{ESTRATEGICO MISIONAL APOYO}
   CLASIFICACIONES = %w{ESTRATEGICO MISIONAL APOYO}
+  TIPO_BUSQUEDA = %w{TODOS NOMBRE OBJETIVO CODIGO}
     
   # Concatena codigo y nombre, especial para usar en combobox
   def codigo_nombre

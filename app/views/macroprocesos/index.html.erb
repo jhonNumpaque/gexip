@@ -4,7 +4,23 @@
   </div>
 
   <div class="well">
-    <%= link_to icon_tag('Agregar', :class => 'icon-plus-sign icon-white'), new_macroproceso_path, :class => 'btn btn-primary' %>
+
+    <%= form_tag controller_name, :class => 'form-inline', :method => :get do %>
+      <%= link_to icon_tag('Agregar', :class => 'icon-plus-sign icon-white'), new_macroproceso_path, :class => 'btn btn-primary' %>
+      <%= link_to icon_tag('Todos', :class => 'icon-eye-open icon-white'), macroproceso_path, :class => 'btn btn-primary' %>
+      <i class="icon-th-large"></i>
+      <%= label_tag 'Buscar' %>
+      <%= text_field_tag :valor, params[:valor] %>
+      <%= label_tag 'Tipo' %>
+      <%= select_tag :tipo_busqueda, options_for_select(Macroproceso::TIPO_BUSQUEDA.map{|c| [c,c]}, params[:tipo_busqueda]) %>
+      <%= submit_tag 'Buscar', :class => 'btn btn-primary' %>
+      <hr />
+      <%= label_tag 'Clasificacion' %>
+      <%= select_tag :filtro_clasificacion, options_for_select(Macroproceso::CLASIFICACIONES.map{|c| [c,c]}, params[:filtro_clasificacion]), :prompt => '-- Seleccione --'  %>
+      <%= label_tag 'Cargo' %>
+      <%= select_tag :filtro_cargo, options_from_collection_for_select(Cargo.all, 'id', 'nombre', params[:filtro_cargo]), :prompt => '-- Seleccione --'  %>
+      <%= submit_tag 'Filtrar', :class => 'btn btn-primary' %>
+    <% end %>
     <%= link_to icon_tag('Formato 37', :class => 'icon-print icon-white'), reporte_formato_37_path, :class => 'btn btn-primary popupWindow' %>
   </div>
   <br />
@@ -40,7 +56,7 @@
         </tr>
       <% end %>
     </table> 
-  
+
   <% else %>
     <p class="alert-message warning">
       Todavía no hay macroprocesos, <%= link_to 'agregar', new_macroproceso_path %>.

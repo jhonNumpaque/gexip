@@ -2,7 +2,25 @@ class MacroprocesosController < ApplicationController
   # GET /macroprocesos
   # GET /macroprocesos.json
   def index
-    @macroprocesos = Macroproceso.all
+    @macroprocesos = Macroproceso
+    
+    if params[:valor].present?
+      case params[:tipo]
+      when 'NOMBRE'
+        @macroprocesos = @macroprocesos.where("nombre like ?", "%#{params[:valor]}%")
+      when 'OBJETIVO'
+        @macroprocesos = @macroprocesos.where("objetivo like ?", "%#{params[:valor]}%")
+      when 'CODIGO'
+        @macroprocesos = @macroprocesos.where("codigo = ?", "#{params[:valor]}")
+      else
+        @macroprocesos = @macroprocesos.where("nombre like ? or objetivo like ? or codigo = ?", "%#{params[:valor]}%", "%#{params[:valor]}%", "#{params[:valor]}")
+      end
+    end
+    
+    @macroprocesos = @macroprocesos.where(" clasificacion = ?", "#{params[:filtro_clasificacion]}") if params[:filtro_clasificacion].present?
+    @macroprocesos = @macroprocesos.where(" cargo_id = ?", "#{params[:filtro_cargo]}") if params[:filtro_cargo].present?
+    
+    @macroprocesos = @macroprocesos.page(params[:page]).per(10)
 
     respond_to do |format|
       format.html # index.html.erb
