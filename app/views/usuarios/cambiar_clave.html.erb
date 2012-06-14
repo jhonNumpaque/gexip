@@ -3,7 +3,7 @@
     <h1>Cambiar Clave</h1>
   </div>
 
-  <%= simple_form_for @usuario, :html => { :class => 'form-horizontal' }  do |f| %>
+  <%= simple_form_for @usuario, :url => cambiar_clave_grabar_path, :html => { :class => 'form-horizontal' }  do |f| %>
     <fieldset>
       <%= f.error_notification %>
       <div class="well">

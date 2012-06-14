@@ -22,6 +22,11 @@ class Usuario < ActiveRecord::Base
   # asociaciones
   belongs_to :rol, :foreign_key => :rol_id
   belongs_to :ente, :foreign_key => :ente_id
+  
+  has_many :expedientes, :dependent => :restrict
+  #has_many :tarea_expedientes, :dependent => :restrict
+    
+  
   has_many :procedimientos
   
   def self.find_for_database_authentication(warden_conditions)
