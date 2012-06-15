@@ -90,10 +90,15 @@ class MacroprocesosController < ApplicationController
   # DELETE /macroprocesos/1.json
   def destroy
     @macroproceso = Macroproceso.find(params[:id])
-    @macroproceso.destroy
+    begin
+      @macroproceso.destroy
+      flash[:notice] = "Macroproceso Eliminado!"
+    rescue ActiveRecord::DeleteRestrictionError
+      flash[:alert] = "No se puede eliminar el macroproceso"
+    end
 
     respond_to do |format|
-      format.html { redirect_to macroprocesos_url, notice: 'MacroProceso Eliminado Correctamente.' }
+      format.html { redirect_to macroprocesos_url}
       format.json { head :no_content }
     end
   end

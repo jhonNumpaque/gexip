@@ -25,6 +25,20 @@
           <%= link_to icon_tag('Formato 39', :class => 'icon-print'), "javascript:;", :class => 'btn disabled' %>
         <% end %>
       </div>
+      <hr />
+      <%= form_tag controller_name, :class => 'form-inline', :method => :get do %>
+        <%= link_to icon_tag('Todos', :class => 'icon-eye-open icon-white'), subprocesos_path, :class => 'btn btn-primary' %>
+        <i class="icon-th-large"></i>
+        <%= label_tag 'Buscar' %>
+        <%= text_field_tag :valor, params[:valor] %>
+        <%= label_tag 'Tipo' %>
+        <%= select_tag :tipo_busqueda, options_for_select(Subproceso::TIPO_BUSQUEDA.map{|c| [c,c]}, params[:tipo_busqueda]) %>
+        <%= submit_tag 'Buscar', :class => 'btn btn-primary' %>
+        <hr />
+        <%= label_tag 'Cargo' %>
+        <%= select_tag :filtro_cargo, options_from_collection_for_select(Cargo.all, 'id', 'nombre', params[:filtro_cargo]), :prompt => '-- Seleccione --'  %>
+        <%= submit_tag 'Filtrar', :class => 'btn btn-primary' %>
+      <% end %>
     </div>
   </div>
   <br />

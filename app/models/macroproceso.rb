@@ -9,7 +9,7 @@ class Macroproceso < Serieproceso
  
   # relacion
   belongs_to :cargo, :foreign_key => :cargo_id
-  has_many :proceso
+  has_many :procesos, :foreign_key => :serieproceso_id, :dependent => :restrict
     
   # Estratégico, Misional y de Apoyo.
   # @v_clasificacion_array = %w{ESTRATEGICO MISIONAL APOYO}
