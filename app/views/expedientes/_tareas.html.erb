@@ -15,29 +15,14 @@
           <th>Tiempo Transc.</th>
         </tr>              
       </thead>
-      <tbody class="table table-condensed table-striped">
-        <% tareas.each do |tarea| %>
-          <% clase_fila =  'alert-info' if @tarea_siguiente == tarea && @tarea_expediente_actual.finalizado? %>
-          <% clase_fila ||=  'alert-success' if @tarea_actual == tarea %>
-          <tr class="alert <%= clase_fila %>" rel="<%= @expediente.id %>-<%= tarea.id %>">
-            <td>
-              <% case clase_fila
-                  when 'alert-info' %>                            
-                <i class="icon-inbox"></i>               
-              <% when 'alert-success' %>
-                <i class="icon-chevron-right"></i>
-              <% else %>
-                <i class="icon-lock"></i>                            
-              <% end %>
-            </td>
-            <td>
-              <%= tarea.nombre %><br />
-              <% if @tarea_actual == tarea %>
-              <small>Inicio: <%= l(@tarea_expediente_actual.created_at, :format => :fechahora)  %> </small>
-              <% end %>
-            </td>                        
-            <td><%= "#{content_tag(:i, '', :class => 'icon-time')} #{@tarea_expediente_actual.tiempo_ejecucion[:diff]}".html_safe if @tarea_actual == tarea %></td>
-          </tr>
+      <tbody class="table table-condensed table-striped" id="lista_tareas">
+        <% vista_tareas.each do |vista_tarea| %>
+          <%= render 'tarea', :vista_tarea => vista_tarea, 
+            :tarea_siguiente => @tarea_siguiente,
+            :tarea_expediente_actual => @tarea_expediente_actual, 
+            :tarea_actual => @tarea_actual,
+            :expediente => @expediente
+         %>
         <% end %>
       </tbody>
     </table>

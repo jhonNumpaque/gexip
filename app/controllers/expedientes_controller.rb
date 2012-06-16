@@ -21,7 +21,18 @@ class ExpedientesController < ApplicationController
     actividad = @tarea_actual.actividad      
     orden = @tarea_expediente_actual.finalizado? ? @tarea_siguiente.orden : @tarea_actual.orden
     
-    @tareas = actividad.tareas.order('orden').limit(2).where('orden >= ?', orden)
+    query_string = '('    
+    query_values = {}
+    if @tarea_expediente_actual.finalizado?
+      query_string = '(id <> :id and '
+      query_values[:id] = @tarea_actual.id
+      actividad = @tarea_siguiente.actividad
+    end
+    query_values.merge!({ :orden => orden, :actividad_id => actividad.id, :procedimiento_id => actividad.procedimiento_id, :actividad_orden => actividad.orden })    
+    query_string += 'orden >= :orden and actividad_id = :actividad_id) or (procedimiento_id = :procedimiento_id and actividad_orden > :actividad_orden)'        
+    
+    # .del_cargo(current_usuario.ente.cargo_id)
+    @vista_tareas = VistaTarea.order('actividad_id,orden').limit(2).where(query_string,query_values)
 
     respond_to do |format|
       format.html # show.html.erb

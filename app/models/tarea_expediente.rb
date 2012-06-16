@@ -28,6 +28,14 @@ class TareaExpediente < ActiveRecord::Base
     self.estado == self.class.estado_inicial
   end
   
+  def finalizar!
+    self.estado = self.class.estado_fin_correcto
+  end
+  
+  def cancelar!
+    self.estado = self.class.estado_fin_incorrecto
+  end
+  
   def tiempo_ejecucion
     tiempo_final = Time.now
     tiempo_final = self.fecha_fin if self.fecha_fin.present?    
