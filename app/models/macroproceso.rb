@@ -9,11 +9,12 @@ class Macroproceso < Serieproceso
  
   # relacion
   belongs_to :cargo, :foreign_key => :cargo_id
-  has_many :proceso
+  has_many :procesos, :foreign_key => :serieproceso_id, :dependent => :restrict
     
   # Estratégico, Misional y de Apoyo.
   # @v_clasificacion_array = %w{ESTRATEGICO MISIONAL APOYO}
   CLASIFICACIONES = %w{ESTRATEGICO MISIONAL APOYO}
+  TIPO_BUSQUEDA = %w{TODOS NOMBRE OBJETIVO CODIGO}
     
   # Concatena codigo y nombre, especial para usar en combobox
   def codigo_nombre

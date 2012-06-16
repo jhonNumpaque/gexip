@@ -5,9 +5,10 @@
 
   <div class="well">
     <div>
-    <%= render 'campos_buscar' %>
+      <%= render 'campos_buscar' %>
     </div>
-    
+    <%= link_to icon_tag('Todos', :class => 'icon-eye-open icon-white'), procedimientos_path, :class => 'btn btn-primary' %>
+    <i class="icon-th-large"></i>
     <%= link_to icon_tag('Agregar', :class => 'icon-plus-sign icon-white'), new_procedimiento_path, :class => 'btn btn-primary' %>
   </div>
   <br />
@@ -15,28 +16,28 @@
   <% if @procedimientos.present? %>
     <table class="table table-striped table-bordered table-condensed">
       <tr>
-              <th>Nombre</th>
-              <th>Objetivo</th>
-              <th>Definiciones</th>
-              <th>Elabora fecha</th>
-              <th>Elabora usuario</th>
-              <th>Aprobado fecha</th>
-              <th>Aprobado usuario</th>
-              <th>Subproceso</th>
+        <th>Nombre</th>
+        <th>Objetivo</th>
+        <th>Definiciones</th>
+        <th>Elabora fecha</th>
+        <th>Elabora usuario</th>
+        <th>Aprobado fecha</th>
+        <th>Aprobado usuario</th>
+        <th>Subproceso</th>
         <th></th>
       </tr>
       <% @procedimientos.each do |procedimiento| %>
         <tr>
-                      <td><%= link_to procedimiento.nombre, procedimiento %></td>
-                      <td><%= procedimiento.objetivo %></td>
-                      <td><%= procedimiento.definiciones %></td>
-                      <td><%= l( procedimiento.elabora_fecha ) if procedimiento.elabora_fecha.present? %></td>
-                      <td><%= procedimiento.elaborador.nombres if procedimiento.elaborador.present? %></td>
-                      <td><%= l( procedimiento.aprobado_fecha ) if procedimiento.aprobado_fecha.present? %></td>
-                      <td><%= procedimiento.aprobador.nombres if procedimiento.aprobador.present? %></td>
-                      <td><%= procedimiento.subproceso.codigo_nombre if procedimiento.subproceso.present? %></td>
-                    <td>
-            
+          <td><%= link_to procedimiento.nombre, procedimiento %></td>
+          <td><%= procedimiento.objetivo %></td>
+          <td><%= procedimiento.definiciones %></td>
+          <td><%= l( procedimiento.elabora_fecha ) if procedimiento.elabora_fecha.present? %></td>
+          <td><%= procedimiento.elaborador.nombres if procedimiento.elaborador.present? %></td>
+          <td><%= l( procedimiento.aprobado_fecha ) if procedimiento.aprobado_fecha.present? %></td>
+          <td><%= procedimiento.aprobador.nombres if procedimiento.aprobador.present? %></td>
+          <td><%= procedimiento.subproceso.codigo_nombre if procedimiento.subproceso.present? %></td>
+          <td>
+
             <div class="btn-group">              
               <%= link_to 'Acciones <b class="caret"></b>'.html_safe, '#', :class => 'btn btn-primary dropdown-toggle', 'data-toggle' => 'dropdown' %>
               <ul id="menu1" class="dropdown-menu">
@@ -49,7 +50,7 @@
         </tr>
       <% end %>
     </table> 
-  <%= paginate @procedimientos %>
+    <%= paginate @procedimientos %>
   <% else %>
     <p class="alert-message warning">
       Todavía no hay procedimientos, <%= link_to 'agregar', new_procedimiento_path %>.

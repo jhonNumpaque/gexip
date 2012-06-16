@@ -3,8 +3,23 @@ class ProcesosController < ApplicationController
   # GET /procesos.json
   def index
     @procesos = Proceso
+    
+    if params[:valor].present?
+      case params[:tipo_busqueda]
+      when 'NOMBRE'
+        @procesos = @procesos.where(' nombre like ?', "%#{params[:valor]}%")
+      when 'OBJETIVO'
+        @procesos = @procesos.where(' objetivo like ?', "%#{params[:valor]}%")
+      when 'CODIGO'
+        @procesos = @procesos.where(' codigo =  ?', "#{params[:valor]}")
+      else
+        @procesos = @procesos.where(' nombre like ? or objetivo like ? or codigo = ?', "%#{params[:valor]}%", "%#{params[:valor]}%", "%#{params[:valor]}%")
+      end
+    end
+    
     @procesos = @procesos.where(:serieproceso_id => params[:macroproceso_id]) if (params[:macroproceso_id].present?)
-    @procesos = @procesos.all
+    @procesos = @procesos.where(:cargo_id => params[:filtro_cargo]) if (params[:filtro_cargo].present?)
+    @procesos = @procesos.page(params[:page]).per(10)
     
     @macroprocesos = Macroproceso.all
 
@@ -77,10 +92,15 @@ class ProcesosController < ApplicationController
   # DELETE /procesos/1.json
   def destroy
     @proceso = Proceso.find(params[:id])
-    @proceso.destroy
+    begin
+      @proceso.destroy
+      flash[:notice] = "Proceso Eliminado!"
+    rescue ActiveRecord::DeleteRestrictionError
+      flash[:alert] = "No se puede eliminar el Proceso!"
+    end
 
     respond_to do |format|
-      format.html { redirect_to procesos_url, notice: 'Proceso Eliminado Correctamente.' }
+      format.html { redirect_to procesos_url}
       format.json { head :no_content }
     end
   end

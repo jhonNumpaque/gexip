@@ -5,8 +5,25 @@ class EntesController < ApplicationController
   def index
     @entes = Ente
     
-    @entes = @entes.where(" documento = ?", params[:documento]) if params[:documento].present?
-    @entes = @entes.where(" nombre like ? or apellido like ?", "%#{params[:nombre]}%", "%#{params[:nombre]}%") if params[:nombre].present?
+    if params[:valor].present?
+      case params[:tipo]
+      when 'DOCUMENTO'
+        @entes = @entes.where(" documento = ?", params[:valor])
+      when 'NOMBRE'
+        @entes = @entes.where(" nombre like ? ", "%#{params[:valor]}%")
+      when 'APELLIDO'
+        @entes = @entes.where(" apellido like ?", "%#{params[:valor]}%")
+      when 'DIRECCION'
+        @entes = @entes.where(" direccion like ?", "%#{params[:valor]}%")
+      when 'TELEFONO'
+        @entes = @entes.where(" telefono = ?", params[:valor])
+      else
+        @entes = @entes.where(" documento = ? or nombre like ? or apellido like ? or direccion like ? or telefono = ?", params[:valor], "%#{params[:valor]}%", "%#{params[:valor]}%", "%#{params[:valor]}%", params[:valor])
+      end
+    end
+    
+    @entes = @entes.where(" tipo_documento_id = ?", params[:filtro_tipo_doc]) if params[:filtro_tipo_doc].present?
+    @entes = @entes.where(" territorio_id = ?", params[:filtro_ciudad]) if params[:filtro_ciudad].present?
     
     @entes = @entes.page(params[:page]).per(10)
 

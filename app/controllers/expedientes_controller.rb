@@ -1,4 +1,5 @@
 class ExpedientesController < ApplicationController
+  before_filter :authenticate_usuario!  
   # GET /expedientes
   # GET /expedientes.json
   def index
