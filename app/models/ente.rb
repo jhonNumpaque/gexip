@@ -5,7 +5,8 @@ class Ente < ActiveRecord::Base
 	validates :tipo_documento_id, :presence => true
 	
   # asociaciones
-  has_one :cargo
+  #has_one :cargo
+  belongs_to :cargo, :foreign_key => :cargo_id
   has_many :usuario
   belongs_to :tipo_documento
   belongs_to :ciudad, :foreign_key => :territorio_id
@@ -31,5 +32,9 @@ class Ente < ActiveRecord::Base
   
   def nombre_completo
     "#{self.nombre} #{self.apellido}".strip
+  end
+  
+  def apellido_nombre
+    "#{self.apellido}, #{self.nombre}".strip
   end
 end

@@ -1,0 +1,53 @@
+<section>
+  <div class="page-header">
+    <h1>Personas Juridicas <small>Lista de personas_juridicas</small></h1>
+  </div>
+
+  <div class="well">
+    <%= link_to icon_tag('Agregar', :class => 'icon-plus-sign icon-white'), new_persona_juridica_path, :class => 'btn btn-primary' %>
+  </div>
+  <br />
+
+  <% if @personas_juridicas.present? %>
+    <table class="table table-striped table-bordered table-condensed">
+      <tr>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Documento</th>
+              <th>Direccion</th>
+              <th>Telefono</th>
+              <th>Territorio</th>
+              <th>Cargo</th>
+              
+        <th></th>
+      </tr>
+      <% @personas_juridicas.each do |persona_juridica| %>
+        <tr>
+                      <td><%= persona_juridica.nombre %></td>
+                      <td><%= persona_juridica.apellido %></td>
+                      <td><%= persona_juridica.documento %></td>
+                      <td><%= persona_juridica.direccion %></td>
+                      <td><%= persona_juridica.telefono %></td>
+                      <td><%= persona_juridica.territorio_id %></td>
+                      <td><%= persona_juridica.cargo_id %></td>
+                    <td>
+            
+            <div class="btn-group">              
+              <%= link_to 'Acciones <b class="caret"></b>'.html_safe, '#', :class => 'btn btn-primary dropdown-toggle', 'data-toggle' => 'dropdown' %>
+              <ul id="menu1" class="dropdown-menu">
+                <li><%= link_to icon_tag('Editar', :class => 'icon-pencil'), edit_persona_juridica_path(persona_juridica) %></li>
+                <li><%= link_to icon_tag('Eliminar', :class => 'icon-trash'), persona_juridica, confirm: '¿Está seguro de eliminar este registro?. Esta acción no se puede deshacer', method: :delete %></li>
+
+              </ul>              
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </table> 
+  <% else %>
+    <p class="alert-message warning">
+      Todavía no hay personas_juridicas, <%= link_to 'agregar', new_persona_juridica_path %>.
+    </p>
+  <% end %>
+
+</section>

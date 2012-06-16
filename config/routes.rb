@@ -1,5 +1,11 @@
 Gexip::Application.routes.draw do
   
+  resources :organismos_internos
+
+  resources :personas_juridicas
+
+  resources :personas_fisicas
+
   resources :expedientes
 
   resources :unidades_tiempos

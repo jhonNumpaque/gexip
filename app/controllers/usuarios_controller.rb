@@ -7,7 +7,6 @@ class UsuariosController < ApplicationController
     
     @usuarios = Usuario
     
-    
     if params[:valor].present?
       case params[:tipo_busqueda]
       when "USUARIO"
