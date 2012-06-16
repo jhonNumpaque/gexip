@@ -64,8 +64,9 @@ class Expediente < ActiveRecord::Base
   
   def tarea_siguiente
     tarea = self.tarea_actual
-    actividad = tarea.actividad
-    actividad.tareas.where(:orden => tarea.orden.next).first
+    actividad = tarea.actividad    
+    cond_query = '(orden > ? and actividad_id = ?) or (procedimiento_id = ? and actividad_orden > ?)'    
+    VistaTarea.where(cond_query, tarea.orden, actividad.id, actividad.procedimiento_id, actividad.orden).first    
   end
   
   def tarea_actual_terminada?
@@ -96,7 +97,7 @@ class Expediente < ActiveRecord::Base
     tarea_expediente.save
     
     self.update_attributes(:tarea_actual_id => tarea.id,
-      :tarea_expediente_id => tarea_expediente.id)
+      :tarea_expediente_actual_id => tarea_expediente.id)
     
   end
 

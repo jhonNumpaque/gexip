@@ -3,8 +3,23 @@ class SubprocesosController < ApplicationController
   # GET /subprocesos.json
   def index
     @subprocesos = Subproceso
+    
+    if params[:valor].present?
+      case params[:tipo_busqueda]
+      when 'NOMBRE'
+        @subprocesos = @subprocesos.where(' nombre like ?', "%#{params[:valor]}%")
+      when 'OBJETIVO'
+        @subprocesos = @subprocesos.where(' objetivo like ?', "%#{params[:valor]}%")
+      when 'CODIGO'
+        @subprocesos = @subprocesos.where(' codigo =  ?', "#{params[:valor]}")
+      else
+        @subprocesos = @subprocesos.where(' nombre like ? or objetivo like ? or codigo = ?', "%#{params[:valor]}%", "%#{params[:valor]}%", "%#{params[:valor]}%")
+      end
+    end
+    
     @subprocesos = @subprocesos.where(:serieproceso_id => params[:proceso_id]) if (params[:proceso_id].present?)
-    @subprocesos = @subprocesos.all
+    @subprocesos = @subprocesos.where(:cargo_id => params[:filtro_cargo]) if (params[:filtro_cargo].present?)
+    @subprocesos = @subprocesos.page(params[:page]).per(10)
     
     @procesos = Proceso.all
     
@@ -77,10 +92,15 @@ class SubprocesosController < ApplicationController
   # DELETE /subprocesos/1.json
   def destroy
     @subproceso = Subproceso.find(params[:id])
-    @subproceso.destroy
+    begin
+      @subproceso.destroy
+      flash[:notice] = "Subproceso eliminado!"
+    rescue ActiveRecord::DeleteRestrictionError
+      flash[:alert] = "No se puede eliminar el Subproceso"
+    end
 
     respond_to do |format|
-      format.html { redirect_to subprocesos_url, notice: 'Subproceso Modificado Correctamente.' }
+      format.html { redirect_to subprocesos_url }
       format.json { head :no_content }
     end
   end

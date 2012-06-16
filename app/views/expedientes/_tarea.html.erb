@@ -1,0 +1,25 @@
+<% clase_fila =  'alert-info' if tarea_siguiente.id == vista_tarea.id && tarea_expediente_actual.finalizado? %>
+
+<% clase_fila ||=  'alert-success' if tarea_actual.id == vista_tarea.id %>
+<tr class="alert <%= clase_fila %>" rel="<%= expediente.id %>-<%= vista_tarea.id %>-<%= tarea_expediente_actual.id %>">
+  <td>              
+    <% case clase_fila
+    when 'alert-info' %>                            
+      <i class="icon-inbox"></i>               
+    <% when 'alert-success' %>
+      <i class="icon-chevron-right"></i>
+    <% else %>
+      <i class="icon-lock"></i>                            
+    <% end %>
+  </td>
+  <td>
+    <%= vista_tarea.nombre %><br />        
+      <small><%= vista_tarea.actividad_descripcion %></small>      
+  </td>                        
+  <td>
+    <% if tarea_actual.id == vista_tarea.id %>
+      <%= "#{content_tag(:i, '', :class => 'icon-time')} #{tarea_expediente_actual.tiempo_ejecucion[:diff]}".html_safe  %> <br />
+      <small>Inicio: <%= l(tarea_expediente_actual.created_at, :format => :fechahora)  %> </small>
+    <% end %>
+  </td>
+</tr>

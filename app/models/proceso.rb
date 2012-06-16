@@ -2,7 +2,10 @@ class Proceso < Serieproceso
   # relacion
   belongs_to :macroproceso, :foreign_key => :serieproceso_id
   belongs_to :cargo, :foreign_key => :cargo_id
-  has_many :subproceso
+  has_many :subprocesos, :foreign_key => :serieproceso_id, :dependent => :restrict
+  
+  #constantes
+  TIPO_BUSQUEDA = %w{TODOS NOMBRE OBJETIVO CODIGO}
   
   # Concatena codigo y nombre, especial para usar en combobox
   def codigo_nombre

@@ -1,0 +1,10 @@
+$('#lista_tareas').html('');
+<% @vista_tareas_siguientes.each do |vista_tarea| %>
+  $('#lista_tareas').append('<%= escape_javascript(render('expedientes/tarea', 
+    :vista_tarea => vista_tarea,
+    :tarea_siguiente => @tarea_siguiente,
+    :tarea_expediente_actual => @tarea_expediente_actual,
+    :tarea_actual => @tarea_actual,
+    :expediente => @expediente
+  )) %>');
+<% end %>
