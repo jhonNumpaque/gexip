@@ -9,7 +9,7 @@ class ProcedimientosController < ApplicationController
     @procedimientos = @procedimientos.where(" definicion like ?", "%#{params[:definicion]}%") if params[:definicion].present?
     @procedimientos = @procedimientos.where(" serieproceso_id = ?", params[:subproceso]) if params[:subproceso].present?
     
-	@procedimientos = @procedimientos.page(params[:page]).per(10)
+    @procedimientos = @procedimientos.page(params[:page]).per(10)
 		
 		
     respond_to do |format|
@@ -55,7 +55,7 @@ class ProcedimientosController < ApplicationController
 
     respond_to do |format|
       if @procedimiento.save
-        format.html { redirect_to @procedimiento, notice: 'Procedimiento was successfully created.' }
+        format.html { redirect_to @procedimiento, notice: 'Procedimiento creado!.' }
         format.json { render json: @procedimiento, status: :created, location: @procedimiento }
       else
         format.html { render action: "new" }
@@ -70,10 +70,21 @@ class ProcedimientosController < ApplicationController
     @procedimiento = Procedimiento.find(params[:id])
 
     respond_to do |format|
-      if @procedimiento.update_attributes(params[:procedimiento])
-        format.html { redirect_to @procedimiento, notice: 'Procedimiento was successfully updated.' }
+      #      if @procedimiento.update_attributes(params[:procedimiento])
+      #        format.html { redirect_to @procedimiento, notice: 'Procedimiento modificado!.' }
+      #        format.json { head :no_content }
+      #      else
+      #        format.html { render action: "edit" }
+      #        format.json { render json: @procedimiento.errors, status: :unprocessable_entity }
+      #      end
+
+      #a causa del nested attributes, al realizar el update, verificar que no ocurran problemas
+      begin
+        @procedimiento.update_attributes(params[:procedimiento])
+        format.html { redirect_to @procedimiento, notice: 'Procedimiento modificado!.' }
         format.json { head :no_content }
-      else
+      rescue ActiveRecord::DeleteRestrictionError
+        flash[:alert] = "No puede eliminar la Actividad!" 
         format.html { render action: "edit" }
         format.json { render json: @procedimiento.errors, status: :unprocessable_entity }
       end
@@ -84,7 +95,13 @@ class ProcedimientosController < ApplicationController
   # DELETE /procedimientos/1.json
   def destroy
     @procedimiento = Procedimiento.find(params[:id])
-    @procedimiento.destroy
+    
+    begin
+      @procedimiento.destroy
+      flash[:notice] = "Procedimiento Eliminado!"
+    rescue ActiveRedord::DeleteRestrictionError
+      flash[:alert] = "El procedimiento no puede ser eliminado!"
+    end
 
     respond_to do |format|
       format.html { redirect_to procedimientos_url }
