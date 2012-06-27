@@ -4,7 +4,7 @@ class Procedimiento < ActiveRecord::Base
 	validates :elabora_usuario, :presence => true		
 	validates :serieproceso_id, :presence => true		
 	
-	has_many :actividades
+	has_many :actividades, :dependent => :restrict
 	belongs_to :elaborador, :class_name => 'Usuario', :foreign_key => 'elabora_usuario'
 	belongs_to :revisador, :class_name => 'Usuario', :foreign_key => 'revisado_usuario'
 	belongs_to :aprobador, :class_name => 'Usuario', :foreign_key => 'aprobado_usuario'
