@@ -1,11 +1,29 @@
 <section>
   <div class="page-header">
-    <h1>Personas Fisicas <small>Disponibles</small></h1>
+    <h1>Personas F&iacute;sicas <small>Disponibles</small></h1>
   </div>
 
-  <div class="well">
+<!--  <div class="well">
     <%= link_to icon_tag('Agregar', :class => 'icon-plus-sign icon-white'), new_persona_fisica_path, :class => 'btn btn-primary' %>
-  </div>
+    -->
+      <%= form_tag controller_name, :class => "well form-inline", :method => :get do %>
+
+    <%= link_to icon_tag('Agregar', :class => 'icon-plus-sign icon-white'), new_persona_fisica_path, :class => 'btn btn-primary' %>
+    <%= link_to icon_tag('Todos', :class => 'icon-eye-open icon-white'), persona_fisica_path, :class => 'btn btn-primary' %>
+    <i class="icon-th-large"></i>
+    <%= label_tag 'Buscar:' %>
+    <%= text_field_tag 'valor', params[:valor], :style => "width:120px;" %>
+    <%= label_tag 'Tipo' %>
+    <%= select_tag :tipo_busqueda, options_for_select(Usuario::TIPO_BUSQUEDA.map{|c| [c,c]},params[:tipo_busqueda]) %>
+    <%= submit_tag 'Buscar',  :class => 'btn btn-primary'%>
+    <hr />
+
+    <%= select_tag :filtro_ciudad, options_from_collection_for_select(Ciudad.all, "id", "nombre", params[:filtro_ciudad]), :prompt => '-- Seleccione --' %>
+    <%= submit_tag 'Fitrar',  :class => 'btn btn-primary'%>
+  <% end %>
+
+</form>
+<!-- </div> -->
   <br />
 
   <% if @personas_fisicas.present? %>
@@ -40,6 +58,8 @@
         </tr>
       <% end %>
     </table> 
+    <%= paginate @personas_fisicas %>
+  
   <% else %>
     <p class="alert-message warning">
       Todavía no hay personas_fisicas, <%= link_to 'agregar', new_persona_fisica_path %>.

@@ -3,12 +3,13 @@
 
   <%= f.input :nombre %>
   <%= f.input :apellido %>
-  <%= f.input :tipo_documento_id, :collection =>  TipoDocumento.all, :label_method => :nombre, :prompt => '-- Seleccione --' %>
-  <%= f.input :documento %>
+  <%= f.input :documento, :label => "Documento (CI)" %>
   <%= f.input :direccion %>
-  <%= f.input :telefono %>
+  <%= f.input :telefono, :label => "Tel&eacute;fono" %>
   <%= f.input :cargo_id, :collection =>  Cargo.all, :label_method => :nombre, :prompt => '-- Seleccione --' %>
   <%= f.input :territorio_id, :label => "Ciudad", :collection => Ciudad.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+
+  <%= f.input :tipo_documento_id, :as => :hidden, :input_html => { :value => "1" } %> <!-- 1 CIN -->
 
   <div class="form-actions">
     <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
