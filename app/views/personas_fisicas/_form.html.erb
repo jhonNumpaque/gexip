@@ -4,7 +4,7 @@
   <%= f.input :nombre %>
   <%= f.input :apellido %>
   <%= f.input :documento, :label => "Documento (CI)" %>
-  <%= f.input :direccion %>
+  <%= f.input :direccion, :label => "Direcci&oacute;n" %>
   <%= f.input :telefono, :label => "Tel&eacute;fono" %>
   <%= f.input :cargo_id, :collection =>  Cargo.all, :label_method => :nombre, :prompt => '-- Seleccione --' %>
   <%= f.input :territorio_id, :label => "Ciudad", :collection => Ciudad.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>

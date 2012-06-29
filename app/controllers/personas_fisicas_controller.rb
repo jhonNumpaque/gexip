@@ -93,7 +93,13 @@ class PersonasFisicasController < ApplicationController
   # DELETE /personas_fisicas/1.json
   def destroy
     @persona_fisica = PersonaFisica.find(params[:id])
-    @persona_fisica.destroy
+
+    begin
+      @persona_fisica.destroy
+      flash[:notice] = "Persona Fisica Eliminada Correctamente."
+    rescue ActiveRecord::DeleteRestrictionError
+      flash[:alert] = 'No se puede eliminar la Persona Fisica!.'  
+    end
 
     respond_to do |format|
       format.html { redirect_to personas_fisicas_url }

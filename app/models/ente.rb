@@ -3,6 +3,7 @@ class Ente < ActiveRecord::Base
 	#validates :apellido, :presence => true
 	validates :documento, :presence => true
 	validates :tipo_documento_id, :presence => true
+  validates :territorio_id, :presence => true
 	
   # asociaciones
   #has_one :cargo
@@ -10,6 +11,8 @@ class Ente < ActiveRecord::Base
   #has_many :usuario
   belongs_to :tipo_documento
   belongs_to :ciudad, :foreign_key => :territorio_id
+  has_many :expediente, :foreign_key => :ente_id, :dependent => :restrict
+  
   
   # CONSTANTE
   TIPO_BUSQUEDA = %w{TODOS NOMBRE APELLIDO DOCUMENTO DIRECCION TELEFONO}
