@@ -1,14 +1,14 @@
 <%= simple_form_for @persona_juridica, :html => { :class => 'form-horizontal' } do |f| %>
   <%= f.error_notification %>
-  
-    <%= f.input :nombre %>
-    <%= f.input :apellido %>
-    <%= f.input :documento %>
-    <%= f.input :direccion %>
-    <%= f.input :telefono %>
-    <%= f.input :territorio_id %>
-    <%= f.input :cargo_id %>
 
+  <%= f.input :nombre, :label => 'Nombre o Razon Social' %>
+  <%= f.input :documento, :label => 'RUC' %>
+  <%= f.input :direccion %>
+  <%= f.input :telefono %>
+  <%= f.input :cargo_id, :collection =>  Cargo.all, :label_method => :nombre, :prompt => '-- Seleccione --' %>
+  <%= f.input :territorio_id, :label => "Ciudad", :collection => Ciudad.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+
+  <%= f.input :tipo_documento_id, :as => :hidden, :input_html => { :value => "2" } %> <!-- 1 RUC -->
 
   <div class="form-actions">
     <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
