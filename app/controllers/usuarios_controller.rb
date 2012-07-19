@@ -99,21 +99,28 @@ class UsuariosController < ApplicationController
 
   # GET /usuarios/datos/cambiar_clave/2
   def cambiar_clave
-    @usuario = Usuario.find(params[:id])
+    @usuario = Usuario.find(current_usuario.id)
   end
   
   # PUT /usuarios/datos/cambiar_clave_grabar/2
   def cambiar_clave_grabar
-    @usuario = Usuario.find(params[:id])
-
+    @usuario = Usuario.find(current_usuario.id)
+    #verificar si el password actual es el que realemente corresponde al usuario
+    
     respond_to do |format|
-      if @usuario.update_attributes(params[:usuario])
-        #format.html { redirect_to @usuario, notice: 'Usuario was successfully updated.' }
-        #format.html { redirect_to @rol, notice: 'Rol actualizado!.' }
-        format.html { redirect_to @usuario, notice: 'Clave Modificada Correctamente.' }
-        #format.json { head :no_content }
+      if @usuario.valid_password?(params[:usuario][:password_actual])
+        if @usuario.update_attributes(:password => params[:usuario][:password], :password_confirmation => params[:usuario][:password_confirmation])
+          #format.html { redirect_to @usuario, notice: 'Usuario was successfully updated.' }
+          #format.html { redirect_to @rol, notice: 'Rol actualizado!.' }
+          format.html { redirect_to @usuario, notice: 'Clave Modificada Correctamente.' }
+          #format.json { head :no_content }
+        else
+          format.html { render action: "cambiar_clave" }
+          format.json { render json: @usuario.errors, status: :unprocessable_entity }
+        end
       else
-        format.html { render action: "cambiar_clave" }
+        puts '------------------------'
+        format.html { redirect_to  cambiar_clave_path(@usuario), alert: 'Clave Actual Incorrecta!'  }
         format.json { render json: @usuario.errors, status: :unprocessable_entity }
       end
     end
