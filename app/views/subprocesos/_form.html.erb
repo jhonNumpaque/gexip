@@ -5,7 +5,7 @@
   <%= f.input :objetivo %>
   <%= f.input :codigo %>
   <%= f.input :cargo_id, :label => "Cargo", :collection => Cargo.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
-  <%= f.input :serieproceso_id, :label => "MacroProceso", :collection => Proceso.all, :label_method => :codigo_nombre, :prompt => "-- Seleccione --" %>
+  <%= f.input :serieproceso_id, :label => "Proceso", :collection => Proceso.all, :label_method => :codigo_nombre, :prompt => "-- Seleccione --" %>
 
   <div class="form-actions">
     <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
