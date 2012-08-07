@@ -46,6 +46,7 @@ Gexip::Application.routes.draw do
   match 'iniciar_tarea' => 'tareas#iniciar_tarea', :as => 'iniciar_tarea'
   match 'finalizar_tarea' => 'tareas#finalizar_tarea', :as => 'finalizar_tarea'
   match 'cancelar_tarea' => 'tareas#cancelar_tarea', :as => 'cancelar_tarea'
+  match 'iniciar_tarea_logica' => 'tareas#iniciar_tarea_logica', :as => 'iniciar_tarea_logica'
   
   #entes
   match '/search' => 'entes#search', :as => 'search_ente'
