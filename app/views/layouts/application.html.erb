@@ -47,32 +47,39 @@
             <span class="i-bar"></span>
           </a>
 <%#= link_to 'GexIP', root_path, :class => 'brand' %>          
-	  <%= link_to image_tag('logo.png'), root_path, :class => 'brand', :style => 'padding-bottom:0;padding-top: 4px;' %>          
+          <%= link_to image_tag('logo.png'), root_path, :class => 'brand', :style => 'padding-bottom:0;padding-top: 4px;' %>          
           <div class="nav-collapse">
-	    <% if usuario_signed_in? %>            
-	      <ul class="nav">
-		<li class="dropdown">
-		  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-		    Administraci&oacute;n
-		    <b class="caret"></b>
-		  </a>
-		  <ul class="dropdown-menu">
-		    <li><%= link_to 'Usuarios',usuarios_path %></li>
-		    <li><%= link_to 'Roles',roles_path %></li>
-		    <li><%= link_to 'Cargos',cargos_path %></li>
-		    <li><%= link_to 'Entes', entes_path %></li>
-		    <li><%= link_to 'Paises', paises_path %></li>
-		    <li><%= link_to 'Ciudades', ciudades_path %></li>
-		    <li><%= link_to 'Unidades de Tiempo', unidades_tiempos_path %></li>
-		  </ul>
-		</li>
+            <% if usuario_signed_in? %>            
+              <ul class="nav">
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    Administraci&oacute;n
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><%= link_to 'Usuarios',usuarios_path %></li>
+                    <li><%= link_to 'Roles',roles_path %></li>
+                    <li><%= link_to 'Cargos',cargos_path %></li>
+                    <!--<li><%= link_to 'Entes', entes_path %></li>-->
+                    <li><%= link_to 'Paises', paises_path %></li>
+                    <li><%= link_to 'Ciudades', ciudades_path %></li>
+                    <li><%= link_to 'Unidades de Tiempo', unidades_tiempos_path %></li>
+                  </ul>
+                </li>
+               
+              </ul>
+            <ul class="nav pull-right">
+               <li class="dropdown">
+               <%= link_to 'Contectado como ' + current_usuario.login, '#', :class => 'dropdown-toggle', 'data-toggle' => 'dropdown' %>
+                <ul class="dropdown-menu">
+                  <li><%= link_to icon_tag(' Ver Perfil', :class => 'icon-user'),  usuario_path(current_usuario.id) %></li>
+                  <li><%= link_to icon_tag(' Cambiar Clave', :class => 'icon-edit'),  cambiar_clave_path %></li>
+                  <li><%= link_to icon_tag(' Salir', :class => 'icon-share'), logout_path %></li>
+                </ul>
+                </li>
+            </ul>
 
-	      </ul>
-	      <p class="navbar-text pull-right">
-		Conectado como <%= icon_tag(nil, :class => 'icon-user icon-white') %> <%= link_to current_usuario.login, usuario_path(current_usuario.id) %> 
-		<%= icon_tag(nil, :class => 'icon-share icon-white') %> <%= link_to 'Salir', logout_path %>
-	      </p>
-	    <% end %>
+            <% end %>
           </div><!--/.nav-collapse -->
         </div>
       </div>
@@ -83,32 +90,34 @@
         <div class="span2">
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
-              <li class="nav-header">Entes</li>
-              <li><%= link_to 'Personas', entes_path %></li>
+              <li class="nav-header">Personas/Organismos</li>
+              <li><%= link_to 'Personas Físicas', personas_fisicas_path %></li>
+              <li><%= link_to 'Personas Juridicas', personas_juridicas_path %></li>
+              <li><%= link_to 'Organismos Internos', organismos_internos_path %></li>
               <li class="nav-header">Procesos</li>
               <li><%= link_to 'MacroProcesos', macroprocesos_path %></li>
               <li><%= link_to 'Procesos', procesos_path %></li>
               <li><%= link_to 'SubProcesos', subprocesos_path %></li>
               <li><%= link_to 'Procedimientos', procedimientos_path %></li>
               <li class="nav-header">Expedientes</li>
-              <li><%= link_to 'Expdientes', expedientes_path %></li>
+              <li><%= link_to 'Expedientes', expedientes_path %></li>
             </ul>
           </div><!--/.well -->
         </div><!--/span-->
         <div class="span10">
-	  <% if notice %>
-	    <div class="alert alert-success">
-	      <p><%= notice %></p>
-	    </div>
-	  <% end %>
+          <% if notice %>
+            <div class="alert alert-success">
+              <p><%= notice %></p>
+            </div>
+          <% end %>
 
-	  <% if alert  %>
-	    <div class="alert alert-error">
-	      <p><%= alert %></p>
-	    </div>
-	  <% end %>
+          <% if alert  %>
+            <div class="alert alert-error">
+              <p><%= alert %></p>
+            </div>
+          <% end %>
 
-	  <%= yield %>
+          <%= yield %>
         </div><!--/span-->
       </div><!--/row-->
 

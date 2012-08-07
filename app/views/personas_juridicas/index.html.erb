@@ -1,0 +1,75 @@
+<section>
+  <div class="page-header">
+    <h1>Personas Juridicas <small>Disponibles</small></h1>
+  </div>
+
+  <div class="well">
+
+    <fieldset>
+      <legend>Buscador</legend>
+      <%= form_tag controller_name, :class => 'form-inline',:method => :get do %>
+        <%= link_to icon_tag('Agregar', :class => 'icon-plus-sign icon-white'), new_persona_juridica_path, :class => 'btn btn-primary' %>
+        <%= link_to icon_tag('Todos', :class => 'icon-eye-open icon-white'), personas_juridicas_path, :class => 'btn btn-primary' %>
+        <i class="icon-th-large"></i>
+
+        <%= label_tag 'Campo' %>
+        <%= text_field_tag 'valor', params[:valor] %>
+        <%= label_tag 'Tipo' %>
+        <%= select_tag :tipo_busqueda, options_for_select(PersonaJuridica::TIPO_BUSQUEDA.map{|c| [c,c]},params[:tipo_busqueda]) , :class => 'input-medium'%>
+        <%= submit_tag 'Buscar',  :class => 'btn btn-primary'%>
+        <hr />
+        <%= label_tag 'Ciudad' %>
+        <%= select_tag :filtro_ciudad, options_from_collection_for_select(Ciudad.all, "id", "nombre", params[:filtro_ciudad]), :prompt => '-- Seleccione --', :class => 'input-medium' %>
+        <%= label_tag 'Cargo' %>
+        <%= select_tag :filtro_cargo, options_from_collection_for_select(Cargo.all, "id", "nombre", params[:filtro_cargo]), :prompt => '-- Seleccione --', :class => 'input-medium' %>
+        <%= submit_tag 'Filtrar',  :class => 'btn btn-primary'%>
+
+
+
+      <% end %>
+    </fieldset>
+
+  </div>
+  <br />
+
+  <% if @personas_juridicas.present? %>
+    <table class="table table-striped table-bordered table-condensed">
+      <tr>
+        <th>Nombre o Raz&oacute;n Social</th>
+        <th>Documento</th>
+        <th>Direccion</th>
+        <th>Telefono</th>
+        <th>Territorio</th>
+        <th>Cargo</th>
+
+        <th></th>
+      </tr>
+      <% @personas_juridicas.each do |persona_juridica| %>
+        <tr>
+          <td><%= persona_juridica.nombre %></td>
+          <td><%= persona_juridica.documento %></td>
+          <td><%= persona_juridica.direccion %></td>
+          <td><%= persona_juridica.telefono %></td>
+          <td><%= persona_juridica.ciudad.nombre %></td>
+          <td><%= persona_juridica.cargo.nombre %></td>
+          <td>
+
+            <div class="btn-group">              
+              <%= link_to 'Acciones <b class="caret"></b>'.html_safe, '#', :class => 'btn btn-primary dropdown-toggle', 'data-toggle' => 'dropdown' %>
+              <ul id="menu1" class="dropdown-menu">
+                <li><%= link_to icon_tag('Editar', :class => 'icon-pencil'), edit_persona_juridica_path(persona_juridica) %></li>
+                <li><%= link_to icon_tag('Eliminar', :class => 'icon-trash'), persona_juridica, confirm: '¿Está seguro de eliminar este registro?. Esta acción no se puede deshacer', method: :delete %></li>
+
+              </ul>              
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </table> 
+  <% else %>
+    <p class="alert-message warning">
+      Todavía no hay personas_juridicas, <%= link_to 'agregar', new_persona_juridica_path %>.
+    </p>
+  <% end %>
+
+</section>

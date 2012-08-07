@@ -1,5 +1,11 @@
 Gexip::Application.routes.draw do
   
+  resources :organismos_internos
+
+  resources :personas_juridicas
+
+  resources :personas_fisicas
+
   resources :expedientes
 
   resources :unidades_tiempos
@@ -38,7 +44,10 @@ Gexip::Application.routes.draw do
   end
 
   resources :usuarios
-	match '/usuarios/clave/cambiar_clave/:id' => 'usuarios#cambiar_clave', :as => :cambiar_clave
+	match '/usuarios/datos/cambiar_clave/' => 'usuarios#cambiar_clave', :as => :cambiar_clave
+  match '/usuarios/datos/modificar_datos/:id' => 'usuarios#modificar_datos', :as => :modificar_datos
+  match '/usuarios/datos/cambiar_clave_grabar/' => 'usuarios#cambiar_clave_grabar', :as => :cambiar_clave_grabar
+  match '/usuarios/datos/modificar_datos_grabar/:id' => 'usuarios#modificar_datos_grabar', :as => :modificar_datos_grabar
   
   match '/:actividad_id/agregar_tarea' => 'actividades#agregar_tarea', :as => 'agregar_tarea'
   match '/:actividad_id/listar_tareas' => 'actividades#listar_tareas', :as => 'listar_tareas'

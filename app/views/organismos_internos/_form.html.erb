@@ -1,0 +1,17 @@
+<%= simple_form_for @organismo_interno, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= f.error_notification %>
+
+  <%= f.input :nombre, :label => "Organismo" %>
+  <%= f.input :documento, :label => "Nro.Registro" %>
+  <%= f.input :direccion, :label => "Direcci&oacute;n" %>
+  <%= f.input :telefono, :label => "Tel&eacute;fono" %>
+  <%= f.input :territorio_id, :label => "Ciudad", :collection => Ciudad.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+
+  <%= f.input :cargo_id, :as => :hidden, :input_html => { :value => "1" }  %> <!-- organismo sin cargo -->
+  <%= f.input :tipo_documento_id, :as => :hidden, :input_html => { :value => "1" } %> <!-- 1 CIN -->
+
+  <div class="form-actions">
+    <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
+    <%= link_to 'Cancelar', organismos_internos_path, :class => "btn" %>
+  </div>
+<% end %>

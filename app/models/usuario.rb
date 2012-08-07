@@ -12,11 +12,21 @@ class Usuario < ActiveRecord::Base
   validates :nombres, :presence => true
   validates :apellidos, :presence => true
   validates :documento, :presence => true
-  #validates :documento, :presence => true
+  validates :ente_id, :presence => true
+  validates :rol_id, :presence => true
+  
+  validates_uniqueness_of :documento
+  validates_uniqueness_of :login
+  validates_uniqueness_of :email
   
   # asociaciones
   belongs_to :rol, :foreign_key => :rol_id
   belongs_to :ente, :foreign_key => :ente_id
+  
+  has_many :expedientes, :dependent => :restrict
+  #has_many :tarea_expedientes, :dependent => :restrict
+    
+  
   has_many :procedimientos
   
   def self.find_for_database_authentication(warden_conditions)
