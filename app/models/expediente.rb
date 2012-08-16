@@ -23,7 +23,7 @@ class Expediente < ActiveRecord::Base
   
   #has_many :tareas_expedientes, :dependent => :destroy
   
-  # CONSTANTE
+  # CONSTANTE, si se modifica orden o se agrega cambiar métodos relacionados
   ESTADO = %w{NUEVO RECIBIDO TRANSITO RECHAZADO FINALIZADO ANULADO PROCESANDO}
   
   attr_accessor :numero_documento
@@ -64,13 +64,33 @@ class Expediente < ActiveRecord::Base
   
   def tarea_siguiente
     tarea = self.tarea_actual
-    actividad = tarea.actividad    
-    cond_query = '(orden > ? and actividad_id = ?) or (procedimiento_id = ? and actividad_orden > ?)'    
-    VistaTarea.where(cond_query, tarea.orden, actividad.id, actividad.procedimiento_id, actividad.orden).first    
+    actividad = tarea.actividad
+    cond_query = '((orden > :orden and actividad_id = :actividad) '
+    cond_vals = { :orden => tarea.orden, :actividad => actividad.id, 
+      :proced => actividad.procedimiento_id, :act_orden => actividad.orden }
+      
+    if tarea.es_proceso_no? 
+      cond_query += ' and (id <> :tarea_not_id)) '
+      cond_vals[:tarea_not_id] = self.tarea_anterior.tarea_sgt_id
+    elsif tarea.es_proceso_si?
+      cond_query += ' and (id <> :tarea_not_id)) '
+      cond_vals[:tarea_not_id] = self.tarea_anterior.tarea_alt_id
+    else
+      cond_query += ') '
+    end
+    cond_query += 'or (procedimiento_id = :proced and actividad_orden > :act_orden)'
+    
+        
+    VistaTarea.where(cond_query, cond_vals).first    
   end
   
   def tarea_actual_terminada?
     self.tarea_expediente_actual.fecha_fin.present?
+  end
+  
+  # métodos de clase
+  def self.estado_procesando
+    ESTADO.last
   end
 
   private
@@ -81,24 +101,30 @@ class Expediente < ActiveRecord::Base
   end
   
   def iniciar_proceso
-    procedimiento = self.procedimiento
-    actividad = procedimiento.actividades.order('orden').first
-    tarea = actividad.tareas.order('orden').first()
+    Expediente.transaction do
+      procedimiento = self.procedimiento
+      actividad = procedimiento.actividades.order('orden').first
+      tarea = actividad.tareas.order('orden').first()
     
-    tarea_expediente = TareaExpediente.new
-    tarea_expediente.procedimiento = procedimiento
-    tarea_expediente.expediente = self
-    tarea_expediente.tarea = tarea
-    tarea_expediente.usuario_inicio_id = self.usuario_id
-    tarea_expediente.fecha_inicio = Time.now
-    tarea_expediente.estado = TareaExpediente::INICIO
-    tarea_expediente.observacion_envio = 'Inicio del procedimiento (automático)'
-    tarea_expediente.fecha_fin = Time.now
-    tarea_expediente.save
-    
-    self.update_attributes(:tarea_actual_id => tarea.id,
-      :tarea_expediente_actual_id => tarea_expediente.id)
-    
+      # tarea_expediente_status contiene un array con true|false en 
+      # el primer elemento (si se guardó o no el registro) y en el 
+      # segundo elemento el objeto tarea_expediente
+      tarea_expediente = TareaExpediente.crear!(
+        :procedimiento_id => procedimiento.id,
+        :expediente_id => self.id,
+        :tarea_id => tarea.id,
+        :usuario_inicio_id => self.usuario_id        
+      )
+      
+      
+      fin = tarea_expediente.finalizar!(
+               self.usuario_id, 
+               'Inicio del procedimiento (automático)'
+            )
+
+      self.update_attributes(:tarea_actual_id => tarea.id,
+      :tarea_expediente_actual_id => tarea_expediente.id) if fin      
+    end
   end
 
 end

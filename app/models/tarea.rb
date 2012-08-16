@@ -11,9 +11,12 @@ class Tarea < ActiveRecord::Base
   belongs_to :cargo, :foreign_key => :cargo_id
   belongs_to :actividad, :foreign_key => :actividad_id
   belongs_to :unidad_tiempo, :foreign_key => :unidad_tiempo_id
+  belongs_to :tarea_siguiente, :foreign_key => :tarea_sgt_id, :class_name => 'Tarea'
+  belongs_to :tarea_alternativa, :foreign_key => :tarea_alt_id, :class_name => 'Tarea'
 
   # CONSTANTE
-  TIPO_TAREA = %w{INICIO PROCESO TRANSLADO ALMACENAMIENTO LOGICA FIN FIN_ALTERNANTIVO}
+  TIPO_TAREA = %w{INICIO PROCESO PROCESO_SI PROCESO_NO TRANSLADO ALMACENAMIENTO LOGICA FIN FIN_ALTERNANTIVO}
+  TIPO_TAREA_LOGICA = 'LOGICA'
   
   attr_accessor :tarea_anterior_id
   
@@ -29,6 +32,18 @@ class Tarea < ActiveRecord::Base
       anterior = self.class.find(self.tarea_anterior_id)
       anterior.update_attribute('tarea_sgt_id', self.tarea_anterior_id)
     end
+  end
+  
+  def es_logica?
+    self.tipo == TIPO_TAREA_LOGICA
+  end
+  
+  def es_proceso_si?
+    self.tipo == 'PROCESO_SI'
+  end
+  
+  def es_proceso_no?
+    self.tipo == 'PROCESO_NO'
   end
   
   def self.tareas_anteriores(actividad_id, me_id)

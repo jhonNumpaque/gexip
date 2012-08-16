@@ -61,7 +61,12 @@ $(function(){
   
     $('#cancelar_tarea').click(function(){     
         var url = $(this).attr('href'); 
-        var ids = $('.alert-success').attr('rel').split('-');
+        var ids = $(this).attr('rel').split('-');
+       
+        // si se presiona cancelar y no hay tarea ejecutandose
+        if (ids.length == 0)
+            return false;
+       
         var eid = ids[0];
         var teid = ids[2];
         var confirm_message = $(this).attr('data-confirm');
@@ -77,6 +82,24 @@ $(function(){
             $('#iniciar_tarea').removeAttr('disabled').addClass('btn-primary');     
         }
      
+        return false;
+    });
+    
+    $('.btn-confirmar').live('click', function(){
+        var ids = $(this).attr('rel').split('-');
+        var eid = ids[0];
+        var tid = ids[1];
+        var confirm_message = $(this).attr('data-confirma');
+        var tipo_confirm = $(this).attr('id');
+        var url = $(this).attr('data-url'); 
+        
+        if (confirm(confirm_message)) {
+            $.get(url, {
+                eid: eid, 
+                tid: tid,
+                tc: tipo_confirm
+            }, null, 'script');         
+        }
         return false;
     });
 });

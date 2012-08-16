@@ -19,22 +19,42 @@ class ExpedientesController < ApplicationController
     @tarea_expediente_actual = @expediente.tarea_expediente_actual
     @tarea_actual = @expediente.tarea_actual
     @tarea_siguiente = @expediente.tarea_siguiente
-    actividad = @tarea_actual.actividad      
-    orden = @tarea_expediente_actual.finalizado? ? @tarea_siguiente.orden : @tarea_actual.orden
     
-    query_string = '('    
-    query_values = {}
-    if @tarea_expediente_actual.finalizado?
-      query_string = '(id <> :id and '
-      query_values[:id] = @tarea_actual.id
-      actividad = @tarea_siguiente.actividad
-    end
-    query_values.merge!({ :orden => orden, :actividad_id => actividad.id, :procedimiento_id => actividad.procedimiento_id, :actividad_orden => actividad.orden })    
-    query_string += 'orden >= :orden and actividad_id = :actividad_id) or (procedimiento_id = :procedimiento_id and actividad_orden > :actividad_orden)'        
-    
-    # .del_cargo(current_usuario.ente.cargo_id)
-    @vista_tareas = VistaTarea.order('actividad_id,orden').limit(2).where(query_string,query_values)
+    if @tarea_siguiente
+      tarea_anterior = @expediente.tarea_anterior
+      actividad = @tarea_actual.actividad      
+      orden = @tarea_expediente_actual.finalizado? ? @tarea_siguiente.orden : @tarea_actual.orden
 
+      query_string = '('    
+      query_values = {}
+      if @tarea_expediente_actual.finalizado?
+        query_string = '(id <> :id and '
+        query_values[:id] = @tarea_actual.id
+        actividad = @tarea_siguiente.actividad
+      end
+
+      if tarea_anterior
+        if tarea_anterior.es_logica?
+          query_string += 'id not in (:tarea_logica, :tarea_not) and '
+          query_values[:tarea_logica] = tarea_anterior.id
+          query_values[:tarea_not] = @tarea_actual.id == tarea_anterior.tarea_sgt_id ? tarea_anterior.tarea_alt_id : tarea_anterior.tarea_sgt_id
+        end
+      end
+
+      if @tarea_actual.es_proceso_si?
+        query_string += 'id <> :id_not and '
+        query_values[:id_not] = tarea_anterior.tarea_alt_id
+      elsif @tarea_actual.es_proceso_no?
+        query_string += 'id <> :id_not and '
+        query_values[:id_not] = tarea_anterior.tarea_sig_id
+      end
+
+      query_values.merge!({ :orden => orden, :actividad_id => actividad.id, :procedimiento_id => actividad.procedimiento_id, :actividad_orden => actividad.orden })    
+      query_string += 'orden >= :orden and actividad_id = :actividad_id) or (procedimiento_id = :procedimiento_id and actividad_orden > :actividad_orden)'        
+
+      # .del_cargo(current_usuario.ente.cargo_id)
+      @vista_tareas = VistaTarea.order('actividad_id,orden').limit(2).where(query_string,query_values)
+    end
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @expediente }

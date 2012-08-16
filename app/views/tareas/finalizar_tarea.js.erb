@@ -1,10 +1,21 @@
-$('#lista_tareas').html('');
-<% @vista_tareas_siguientes.each do |vista_tarea| %>
-  $('#lista_tareas').append('<%= escape_javascript(render('expedientes/tarea', 
-    :vista_tarea => vista_tarea,
-    :tarea_siguiente => @tarea_siguiente,
-    :tarea_expediente_actual => @tarea_expediente_actual,
-    :tarea_actual => @tarea_actual,
-    :expediente => @expediente
-  )) %>');
+<% if @tarea_siguiente && @tarea_siguiente.es_logica? && @tarea_expediente_actual.finalizado? %>
+  $('#tareas_wrapper').remove();
+  $('#data_wrapper').append('<%= escape_javascript(render('expedientes/logica_toolbar', 
+                :tarea_siguiente => @tarea_siguiente, 
+                :tarea_expediente_actual => @tarea_expediente_actual,
+                :expediente => @expediente,
+                :vista_tarea => @vista_tareas.first)) %>');
+<% elsif @tarea_es_logica %>
+      $('#tareas').html('<%= escape_javascript(render('tareas', :vista_tareas => @vista_tareas)) unless @tarea_siguiente.es_logica? %>');
+<% else %>
+  $('#lista_tareas').html('');
+  <% @vista_tareas.each do |vista_tarea| %>  
+    $('#lista_tareas').append('<%= escape_javascript(render('expedientes/tarea', 
+      :vista_tarea => vista_tarea,
+      :tarea_siguiente => @tarea_siguiente,
+      :tarea_expediente_actual => @tarea_expediente_actual,
+      :tarea_actual => @tarea_actual,
+      :expediente => @expediente
+    )) %>');
+  <% end %>
 <% end %>

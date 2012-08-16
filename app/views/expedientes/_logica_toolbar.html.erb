@@ -1,0 +1,22 @@
+ <div class="toolbar-rigth">
+    <% if tarea_siguiente && tarea_siguiente.es_logica? && tarea_expediente_actual.finalizado? %>
+      <%= tarea_siguiente.nombre %><br />
+      <div class="btn-group">            
+          <%= link_to 'Sí', '#', 'data-url' => iniciar_tarea_logica_path, :class => 'btn btn-primary btn-confirmar', 
+            :id => 'tarea_si', :rel => "#{expediente.id}-#{tarea_siguiente.id}",
+            'data-confirma' => 'Usted eligió SI. ¿Está seguro?' %>
+        
+          <%= link_to 'No', '#', 'data-url' => iniciar_tarea_logica_path, :class => 'btn btn-primary btn-confirmar', 
+            :id => 'tarea_no', :rel => "#{expediente.id}-#{tarea_siguiente.id}",
+            'data-confirma' => 'Usted eligió NO. ¿Está seguro?' %>
+
+          <%= link_to 'Cancelar', cancelar_tarea_path, :class => 'btn btn-primary btn-cancelar', 
+            :id => 'cancelar_tarea', :rel => "#{expediente.id}-#{vista_tarea.id }-#{ tarea_expediente_actual.id }",
+            :confirm => '¿Está seguro que desea CANCELAR esta tarea?' %>
+          
+        <!--<%= link_to icon_tag('Enviar', :class => 'icon-plane icon-white'), '#', :class => 'btn btn-primary' %>
+        <%= link_to icon_tag('Editar', :class => 'icon-edit icon-white'), '#', class: 'btn btn-primary' %>
+        <%= link_to icon_tag('Anular', :class => 'icon-ban-circle icon-white'), '#', class: 'btn btn-primary' %>-->
+      </div>
+    <% end %>
+  </div>
