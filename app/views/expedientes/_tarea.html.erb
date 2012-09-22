@@ -1,4 +1,4 @@
-<% clase_fila =  'alert-info' if tarea_siguiente.id == vista_tarea.id && tarea_expediente_actual.finalizado? %>
+<% clase_fila =  'alert-info' if tarea_siguiente && tarea_siguiente.id == vista_tarea.id && tarea_expediente_actual.finalizado? %>
 
 <% clase_fila ||=  'alert-success' if tarea_actual.id == vista_tarea.id %>
 <tr class="alert <%= clase_fila %>" rel="<%= expediente.id %>-<%= vista_tarea.id %>-<%= tarea_expediente_actual.id %>">

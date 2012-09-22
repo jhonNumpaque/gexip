@@ -1,10 +1,10 @@
-<div class="span5 well-simple">          
+<div class="span5 well-simple" id="tareas_wrapper">          
   <fieldset>
     <legend>Tareas</legend>
     <div class="btn-group">
       <%= link_iniciar_tarea(@expediente) %>
       <%= link_finalizar_tarea(@expediente) %>
-      <%= link_cancelar_tarea(@expediente) %>
+      <%= link_cancelar_tarea(@expediente, vista_tareas.first) %>
     </div>
 
     <table class="table">
@@ -17,7 +17,7 @@
       </thead>
       <tbody class="table table-condensed table-striped" id="lista_tareas">
         <% vista_tareas.each do |vista_tarea| %>
-          <%= render 'tarea', :vista_tarea => vista_tarea, 
+          <%= render 'expedientes/tarea', :vista_tarea => vista_tarea, 
             :tarea_siguiente => @tarea_siguiente,
             :tarea_expediente_actual => @tarea_expediente_actual, 
             :tarea_actual => @tarea_actual,

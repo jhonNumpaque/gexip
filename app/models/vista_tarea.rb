@@ -6,4 +6,8 @@ class VistaTarea < ActiveRecord::Base
   
   scope :del_cargo, lambda { |cargo_id| where(:cargo_id => cargo_id) }
 	
+  def es_logica?
+    self.tipo == Tarea::TIPO_TAREA_LOGICA
+  end
+  
 end

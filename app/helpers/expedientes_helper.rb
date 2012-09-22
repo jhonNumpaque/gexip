@@ -29,17 +29,22 @@ module ExpedientesHelper
       confirm: '¿Está seguro que desea FINALIZAR esta tarea?')      
   end
   
-  def link_cancelar_tarea(expediente)
-    if expediente.tarea_expediente_actual.finalizado?
+  def link_cancelar_tarea(expediente, vista_tarea)
+    tarea_expediente_actual = expediente.tarea_expediente_actual
+    tarea_actual_finalizado = tarea_expediente_actual.finalizado?
+    if tarea_actual_finalizado
       clase = 'btn'      
-      disabled = 'disabled'      
+      disabled = 'disabled'
+      rel = ''
     else
-      clase = 'btn btn-primary'            
+      clase = 'btn btn-primary'
+      rel = "#{expediente.id}-#{vista_tarea.id }-#{ tarea_expediente_actual.id }"
     end
     
     link_to(icon_tag('Cancelar', :class => 'icon-stop icon-white'), 
       cancelar_tarea_path(), 
       class: clase, disabled: disabled, 
+      rel: rel,
       id: 'cancelar_tarea',
       confirm: '¿Está seguro que desea CANCELAR esta tarea?')      
   end

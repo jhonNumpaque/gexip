@@ -13,7 +13,7 @@
         </div>
 
 
-        <div class="span6 well-simple">
+        <div class="span6 well-simple" id="data_wrapper">
           <fieldset>
             <legend>Datos del Expediente</legend>
             <table>
@@ -48,15 +48,17 @@
             </table>
           </fieldset>
           
-          <div class="btn-group toolbar-rigth">
-            <%= link_to icon_tag('Enviar', :class => 'icon-plane icon-white'), '#', :class => 'btn btn-primary' %>
-            <%= link_to icon_tag('Editar', :class => 'icon-edit icon-white'), '#', class: 'btn btn-primary' %>
-            <%= link_to icon_tag('Anular', :class => 'icon-ban-circle icon-white'), '#', class: 'btn btn-primary' %>            
-          </div>
-          
+              <%= render 'logica_toolbar', 
+                :tarea_siguiente => @tarea_siguiente, 
+                :tarea_expediente_actual => @tarea_expediente_actual,
+                :expediente => @expediente,
+                :vista_tarea => @vista_tareas.first if @tarea_siguiente && @tarea_siguiente.es_logica? %>
         </div>
 
-          <%= render 'tareas', :vista_tareas => @vista_tareas %>
+        <div id="tareas">          
+          <%#= @vista_tareas.blank? %>
+          <%= render 'tareas', :vista_tareas => @vista_tareas unless @vista_tareas.blank? || (@tarea_siguiente && @tarea_siguiente.es_logica?) %>
+        </div>
 
             <div class="span11 well-simple">
               <fieldset>
