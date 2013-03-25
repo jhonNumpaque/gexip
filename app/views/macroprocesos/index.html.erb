@@ -7,7 +7,7 @@
 
     <%= form_tag controller_name, :class => 'form-inline', :method => :get do %>
       <%= link_to icon_tag('Agregar', :class => 'icon-plus-sign icon-white'), new_macroproceso_path, :class => 'btn btn-primary' %>
-      <%= link_to icon_tag('Todos', :class => 'icon-eye-open icon-white'), macroproceso_path, :class => 'btn btn-primary' %>
+      <%= link_to icon_tag('Todos', :class => 'icon-eye-open icon-white'), macroprocesos_path, :class => 'btn btn-primary' %>
       <i class="icon-th-large"></i>
       <%= label_tag 'Buscar' %>
       <%= text_field_tag :valor, params[:valor] %>
