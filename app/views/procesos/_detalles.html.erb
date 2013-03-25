@@ -1,0 +1,47 @@
+<h2 style="text-align:center;background-color:#ccc">Proceso</h2>
+<table class="table">
+	<tbody>
+		<tr>
+			<th>C&oacute;digo</th>
+			<td><%= @proceso.codigo %></td>
+		</tr>
+		<tr>
+			<th>Nombre</th>
+			<td><%= @proceso.nombre %></td>
+		</tr>
+		<tr>
+			<th>Objetivo</th>
+			<td><%= @proceso.objetivo %></td>
+		</tr>
+		<tr>
+			<th>Fecha de Elaboración</th>
+			<td><%= format_date(@proceso.created_at) %></td>
+		</tr>
+		<tr>
+			<th>Cargo Responsable</th>
+			<td><%= @proceso.cargo.nombre %></td>
+		</tr>		
+	</tbody>
+</table>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th colspan="4" style="text-align:center;background-color:#ccc"><h3>Sub-Procesos<h3></th>
+		</tr>
+		<tr>
+			<th>Nombre</th>
+			<th>Fecha</th>
+			<th>&nbsp;</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% for subproceso in @subprocesos -%>
+			<tr>
+				<td><%= subproceso.nombre %></td>
+				<td><%= format_date(subproceso.updated_at) %></td>
+				<td><div class="pull-right"><%= link_to icon_tag('', :class => 'icon-pencil'), '#' %></div></td>
+			</tr>
+		<% end -%>
+	</tbody>
+</table>

@@ -1,4 +1,6 @@
 Gexip::Application.routes.draw do
+
+  match 'procedimientos/ni' => 'procedimientos#new_index', :as => :new_procedimientos_index
   
   resources :organismos_internos
 
@@ -56,6 +58,9 @@ Gexip::Application.routes.draw do
   match 'finalizar_tarea' => 'tareas#finalizar_tarea', :as => 'finalizar_tarea'
   match 'cancelar_tarea' => 'tareas#cancelar_tarea', :as => 'cancelar_tarea'
   match 'iniciar_tarea_logica' => 'tareas#iniciar_tarea_logica', :as => 'iniciar_tarea_logica'
+  
+  # file upload
+  resources :uploads
   
   #entes
   match '/search' => 'entes#search', :as => 'search_ente'

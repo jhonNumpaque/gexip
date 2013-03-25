@@ -80,7 +80,7 @@
             <div class="span11">
               <div id="tabContent" class="tab-content">                
                 <%= render 'registros_aplicables' %>                
-                <%= render 'documentos' %>                
+                <%= render 'documentos', :expediente => @expediente %>                
                 <%= render 'observaciones' %>                                
                 <%= render 'seguimiento' %>                                
               </div>              

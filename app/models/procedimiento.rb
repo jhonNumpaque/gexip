@@ -13,5 +13,7 @@ class Procedimiento < ActiveRecord::Base
 	
 	accepts_nested_attributes_for :actividades, :reject_if => lambda { |a| a[:descripcion].blank? }, :allow_destroy => true
 	
-	
+	def aprobado?
+		self.aprobado_fecha.present? && self.aprobado_usuario.present?
+	end
 end

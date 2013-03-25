@@ -24,9 +24,11 @@ class ProcedimientosController < ApplicationController
   def show
     @procedimiento = Procedimiento.find(params[:id])
     @actividades = @procedimiento.actividades.order('orden asc')
+
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @procedimiento }
+      format.json { render json: [@procedimiento, @actividades] }
+      format.js
     end
   end
 
@@ -108,4 +110,9 @@ class ProcedimientosController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def new_index
+    @macroprocesos = Macroproceso.all
+    render :layout => 'jstree'
+  end  
 end

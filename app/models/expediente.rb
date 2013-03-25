@@ -22,6 +22,10 @@ class Expediente < ActiveRecord::Base
   belongs_to :usuario_finalizado, :foreign_key => :usuario_finalizo_id, :class_name => 'Usuario'
   
   #has_many :tareas_expedientes, :dependent => :destroy
+
+  has_many :adjuntos, :as => :adjuntable
+
+  accepts_nested_attributes_for :adjuntos, :reject_if => lambda { |a| a[:data].blank? }, :allow_destroy => true
   
   # CONSTANTE, si se modifica orden o se agrega cambiar métodos relacionados
   ESTADO = %w{NUEVO RECIBIDO TRANSITO RECHAZADO FINALIZADO ANULADO PROCESANDO}

@@ -1,0 +1,11 @@
+<td><%= proceso.nombre %></td>
+<td><%= format_date(proceso.updated_at) %></td>
+<td>
+	<div class="pull-right">
+		<%= link_to icon_tag('', :class => 'icon-trash'), proceso_path(proceso), 
+		:title => 'Eliminar Proceso', :method => :delete, :remote => true,
+		:confirm => "¿Está seguro de eliminar este proceso?.\nEsta acción no se puede revertir" %> 
+		<%= link_to icon_tag('', :class => 'icon-pencil'), 
+		edit_proceso_path(id: proceso, from: 'tree'), remote: true %>
+	</div>
+</td>

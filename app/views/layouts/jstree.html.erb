@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>GexIP :: <%= controller_name.humanize  %></title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+    <%= stylesheet_link_tag    "procedimientos_jstree", :media => "all" %>
+    <%#= javascript_include_tag "application" %>
+    <%= javascript_include_tag "jquery", 'jquery_ujs', 'bootstrap.min.js' %>
+
+    <%= csrf_meta_tags %>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+	<body>
+
+    
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="i-bar"></span>
+            <span class="i-bar"></span>
+            <span class="i-bar"></span>
+          </a>
+<%#= link_to 'GexIP', root_path, :class => 'brand' %>          
+          <%= link_to image_tag('logo.png'), root_path, :class => 'brand', :style => 'padding-bottom:0;padding-top: 4px;' %>          
+          <div class="nav-collapse">
+            <% if usuario_signed_in? %>            
+              <ul class="nav">
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    Administraci&oacute;n
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><%= link_to 'Usuarios',usuarios_path %></li>
+                    <li><%= link_to 'Roles',roles_path %></li>
+                    <li><%= link_to 'Cargos',cargos_path %></li>
+                    <!--<li><%= link_to 'Entes', entes_path %></li>-->
+                    <li><%= link_to 'Paises', paises_path %></li>
+                    <li><%= link_to 'Ciudades', ciudades_path %></li>
+                    <li><%= link_to 'Unidades de Tiempo', unidades_tiempos_path %></li>
+                  </ul>
+                </li>
+               
+              </ul>
+            <ul class="nav pull-right">
+               <li class="dropdown">
+               <%= link_to 'Contectado como ' + current_usuario.login, '#', :class => 'dropdown-toggle', 'data-toggle' => 'dropdown' %>
+                <ul class="dropdown-menu">
+                  <li><%= link_to icon_tag(' Ver Perfil', :class => 'icon-user'),  usuario_path(current_usuario.id) %></li>
+                  <li><%= link_to icon_tag(' Cambiar Clave', :class => 'icon-edit'),  cambiar_clave_path %></li>
+                  <li><%= link_to icon_tag(' Salir', :class => 'icon-share'), logout_path %></li>
+                </ul>
+                </li>
+            </ul>
+
+            <% end %>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+		<div class="container-fluid">
+      <div class="rows">        
+			 <%= yield %>
+      </div>
+		</div>
+
+    <div class="modal hide fade" id="modal-wrapper">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Cargando...</h3>
+      </div>
+      <div class="modal-body">
+        <p>Cargando, espere por favor…</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" id="submit_form">Guardar</button>
+        <button class="btn" data-dismiss="modal">Cancelar</button>  
+      </div>
+    </div>
+
+		<%= javascript_include_tag 'jquery.jstree' %>
+    <script type="text/javascript">
+      $(function(){
+        $('#main').jstree({
+          'themes': {
+            'theme': 'default',
+            'url': '/assets/themes/default/style.css'
+          },          
+          'types': {
+            'valid_children': ['macroproceso'],
+            'types': {
+              'macroproceso': {
+                'icon': {                  
+                    'image': '/assets/icons/macroproceso.png'                  
+                },
+                'max_children': -1,
+                'max_depth': -1,
+                'valid_children': 'all'
+              }
+            }
+          }
+        })
+        .bind("select_node.jstree", function (event, data) {
+          var id = data.rslt.obj.attr('data-id');
+          var rel = data.rslt.obj.attr('rel');
+
+          if (rel == 'macroproceso') {
+            $.get('<%= macroprocesos_path %>/' + id + '.js', {}, function(data){
+              //setData(data);                            
+            }, 'script');
+          } else if (rel == 'proceso') {
+            $.get('<%= procesos_path %>/' + id + '.js', {}, function(data){
+              //setData(data);
+            }, 'script');
+          } else if (rel == 'subproceso') {
+            $.get('<%= subprocesos_path %>/' + id + '.js', {}, function(data){
+              //setData(data);
+            }, 'script');
+          } else if (rel == 'procedimiento') {
+            $.get('<%= procedimientos_path %>/' + id + '.js', {}, function(data){
+              //setData(data);
+            }, 'script');
+          }          
+                    
+          $('.descipt').html(humanize(rel));
+        });
+      });
+
+      function humanize(string)
+      {
+          return string.charAt(0).toUpperCase() + string.slice(1);
+      }
+
+      function setData(data) {
+        obj = data[0]
+        children = data[1]
+        $('#id').html(obj.id);
+        $('#nombre').html(obj.nombre);
+        $('#objetivo').html(obj.objetivo);
+        $('#definiciones').html(obj.definiciones);
+        $('#codigo').html(obj.codigo);
+        $('#clasificacion').html(obj.clasificacion);
+
+        $("#children_body").html("");
+
+        if (obj.cargo_id) {
+          $.get('<%= cargos_path %>/' + obj.cargo_id + '.json', {}, function(cargo_data){
+            $('#cargo').html(cargo_data.nombre);
+          }, 'json');
+        }
+
+        if (children) {
+          $.each(children, function(i, val) {
+            var cont = "<tr><td>" + val.id + "</td>";
+            codigo = ""
+            if (val.codigo)
+              codigo = val.codigo;
+
+            nombre = ""
+            if (val.nombre)
+              nombre = val.nombre;
+
+            if (val.descripcion)
+              nombre = val.descripcion;
+
+            cont = cont + "<td>" + codigo + "</td>";
+            cont = cont + "<td>" + nombre + "</td>";
+            $("#children_body").append(cont);
+          })        
+        }
+      }
+    </script>
+	</body>
+</html>

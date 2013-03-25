@@ -16,9 +16,9 @@
 
         <table class="table table-condensed table-striped">                        
           <tbody>
-            <% 10.times do %>
+            <% expediente.adjuntos.each do |adjunto| %>            
               <tr>                      
-                <td>Lorem Ipsum has been the</td>                              
+                <td><%= adjunto.data %></td>                              
                 <td><button class="btn btn-primary">Acciones</button></td>
               </tr>
             <% end %>

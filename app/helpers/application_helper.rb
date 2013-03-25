@@ -18,4 +18,9 @@ module ApplicationHelper
     valor ? 'Sí' : 'No'
   end
 
+  def format_date(date, format="%d/%m/%Y %H:%M")
+    format = "%d/%m/%Y" if date.is_a?(Date)
+    date.strftime(format)
+  end
+
 end

@@ -1,0 +1,51 @@
+<h2 style="text-align:center;background-color:#ccc">Macroproceso</h2>
+<table class="table">
+	<tbody>
+		<tr>
+			<th>C&oacute;digo</th>
+			<td><%= @macroproceso.codigo %></td>
+		</tr>
+		<tr>
+			<th>Nombre</th>
+			<td><%= @macroproceso.nombre %></td>
+		</tr>
+		<tr>
+			<th>Objetivo</th>
+			<td><%= @macroproceso.objetivo %></td>
+		</tr>
+		<tr>
+			<th>Clasificaci&oacute;n</th>
+			<td><%= @macroproceso.clasificacion %></td>
+		</tr>
+		<tr>
+			<th>Fecha de Elaboración</th>
+			<td><%= format_date(@macroproceso.created_at) %></td>
+		</tr>
+		<tr>
+			<th>Cargo Responsable</th>
+			<td><%= @macroproceso.cargo.nombre %></td>
+		</tr>		
+	</tbody>
+</table>
+
+<div id="procesos">
+	<table class="table">
+		<thead>
+			<tr>
+				<th colspan="4" style="text-align:center;background-color:#ccc"><h3>Procesos<h3></th>
+			</tr>
+			<tr>
+				<th>Nombre</th>
+				<th>Fecha</th>
+				<th>&nbsp;</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% for proceso in @procesos -%>
+				<tr id="pso-<%= proceso.id %>">
+					<%= render 'proceso', :proceso => proceso %>
+				</tr>
+			<% end -%>
+		</tbody>
+	</table>
+</div>

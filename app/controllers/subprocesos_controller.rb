@@ -33,10 +33,14 @@ class SubprocesosController < ApplicationController
   # GET /subprocesos/1.json
   def show
     @subproceso = Subproceso.find(params[:id])
+    @procedimientos = @subproceso.procedimientos
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @subproceso }
+      format.json do         
+        render json: [@subproceso, @procedimientos]
+      end
+      format.js
     end
   end
 
