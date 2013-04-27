@@ -11,6 +11,7 @@
 # bundler state
 /.bundle
 /vendor/bundle/
+Gemfile.*
 
 # minimal Rails specific artifacts
 db/*.sqlite3
@@ -38,6 +39,7 @@ tmp/*
 /public/cache
 /public/stylesheets/compiled
 /public/system
+/public/uploads
 /spec/tmp/*
 /cache
 /capybara*
@@ -48,6 +50,7 @@ tmp/*
 /spec/routing
 /spec/views
 /specifications
+/spec
 
 # scm revert files
 **.orig
