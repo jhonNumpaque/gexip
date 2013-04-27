@@ -48,15 +48,17 @@ class SubprocesosController < ApplicationController
   # GET /subprocesos/new.json
   def new
     @subproceso = Subproceso.new
+    @from_tree = params[:from].present?
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render json: @subproceso }
+      format.js
     end
   end
 
   # GET /subprocesos/1/edit
   def edit
+    @from_tree = params[:from].present?
     @subproceso = Subproceso.find(params[:id])
   end
 
@@ -68,10 +70,10 @@ class SubprocesosController < ApplicationController
     respond_to do |format|
       if @subproceso.save
         format.html { redirect_to subprocesos_path, notice: 'Subproceso Creado Correctamente.' }
-        format.json { render json: @subproceso, status: :created, location: @subproceso }
+        format.js
       else
         format.html { render action: "new" }
-        format.json { render json: @subproceso.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end
@@ -84,10 +86,10 @@ class SubprocesosController < ApplicationController
     respond_to do |format|
       if @subproceso.update_attributes(params[:subproceso])
         format.html { redirect_to subproceso_path, notice: 'Subproceso Modificado Correctamente.' }
-        format.json { head :no_content }
+        format.js
       else
         format.html { render action: "edit" }
-        format.json { render json: @subproceso.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end
@@ -105,7 +107,7 @@ class SubprocesosController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to subprocesos_url }
-      format.json { head :no_content }
+      format.js
     end
   end
   

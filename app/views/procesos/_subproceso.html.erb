@@ -1,0 +1,11 @@
+<td colspan="2"><%= subproceso.nombre %></td>
+<td><%= format_date(subproceso.updated_at) %></td>
+<td>
+	<div class="pull-right">
+		<%= link_to icon_tag('', :class => 'icon-trash'), subproceso_path(subproceso), 
+		:title => 'Eliminar Sub-Proceso', :method => :delete, :remote => true,
+		:confirm => "¿Está seguro de eliminar este sub-proceso?.\nEsta acción no se puede revertir" %> 
+		<%= link_to icon_tag('', :class => 'icon-pencil'), 
+		edit_subproceso_path(id: subproceso, from: 'tree'), remote: true %>
+	</div>
+</td>

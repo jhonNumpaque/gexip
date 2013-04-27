@@ -26,8 +26,11 @@
 
 <table class="table">
 	<thead>
-		<tr>
-			<th colspan="4" style="text-align:center;background-color:#ccc"><h3>Procedimientos<h3></th>
+		<tr style="background-color:#ccc">
+			<th colspan="2" style="text-align:center;">
+				<h3>Procedimientos</h3>					
+			</th>
+			<td class="add-place"><%= link_to icon_tag('Agregar', :class => 'icon-plus-sign'), new_procedimiento_path(:from => 'tree', :subproceso_id => @subproceso.id), :id => 'add-proceso', :class => 'btn pull-right', :remote => true %></td>
 		</tr>
 		<tr>
 			<th>Nombre</th>
@@ -37,10 +40,8 @@
 	</thead>
 	<tbody>
 		<% for procedimiento in @procedimientos -%>
-			<tr>
-				<td><%= procedimiento.nombre %></td>
-				<td><%= format_date(procedimiento.updated_at) %></td>
-				<td><div class="pull-right"><%= link_to icon_tag('', :class => 'icon-pencil'), '#' %></div></td>
+			<tr id="pso-<%= procedimiento.id %>">
+				<%= render 'subprocesos/procedimiento', :procedimiento => procedimiento %>
 			</tr>
 		<% end -%>
 	</tbody>

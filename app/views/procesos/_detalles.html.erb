@@ -26,8 +26,11 @@
 
 <table class="table">
 	<thead>
-		<tr>
-			<th colspan="4" style="text-align:center;background-color:#ccc"><h3>Sub-Procesos<h3></th>
+		<tr style="background-color:#ccc">
+			<th colspan="3" style="text-align:center;">
+				<h3>Sub-Procesos</h3>					
+			</th>
+			<td class="add-place"><%= link_to icon_tag('Agregar', :class => 'icon-plus-sign'), new_subproceso_path(:from => 'tree', :proceso_id => @proceso.id), :id => 'add-proceso', :class => 'btn pull-right', :remote => true %></td>
 		</tr>
 		<tr>
 			<th>Nombre</th>
@@ -35,12 +38,10 @@
 			<th>&nbsp;</th>
 		</tr>
 	</thead>
-	<tbody>
+	<tbody id="pso-body">
 		<% for subproceso in @subprocesos -%>
-			<tr>
-				<td><%= subproceso.nombre %></td>
-				<td><%= format_date(subproceso.updated_at) %></td>
-				<td><div class="pull-right"><%= link_to icon_tag('', :class => 'icon-pencil'), '#' %></div></td>
+			<tr id="pso-<%= subproceso.id %>">
+				<%= render 'procesos/subproceso', :subproceso => subproceso %>
 			</tr>
 		<% end -%>
 	</tbody>

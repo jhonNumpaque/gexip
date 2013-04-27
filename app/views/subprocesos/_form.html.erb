@@ -1,14 +1,20 @@
-<%= simple_form_for @subproceso, :html => { :class => 'form-horizontal' } do |f| %>
+<%= simple_form_for @subproceso, :remote => @from_tree, :html => { :class => 'form-horizontal form_remote' } do |f| %>
   <%= f.error_notification %>
 
   <%= f.input :nombre %>
-  <%= f.input :objetivo %>
+  <%= f.input :objetivo, :as => :text, :input_html => { :style => 'width:80%;', :rows => 7, :cols => 20  } %>
   <%= f.input :codigo %>
   <%= f.input :cargo_id, :label => "Cargo", :collection => Cargo.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
-  <%= f.input :serieproceso_id, :label => "Proceso", :collection => Proceso.all, :label_method => :codigo_nombre, :prompt => "-- Seleccione --" %>
+  <% if @from_tree %>
+    <%= f.hidden_field :serieproceso_id, :value => params[:proceso_id] %>
+  <% else %>
+    <%= f.input :serieproceso_id, :label => "Proceso", :collection => Proceso.all, :label_method => :codigo_nombre, :prompt => "-- Seleccione --" %>
+  <% end %>
 
-  <div class="form-actions">
-    <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
-    <%= link_to 'Cancelar', subprocesos_path, :class => "btn" %>
-  </div>
+  <% unless @from_tree %>
+    <div class="form-actions">
+      <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
+      <%= link_to 'Cancelar', subprocesos_path, :class => "btn" %>
+    </div>
+  <% end %>
 <% end %>

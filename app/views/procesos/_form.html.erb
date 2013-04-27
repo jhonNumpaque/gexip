@@ -1,11 +1,15 @@
-<%= simple_form_for @proceso, :remote => @from_tree, :html => { :class => 'form-horizontal', :id => 'form_proceso' } do |f| %>
+<%= simple_form_for @proceso, :remote => @from_tree, :html => { :class => 'form-horizontal form_remote', :id => 'form_proceso' } do |f| %>
   <%= f.error_notification %>
 
   <%= f.input :nombre %>
   <%= f.input :objetivo, :as => :text, :input_html => { :style => 'width:80%;', :rows => 7, :cols => 20  } %>
   <%= f.input :codigo %>
   <%= f.input :cargo_id, :label => "Cargo", :collection => Cargo.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
-  <%= f.input :serieproceso_id, :label => "MacroProceso", :collection => Macroproceso.all, :label_method => :codigo_nombre, :prompt => "-- Seleccione --" %>
+  <% unless @from_tree -%>
+    <%= f.input :serieproceso_id, :label => "MacroProceso", :collection => Macroproceso.all, :label_method => :codigo_nombre, :prompt => "-- Seleccione --" %>
+  <% else %>
+    <%= f.hidden_field :serieproceso_id, :value => params[:macroproceso_id] %>
+  <% end %>
 
   <% unless @from_tree -%>
     <div class="form-actions">
