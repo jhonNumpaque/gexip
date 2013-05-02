@@ -1,5 +1,16 @@
-<%= simple_form_for @organismo_interno, :html => { :class => 'form-horizontal' } do |f| %>
-  <%= f.error_notification %>
+ <% if @organismo_interno.errors.any? %>  
+ <div class="alert alert-block alert-error">  
+  <h4 class="alert-heading"><%= pluralize(@organismo_interno.errors.count, "error") %> 
+    <%= @organismo_interno.errors.count > 1 ? 'han' : 'ha' %> impedido que el registro sea guardado:</h4>  
+    <ul>  
+      <% @organismo_interno.errors.full_messages.each do |msg| %>  
+      <li><%= msg %></li>  
+      <% end %>  
+    </ul>  
+  </div>  
+  <% end %> 
+
+  <%= simple_form_for @organismo_interno, :html => { :class => 'form-horizontal' } do |f| %>
 
   <%= f.input :nombre, :label => "Organismo" %>
   <%= f.input :documento, :label => "Nro.Registro" %>
@@ -7,11 +18,25 @@
   <%= f.input :telefono, :label => "Tel&eacute;fono" %>
   <%= f.input :territorio_id, :label => "Ciudad", :collection => Ciudad.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
 
-  <%= f.input :cargo_id, :as => :hidden, :input_html => { :value => "1" }  %> <!-- organismo sin cargo -->
+  <%#= f.input :cargo_id, :as => :hidden, :input_html => { :value => "1" }  %> <!-- organismo sin cargo -->
   <%= f.input :tipo_documento_id, :as => :hidden, :input_html => { :value => "1" } %> <!-- 1 CIN -->
+
+
+  <fieldset>
+    <legend>
+      Cargos 
+      <%= link_to_function icon_tag('Marcar Todos', :class => "icon-check icon-white"), 'markAll()', :class => 'btn btn-primary' %>
+      &nbsp;
+      <%= link_to_function icon_tag('Desmarcar Todos', :class => 'icon-remove icon-white'), 'unmarkAll()', :class => 'btn btn-primary'   %> 
+      <%= link_to_function icon_tag('Agregar Cargo', :class => 'icon-plus-sign icon-white'), '#', :class => 'btn btn-primary'   %> 
+    </legend>    
+    <% @cargos.each do |cargo| %>
+    <div class="span4"><%= check_box_tag "cargo_id_#{cargo.id}", cargo.id, @cargos_actuales.include?(cargo), :name => "cargos[]" %> <%= cargo.nombre %></div>
+    <% end %>    
+  </fieldset>  
 
   <div class="form-actions">
     <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
     <%= link_to 'Cancelar', organismos_internos_path, :class => "btn" %>
   </div>
-<% end %>
+  <% end %>

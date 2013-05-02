@@ -33,6 +33,7 @@ class OrganismosInternosController < ApplicationController
   # GET /organismos_internos/1.json
   def show
     @organismo_interno = OrganismoInterno.find(params[:id])
+    @cargos_actuales = @organismo_interno.cargos
 
     respond_to do |format|
       format.html # show.html.erb
@@ -45,6 +46,9 @@ class OrganismosInternosController < ApplicationController
   def new
     @organismo_interno = OrganismoInterno.new
 
+    @cargos = Cargo.all
+    @cargos_actuales = []
+
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @organismo_interno }
@@ -54,6 +58,8 @@ class OrganismosInternosController < ApplicationController
   # GET /organismos_internos/1/edit
   def edit
     @organismo_interno = OrganismoInterno.find(params[:id])
+    @cargos = Cargo.all
+    @cargos_actuales = @organismo_interno.cargos
   end
 
   # POST /organismos_internos
@@ -61,11 +67,17 @@ class OrganismosInternosController < ApplicationController
   def create
     @organismo_interno = OrganismoInterno.new(params[:organismo_interno])
 
+    cargos = Cargo.where(:id => params[:cargos])
+    @organismo_interno.cargos = cargos
+
     respond_to do |format|
       if @organismo_interno.save
         format.html { redirect_to organismos_internos_path, notice: 'Organismo Interno Creado Correctamente.' }
         format.json { render json: @organismo_interno, status: :created, location: @organismo_interno }
       else
+        @cargos = Cargo.all
+        @cargos_actuales = cargos
+
         format.html { render action: "new" }
         format.json { render json: @organismo_interno.errors, status: :unprocessable_entity }
       end

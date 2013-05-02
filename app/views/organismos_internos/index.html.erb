@@ -35,7 +35,7 @@
     </tr>
     <% @organismos_internos.each do |organismo_interno| %>
       <tr>
-        <td><%= organismo_interno.nombre %></td>
+        <td><%= link_to organismo_interno.nombre, organismo_interno  %></td>
         <td><%= organismo_interno.documento %></td>
         <td><%= organismo_interno.direccion %></td>
         <td><%= organismo_interno.telefono %></td>

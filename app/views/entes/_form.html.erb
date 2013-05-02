@@ -1,20 +1,19 @@
 <%= simple_form_for @ente, :html => { :class => 'form-horizontal' } do |f| %>
-  <%= f.error_notification %>
+<%= f.error_notification %>
 
-  <%= f.input :nombre %>
-  <%= f.input :apellido %>
-  <%= f.input :tipo_documento_id, :collection =>  TipoDocumento.all, :label_method => :nombre, :prompt => '-- Seleccione --' %>
-  <%= f.input :documento %>
-  <%= f.input :direccion %>
-  <%= f.input :telefono %>
-  <%= f.input :cargo_id, :collection =>  Cargo.all, :label_method => :nombre, :prompt => '-- Seleccione --' %>
-  <%#=  select("cargo", "cargo_id", Cargo.all.collect {|p| [ p.nombre, p.id ] }, {:include_blank => 'Elegir...'}) %>
-  <%#= f.input :territorio_id %>
-  <%= f.input :territorio_id, :label => "Ciudad", :collection => Ciudad.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+<%= f.input :nombre %>
+<%= f.input :apellido %>
+<%= f.input :tipo_documento_id, :collection =>  TipoDocumento.all, :label_method => :nombre, :prompt => '-- Seleccione --' %>
+<%= f.input :documento %>
+<%= f.input :direccion %>
+<%= f.input :telefono %>
+<%= f.input :cargo_id, :collection =>  Cargo.all, :label_method => :nombre, :prompt => '-- Seleccione --' %>
+<%#=  select("cargo", "cargo_id", Cargo.all.collect {|p| [ p.nombre, p.id ] }, {:include_blank => 'Elegir...'}) %>
+<%#= f.input :territorio_id %>
+<%= f.input :territorio_id, :label => "Ciudad", :collection => Ciudad.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
 
-
-  <div class="form-actions">
-    <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
-    <%= link_to 'Cancelar', entes_path, :class => "btn" %>
-  </div>
+<div class="form-actions">
+  <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
+  <%= link_to 'Cancelar', entes_path, :class => "btn" %>
+</div>
 <% end %>

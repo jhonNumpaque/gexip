@@ -21,7 +21,7 @@ class Usuario < ActiveRecord::Base
   
   # asociaciones
   belongs_to :rol, :foreign_key => :rol_id
-  belongs_to :ente, :foreign_key => :ente_id
+  belongs_to :persona_fisica, :foreign_key => :ente_id
   
   has_many :expedientes, :dependent => :restrict
   #has_many :tarea_expedientes, :dependent => :restrict

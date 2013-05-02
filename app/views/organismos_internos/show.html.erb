@@ -3,7 +3,7 @@
     <h1>Organismo interno</h1>
   </div>
 
-   <div class="well">
+  <div class="well">
     <div class="btn-group">
       <%= link_to icon_tag('Editar', :class => 'icon-edit icon-white'), edit_organismo_interno_path(@organismo_interno), :class => 'btn btn-primary' %>
       <%= link_to icon_tag('Borrar', :class => 'icon-trash icon-white'), @organismo_interno, confirm: 'Estás seguro?', method: :delete, class: 'btn btn-primary' %>
@@ -11,39 +11,46 @@
     </div>
   </div>
 
-      <p>
-      <b>Nombre:</b>
-      <%= @organismo_interno.nombre %>
-    </p>
-    
-      <p>
-      <b>Apellido:</b>
-      <%= @organismo_interno.apellido %>
-    </p>
-    
-      <p>
-      <b>Documento:</b>
-      <%= @organismo_interno.documento %>
-    </p>
-    
-      <p>
-      <b>Direccion:</b>
-      <%= @organismo_interno.direccion %>
-    </p>
-    
-      <p>
-      <b>Telefono:</b>
-      <%= @organismo_interno.telefono %>
-    </p>
-    
-      <p>
-      <b>Territorio:</b>
-      <%= @organismo_interno.territorio_id %>
-    </p>
-    
-      <p>
-      <b>Cargo:</b>
-      <%= @organismo_interno.cargo_id %>
-    </p>
-    
-  </section>
+  <p>
+    <b>Nombre:</b>
+    <%= @organismo_interno.nombre %>
+  </p>
+
+  <p>
+    <b>Apellido:</b>
+    <%= @organismo_interno.apellido %>
+  </p>
+
+  <p>
+    <b>Documento:</b>
+    <%= @organismo_interno.documento %>
+  </p>
+
+  <p>
+    <b>Direccion:</b>
+    <%= @organismo_interno.direccion %>
+  </p>
+
+  <p>
+    <b>Telefono:</b>
+    <%= @organismo_interno.telefono %>
+  </p>
+
+  <p>
+    <b>Territorio:</b>
+    <%= @organismo_interno.territorio_id %>
+  </p>
+
+  <p>
+    <b>Cargo:</b>
+    <%= @organismo_interno.cargo_id %>
+  </p>
+
+  <h3>Cargos</h3>
+  <% @cargos_actuales.each do |cargo| %>
+  <div class="span4">
+    <%= icon_tag cargo.nombre, :class => 'icon-ok' %>
+  </div>
+  <% end %> 
+
+</section>
