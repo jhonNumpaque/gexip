@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.0'
+gem 'rails', '3.2.11'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -10,6 +10,7 @@ gem "simple_form", "~> 2.0.0.rc"
 gem 'devise'
 gem 'kaminari'
 gem 'time_diff'
+gem 'carrierwave'
 
 group :development do 
   gem 'mongrel'

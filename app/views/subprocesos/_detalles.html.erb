@@ -1,0 +1,48 @@
+<h2 style="text-align:center;background-color:#ccc">Sub Proceso</h2>
+<table class="table">
+	<tbody>
+		<tr>
+			<th>C&oacute;digo</th>
+			<td><%= @subproceso.codigo %></td>
+		</tr>
+		<tr>
+			<th>Nombre</th>
+			<td><%= @subproceso.nombre %></td>
+		</tr>
+		<tr>
+			<th>Objetivo</th>
+			<td><%= @subproceso.objetivo %></td>
+		</tr>
+		<tr>
+			<th>Fecha de Elaboración</th>
+			<td><%= format_date(@subproceso.created_at) %></td>
+		</tr>
+		<tr>
+			<th>Cargo Responsable</th>
+			<td><%= @subproceso.cargo.nombre %></td>
+		</tr>		
+	</tbody>
+</table>
+
+<table class="table">
+	<thead>
+		<tr style="background-color:#ccc">
+			<th colspan="2" style="text-align:center;">
+				<h3>Procedimientos</h3>					
+			</th>
+			<td class="add-place"><%= link_to icon_tag('Agregar', :class => 'icon-plus-sign'), new_procedimiento_path(:from => 'tree', :subproceso_id => @subproceso.id), :id => 'add-proceso', :class => 'btn pull-right', :remote => true %></td>
+		</tr>
+		<tr>
+			<th>Nombre</th>
+			<th>Fecha</th>
+			<th>&nbsp;</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% for procedimiento in @procedimientos -%>
+			<tr id="pso-<%= procedimiento.id %>">
+				<%= render 'subprocesos/procedimiento', :procedimiento => procedimiento %>
+			</tr>
+		<% end -%>
+	</tbody>
+</table>

@@ -1,23 +1,10 @@
 <ul class="nav nav-tabs">
   <li class="tab active"><%= link_to 'Persona Física', '#', :class => 'pf' %></a></li>
-  <!-- <li class="dropdown">
-     <a class="dropdown-toggle"
-        data-toggle="dropdown"
-        href="#">
-       Persona Jurídica
-       <b class="caret"></b>
-     </a>
-     <ul class="dropdown-menu">
-       <li><%= link_to 'Interno' %></li>
-       <li><%= link_to 'Externo' %></li>
-     </ul>
-   </li>-->
   <li class="tab"><%= link_to 'Persona Jurídica Interna', '#', :class => 'pji'  %></li>
   <li class="tab"><%= link_to 'Persona Jurídica Externa', '#', :class => 'pje' %></li>
 </ul>
 
-<%= simple_form_for @expediente, :html => { :class => 'form-horizontal' } do |f| %>
-  <%#= f.error_notification %>
+<%= simple_form_for @expediente, :html => { :class => 'form-horizontal', :multipart => true } do |f| %>
 
   <% if @expediente.errors.any? %>  
     <div class="alert alert-block alert-error">  
@@ -32,7 +19,7 @@
   <% end %>  
 
   <div class="rows">
-    <div class="span7 well">
+    <div class="span10 well cajaexp">
       <h4>Datos Básicos</h4>
       <hr />
       <div class="control-group select required">
@@ -41,37 +28,48 @@
 
       </div>      
       <div class="control-group">
-        <%= f.label :ente_id, 'Cédula/Nombre y Apellido' %>
-        <div class="controls">
-          <%= f.text_field :numero_documento, :style => 'margin-right: 10px; width: 80px'  %>
-          <%= f.text_field :ente_id, :style => 'width: 305px', :readonly => true, :id => 'nombre-ente' %>
+        <%= f.label :ente_id, 'Cédula/Nombre y Apellido', :class => 'control-label' %>
+        <div class="controls">          
+          <div class="input-append">            
+            <%= f.text_field :numero_documento, :style => 'width: 80px'  %>
+            <%= f.text_field :ente_id, :style => 'width: 288px', :readonly => true, :id => 'nombre-ente' %>          
+            <button class="btn" type="button" onclick="mostrarPopup()"><i class="icon-search"></i></button>            
+            <button class="btn btn-limpiar" type="button" rel="ente" title="Limpiar campo"><i class="icon-remove-sign"></i></button>            
+          </div>
           <%= f.hidden_field :ente_id %>
-          <button class="btn" type="button" onclick="mostrarPopup()"><i class="icon-search"></i></button>
         </div>
-      </div>
-       <%#= f.input :ente_id, :label => 'Cédula/Nombre y Apellido' %>
-  <%#= f.input :ente_id, :label => "Ente", :collection => Ente.all, :label_method => :nombre, :prompt => "-- Seleccione --", :label => 'Cédula/Nombre y Apellido' %>
-      
+      </div>       
+
       <div class="control-group">
-        <%= f.label :procedimiento_id, 'Procedimiento' %>
+        <%= f.label :procedimiento_id, 'Procedimiento', :class => 'control-label' %>
         <div class="controls">
-          <%= f.text_field :procedimiento_id, :style => 'margin-right: 10px; width: 180px', :id => 'nombre-procedimiento'  %>
+          <div class="input-append">
+            <%= text_field_tag :procedimiento_nombre, nil, :style => 'width: 180px', :id => 'nombre-procedimiento'  %>            
+            <button class="btn" type="button" onclick="mostrarPopupProcedimientos()"><i class="icon-search"></i></button>
+            <button class="btn btn-limpiar" type="button" rel="procedimiento" title="Limpiar campo"><i class="icon-remove-sign"></i></button>            
+          </div>
           <%= f.hidden_field :procedimiento_id %>
-          <button class="btn" type="button" onclick="mostrarPopupProcedimientos()"><i class="icon-search"></i></button>
         </div>
       </div>
- 
-      <%#= f.input :procedimiento_id, :label => "Procedimiento", :collection => Procedimiento.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+
       <%= f.input :copia, :label => 'Es Copia' %>
     </div>
-
-    <div class="span3 well" style="min-height:205px">
-      <h4>Documentos Adjuntos</h4>
-      <hr />
-    </div>
+    
   </div>
 
   <div class="rows control-group">
+    <div class="span10 well">
+      <h4>Documentos Requeridos</h4>
+      <hr />
+      <div id="cont_adjunto">
+        <%= f.fields_for :adjuntos do |build| %>
+          <%= render 'campos_adjunto', :f => build %>
+        <% end %>
+      </div>
+
+      <%= link_to_add_fields("Agregar", f, :adjuntos) %>
+    </div>
+
     <div class="span10 well">
       <h4>Descripción</h4>
       <hr />
@@ -95,7 +93,8 @@
   <a class="close" data-dismiss="modal">x</a>
   <%= render 'buscar_procedimiento' %>
 </div>
-
+<%= javascript_include_tag 'plupload', 'formularios_anidados' %>
+<%= stylesheet_link_tag 'jquery.plupload.queue' %>
 <script type="text/javascript">
   function mostrarPopup(){
     $('#buscar-modal').modal('toggle');
@@ -118,4 +117,46 @@
     $("#nombre-procedimiento").val(nombre);
     $('#buscar-procedimiento-modal').modal('hide');
   }
+  
+  $(function(){
+    $('.btn-limpiar').click(function(){      
+      var campo = $(this).attr('rel');
+      $('#nombre-' + campo).val('');
+      $('#expediente_' + campo + '_id').val('');
+      if (campo == 'ente')
+        $('#expediente_numero_documento').val('');
+      return false;
+    });
+    
+     $(function() {
+
+        
+        $("#uploader").pluploadQueue({
+                runtimes : 'html5,flash,silverlight',
+		// General settings
+		multipart : true,
+                multipart_params : {
+                    'authenticity_token' : '<%= form_authenticity_token %>'
+                },
+                flash_swf_url : 
+                    '<%= asset_path "plupload/dependencies/plupload.flash.swf" %>',
+                silverlight_xap_url :
+                    '<%= asset_path "plupload/dependencies/plupload.silverlight.xap" %>',
+                url : '<%= uploads_path %>',
+		max_file_size : '10mb',
+		chunk_size : '1mb',
+		unique_names : true,
+    show_header: false,
+
+		// Resize images on clientside if we can
+		resize : {width : 320, height : 240, quality : 90},
+
+		// Specify what files to browse for
+		filters : [
+			{title : "Image files", extensions : "jpg,gif,png"},
+			{title : "Zip files", extensions : "zip"}
+		]
+	});
+    });
+  });
 </script>

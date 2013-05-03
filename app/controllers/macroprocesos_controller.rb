@@ -32,10 +32,14 @@ class MacroprocesosController < ApplicationController
   # GET /macroprocesos/1.json
   def show
     @macroproceso = Macroproceso.find(params[:id])
+    @procesos = @macroproceso.procesos
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @macroproceso }
+      format.json do         
+        render json: [@macroproceso, @procesos]
+      end
+      format.js
     end
   end
 

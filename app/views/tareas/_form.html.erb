@@ -1,37 +1,95 @@
 <%= simple_form_for @tarea, :html => { :class => 'form-horizontal' } do |f| %>
-  <%= f.error_notification %>
+  <div id="wizard" class="swMain">
+    <ul>
+      <li>
+        <a href="#step-1">
+          <label class="stepNumber">1</label>
+          <span class="stepDesc">Tipo <br />
+            <small>Seleccione el tipo de tarea</small>
+          </span>
+        </a>
+      </li>
 
-  <% if Tarea.tareas_anteriores(params[:actividad_id], @tarea.id).present? %>
-    <div class="control-group integer required">
-      <%= label_tag :ant_id, raw("#{content_tag(:abbr, '*', :title => 'requerido')} Tarea Anterior"), :class => 'integer required' %>
+      <li>
+        <a href="#step-2">
+          <label class="stepNumber">2</label>
+          <span class="stepDesc">Nombre y Método <br />
+            <small>Escriba el nombre y el método de la tarea</small>
+          </span>
+        </a>
+      </li>
 
-      <div class="controls">
-        <%#= f.collection_select :tarea_anterior_id, Tarea.tareas_anteriores(params[:actividad_id], @tarea.id), :id, :nombre, {}, { :class => 'numeric integer required'} %>
-      </div>
-    </div>  
-  <% end %>
-  <%#= f.input :orden %>
-  <%= f.input :nombre %>
-  <%= f.input :metodo %>
-  <%= f.input :tiempo_ejecucion %>
-  <%= f.input :unidad_tiempo_id %>
-  <%= f.input :tipo, :collection => Tarea::TIPO_TAREA.map{|c| [c,c]}, :prompt => "-- Seleccione --" %>
-  <%= f.input :cargo_id, :label => "Cargo", :collection => Cargo.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
-  <%#= f.input :tarea_sgt_id %>
-  <%#= f.input :tarea_alt_id %>
-  <!--
-  arreglar aca para cuando sea un nuevo tome del parametro
-  :as => :hidden
-  -->
+      <li>
+        <a href="#step-3">
+          <label class="stepNumber">3</label>
+          <span class="stepDesc">Responsable y Tiempo <br />
+            <small>Seleccione un responsable e indique el tiempo estimado</small>
+          </span>
+        </a>
+      </li>
 
-  <% if @tarea.actividad_id.present? %>
-    <%= f.input :actividad_id, :as => :hidden %>
-  <% else %>
-    <%= f.input :actividad_id, :as => :hidden,  :input_html => { :value => "4" }  %> 
-  <% end %>
+      <li>
+        <a href="#step-4">
+          <label class="stepNumber">4</label>
+          <span class="stepDesc">Documentos <br />
+            <small>Indique los documentos que intervienen de tarea</small>
+          </span>
+        </a>
+      </li>
 
-  <div class="form-actions">
-    <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
-    <%= link_to 'Cancelar', tareas_path(:actividad_id => params[:actividad_id]), :remote => true, :class => "btn" %>
+    </ul>
+
+    <div id="step-1">
+      <h2 class="StepTitle">Tipo</h2>
+      <%= f.error_notification %>
+
+      <%= f.input :tipo, :collection => Tarea::TIPO_TAREA.map{|c| [c,c]}, :prompt => "-- Seleccione --" %>
+
+      <% if Tarea.tareas_anteriores(params[:actividad_id], @tarea.id).present? %>
+        <div class="control-group integer required">
+          <%= label_tag :ant_id, raw("#{content_tag(:abbr, '*', :title => 'requerido')} Tarea Anterior"), :class => 'integer required' %>
+
+          <div class="controls">
+            <%#= f.collection_select :tarea_anterior_id, Tarea.tareas_anteriores(params[:actividad_id], @tarea.id), :id, :nombre, {}, { :class => 'numeric integer required'} %>
+          </div>
+        </div>  
+      <% end %>
+    </div>
+
+    <div id="step-2">
+      <h2 class="StepTitle">Nombre y Método</h2>
+      <%#= f.input :orden %>
+      <%= f.input :nombre %>
+      <%= f.input :metodo %>
+    </div>
+
+    <div id="step-3">
+      <h2 class="StepTitle">Responsable y Tiempo</h2>
+      <%= f.input :tiempo_ejecucion %>
+      <%= f.input :unidad_tiempo_id %>
+      <%= f.input :cargo_id, :label => "Cargo", :collection => Cargo.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+    </div>
+    
+    <div id="step-4">
+      <h2 class="StepTitle">Documentos</h2>
+      
+    </div>
+    <%#= f.input :tarea_sgt_id %>
+    <%#= f.input :tarea_alt_id %>
+    <!--
+    arreglar aca para cuando sea un nuevo tome del parametro
+    :as => :hidden
+    -->
+
+    <% if @tarea.actividad_id.present? %>
+      <%= f.input :actividad_id, :as => :hidden %>
+    <% else %>
+      <%= f.input :actividad_id, :as => :hidden,  :input_html => { :value => "4" }  %> 
+    <% end %>
+
+    <!--<div class="form-actions">
+      <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
+      <%= link_to 'Cancelar', tareas_path(:actividad_id => params[:actividad_id]), :remote => true, :class => "btn" %>
+    </div>-->
   </div>
 <% end %>

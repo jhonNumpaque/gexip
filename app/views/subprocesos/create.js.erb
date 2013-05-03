@@ -1,0 +1,15 @@
+<% if @subproceso.errors.empty? %>
+	$('#pso-body').append('<tr id="pso-<%= @subproceso.id %>"><%= escape_javascript(render("procesos/subproceso", :subproceso => @subproceso)) %></tr>')
+	$('#modal-wrapper .modal-header h3').html("&iexcl;&Eacute;xito!");
+	$('#modal-wrapper .modal-body').html("&iexcl;Guardado correctamente!");
+	$('#modal-wrapper .modal-footer').hide();	
+<% else %>
+	$('#modal-wrapper .modal-header h3').html("&iexcl;Error!");
+	$('#modal-wrapper .modal-body').html("No se ha podido guardar el registro, verifique lo siguiente:");
+	$('#modal-wrapper .modal-body').append('<ul>');
+	<% @subproceso.errors.full_messages.each do |error| %>
+		$('#modal-wrapper .modal-body').append('<li><%= error %></li>');
+	<% end %>
+	$('#modal-wrapper .modal-body').append('</ul>');
+	$('#modal-wrapper .modal-footer').hide();
+<% end %>

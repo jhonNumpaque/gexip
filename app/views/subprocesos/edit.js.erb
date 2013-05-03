@@ -1,0 +1,5 @@
+$('#modal-wrapper .modal-header h3').html('Editar Sub-Proceso');
+$('#modal-wrapper .modal-body').html('<%= escape_javascript(render("form")) %>');
+$('#modal-wrapper .modal-footer').show();
+$('#modal-wrapper').modal();
+$('#submit_form').click(function(){ $('#form_proceso').submit(); });

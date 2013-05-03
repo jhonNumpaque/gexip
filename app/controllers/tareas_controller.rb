@@ -40,8 +40,8 @@ class TareasController < ApplicationController
 
   # GET /tareas/1/edit
   def edit
-    @tarea_actual = Tarea.find(params[:id])
-    @actividad_id = @tarea_actual.actividad_id
+    @tarea = Tarea.find(params[:id])
+    @actividad_id = @tarea.actividad_id
 		respond_to do |format|
 			#      format.html { render :layout => "popup_wf" } # new.html.erb
 			#      format.json { render json: @tarea_actual }

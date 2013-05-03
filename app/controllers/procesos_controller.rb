@@ -33,10 +33,14 @@ class ProcesosController < ApplicationController
   # GET /procesos/1.json
   def show
     @proceso = Proceso.find(params[:id])
+    @subprocesos = @proceso.subprocesos
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @proceso }
+      format.json do         
+        render json: [@proceso, @subprocesos]
+      end
+      format.js
     end
   end
 
@@ -44,16 +48,23 @@ class ProcesosController < ApplicationController
   # GET /procesos/new.json
   def new
     @proceso = Proceso.new
+    @from_tree = params[:from].present? && params[:from] == 'tree'
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render json: @proceso }
+      format.js
     end
   end
 
   # GET /procesos/1/edit
   def edit
     @proceso = Proceso.find(params[:id])
+    @from_tree = params[:from].present? && params[:from] == 'tree'
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # POST /procesos
@@ -64,10 +75,10 @@ class ProcesosController < ApplicationController
     respond_to do |format|
       if @proceso.save
         format.html { redirect_to procesos_path, notice: 'Proceso Creado Correctamente.' }
-        format.json { render json: @proceso, status: :created, location: @proceso }
+        format.js
       else
         format.html { render action: "new" }
-        format.json { render json: @proceso.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end
@@ -81,9 +92,11 @@ class ProcesosController < ApplicationController
       if @proceso.update_attributes(params[:proceso])
         format.html { redirect_to procesos_path, notice: 'Proceso Modificado Correctamente.' }
         format.json { head :no_content }
+        format.js
       else
         format.html { render action: "edit" }
         format.json { render json: @proceso.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end
@@ -101,7 +114,7 @@ class ProcesosController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to procesos_url}
-      format.json { head :no_content }
+      format.js
     end
   end
   

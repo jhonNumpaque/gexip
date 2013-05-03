@@ -24,9 +24,11 @@ class ProcedimientosController < ApplicationController
   def show
     @procedimiento = Procedimiento.find(params[:id])
     @actividades = @procedimiento.actividades.order('orden asc')
+
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @procedimiento }
+      format.json { render json: [@procedimiento, @actividades] }
+      format.js
     end
   end
 
@@ -36,16 +38,20 @@ class ProcedimientosController < ApplicationController
     @procedimiento = Procedimiento.new
 
 		actividad = @procedimiento.actividades.build
+    @from_tree = params[:from].present?
+    @subproceso_id = params[:subproceso_id]
 		
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render json: @procedimiento }
+      format.js
     end
   end
 
   # GET /procedimientos/1/edit
   def edit
+    @from_tree = params[:from].present?
     @procedimiento = Procedimiento.find(params[:id])
+    @subproceso_id = @procedimiento.serieproceso_id
   end
 
   # POST /procedimientos
@@ -56,10 +62,10 @@ class ProcedimientosController < ApplicationController
     respond_to do |format|
       if @procedimiento.save
         format.html { redirect_to @procedimiento, notice: 'Procedimiento creado!.' }
-        format.json { render json: @procedimiento, status: :created, location: @procedimiento }
+        format.js
       else
         format.html { render action: "new" }
-        format.json { render json: @procedimiento.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end
@@ -82,11 +88,11 @@ class ProcedimientosController < ApplicationController
       begin
         @procedimiento.update_attributes(params[:procedimiento])
         format.html { redirect_to @procedimiento, notice: 'Procedimiento modificado!.' }
-        format.json { head :no_content }
+        format.js
       rescue ActiveRecord::DeleteRestrictionError
         flash[:alert] = "No puede eliminar la Actividad!" 
         format.html { render action: "edit" }
-        format.json { render json: @procedimiento.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end
@@ -108,4 +114,9 @@ class ProcedimientosController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def new_index
+    @macroprocesos = Macroproceso.all
+    render :layout => 'jstree'
+  end  
 end

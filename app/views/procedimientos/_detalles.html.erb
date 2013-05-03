@@ -1,0 +1,59 @@
+<h2 style="text-align:center;background-color:#ccc">Procedimiento</h2>
+<table class="table">
+	<tbody>
+		<tr>
+			<th>Nombre</th>
+			<td><%= @procedimiento.nombre %></td>
+		</tr>
+		<tr>
+			<th>Objetivo</th>
+			<td><%= @procedimiento.objetivo %></td>
+		</tr>
+		<tr>
+			<th>Fecha de Elaboración</th>
+			<td><%= format_date(@procedimiento.elabora_fecha) %></td>
+		</tr>
+		<tr>
+			<th>Elaborado por</th>
+			<td><%= @procedimiento.elaborador.nombre_completo %></td>
+		</tr>
+		<% if @procedimiento.aprobado? -%>
+			<tr>
+				<th>Fecha de Aprobación</th>
+				<td><%= format_date(@procedimiento.aprobado_fecha) %></td>
+			</tr>
+			<tr>
+				<th>Aprobado por</th>
+				<td><%= @procedimiento.aprobador.nombre_completo %></td>
+			</tr>
+		<% end -%>
+		<tr>
+			<th>Definiciones</th>
+			<td><%= @procedimiento.definiciones %></td>
+		</tr>
+	</tbody>
+</table>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th colspan="4" style="text-align:center;background-color:#ccc"><h3>Actividades<h3></th>
+		</tr>
+		<tr>
+			<th>Orden</th>
+			<th>Nombre</th>
+			<th>Fecha</th>
+			<th>&nbsp;</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% for actividad in @actividades -%>
+			<tr>
+				<td><%= actividad.orden %></td>
+				<td><%= actividad.descripcion %></td>
+				<td><%= format_date(actividad.updated_at) %></td>
+				<td><div class="pull-right"><%= link_to icon_tag('', :class => 'icon-pencil'), '#' %></div></td>
+			</tr>
+		<% end -%>
+	</tbody>
+</table>

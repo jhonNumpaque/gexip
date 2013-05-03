@@ -1,0 +1,87 @@
+<div class="span5 bordered">
+	<div id="main">
+		<ul>
+
+			<% @macroprocesos.each do |macroproceso| %>
+				<li rel="macroproceso" data-id="<%= macroproceso.id %>">
+					<%= link_to macroproceso.nombre, '#' %>
+					<% if macroproceso.procesos %>					
+						<ul>
+							<% macroproceso.procesos.each do |proceso| %>
+								<li rel="proceso" data-id="<%= proceso.id %>"><%= link_to proceso.nombre, '#' %>
+									<% if proceso.subprocesos %>
+										<ul>
+										<% proceso.subprocesos.each do |subproceso| %>										
+											<li rel="subproceso" data-id="<%= subproceso.id %>">
+												<%= link_to subproceso.nombre, '#' %>
+												<% if subproceso.procedimientos %>
+													<ul>
+														<% subproceso.procedimientos.each do |procedimiento| %>
+															<li rel="procedimiento" data-id="<%= procedimiento.id %>"><%= link_to procedimiento.nombre, '#' %></li>
+														<% end %>
+													</ul>
+												<% end %>
+											</li>											
+										<% end %>
+										</ul>
+									<% end %>
+								</li>
+							<% end %>
+						</ul>
+					<% end %>
+				</li>
+			<% end %>
+		</ul>
+	</div>
+</div>
+
+<div class="span11 pull-right bordered" id="contenido">
+	<p class="descipt"></p>
+	<table class="table table-condensed">
+		<tr>
+			<th>Id</th>
+			<td id="id"></td>
+		</tr>
+		<tr>
+			<th>Nombre</th>
+			<td id="nombre"></td>
+		</tr>
+		<tr>
+			<th>Objetivo</th>
+			<td id="objetivo"></td>
+		</tr>
+		<tr>
+			<th>Definiciones</th>
+			<td id="definiciones"></td>
+		</tr>
+		<tr>
+			<th>Clasificación</th>
+			<td id="clasificacion"></td>
+		</tr>
+		<tr>
+			<th>Código</th>
+			<td id="codigo"></td>
+		</tr>
+		<tr>
+			<th>Fecha de Elaboración</th>
+			<td id="fecha_elaboracion"></td>
+		</tr>
+		<tr>
+			<th>Cargo Responsable</th>
+			<td id="cargo"></td>
+		</tr>
+	</table>
+	<hr />
+	<table class="table table-condensed" id="children">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Código</th>
+				<th>Nombre</th>
+			</tr>
+		</thead>
+		<tbody id="children_body">
+
+		</tbody>
+	</table>
+</div>
