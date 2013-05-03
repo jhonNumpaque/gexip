@@ -3,4 +3,6 @@ class Serieproceso < ActiveRecord::Base
   validates :nombre, :presence => true
   validates :objetivo, :presence => true
   validates :codigo, :presence => true, :uniqueness => true
+
+  belongs_to :cargo_ente
 end
