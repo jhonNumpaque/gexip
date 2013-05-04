@@ -4,5 +4,6 @@ class Cargo < ActiveRecord::Base
   
 	#has_many :ente, :dependent => :restrict
 	has_many :cargos_entes, :dependent => :restrict
-	has_many :entes, :through => :cargos_entes
+	has_many :organismos_internos, :through => :cargos_entes
+	has_many :personas_fisicas, :through => :cargos_entes
 end

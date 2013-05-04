@@ -8,8 +8,7 @@ class Ente < ActiveRecord::Base
   # asociaciones
   #has_one :cargo
   #belongs_to :cargo, :foreign_key => :cargo_id
-  has_many :cargos_entes, :dependent => :restrict
-  has_many :cargos, :through => :cargos_entes
+
   #has_many :usuario
   belongs_to :tipo_documento
   belongs_to :ciudad, :foreign_key => :territorio_id

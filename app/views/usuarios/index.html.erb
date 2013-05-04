@@ -8,7 +8,7 @@
   <%= form_tag controller_name, :class => "well form-inline", :method => :get do %>
 
     <%= link_to icon_tag('Agregar', :class => 'icon-plus-sign icon-white'), new_usuario_path, :class => 'btn btn-primary' %>
-    <%= link_to icon_tag('Todos', :class => 'icon-eye-open icon-white'), usuario_path, :class => 'btn btn-primary' %>
+    <%= link_to icon_tag('Todos', :class => 'icon-eye-open icon-white'), usuarios_path, :class => 'btn btn-primary' %>
     <i class="icon-th-large"></i>
     <%= label_tag 'Buscar:' %>
     <%= text_field_tag 'valor', params[:valor], :style => "width:120px;" %>
@@ -31,7 +31,7 @@
       <th>Usuario</th>
       <th>Nombres y Apellido</th>
       <th>Documento</th>
-      <th>Organismo</th>
+      <th>Funcionario</th>
       <th>Rol</th>
 
       <th></th>
@@ -41,7 +41,7 @@
         <td><%= usuario.login %></td>
         <td><%= usuario.apellido_nombre %></td>
         <td><%= usuario.documento %></td>
-        <td><%= usuario.ente.nombre %></td>
+        <td><%= usuario.persona_fisica.present? ? usuario.persona_fisica.nombre : nil %></td>
         <td><%= usuario.rol.nombre %></td>
         <td>
 

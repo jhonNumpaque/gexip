@@ -8,8 +8,9 @@ class PersonaFisica < ActiveRecord::Base
   validates_uniqueness_of :documento
 
   belongs_to :tipo_documento, :foreign_key => :tipo_documento_id 
-  belongs_to :territorio, :foreign_key => :territorio_id 
-  belongs_to :cargo_ente, :foreign_key => :cargo_ente_id 
+  belongs_to :ciudad, :foreign_key => :territorio_id 
+  belongs_to :cargo_ente, :foreign_key => :cargo_ente_id
+  has_one :cargo, :through => :cargo_ente 
 
   
   # CONSTANTE

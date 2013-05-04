@@ -18,7 +18,7 @@
 
       <%= f.input :password_confirmation, :as => :password, :label =>  'Confirmar Contraseña' %>
       <% end #if @usuario.new_record? %>
-      <%= f.input :ente_id, :collection => Ente.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Organismo" %>
+      <%= f.input :persona_fisica_id, :collection => PersonaFisica.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Funcionario" %>
 
       <%= f.input :rol_id, :collection => Rol.all, :label_method => :nombre, :prompt => '-- Seleccione --' %>
 

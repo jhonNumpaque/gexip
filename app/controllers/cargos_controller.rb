@@ -3,11 +3,14 @@ class CargosController < ApplicationController
   # GET /cargos
   # GET /cargos.json
   def index
-    @cargos = Cargo
-    
-    @cargos = @cargos.where("nombre like ?", "%#{params[:nombre]}%") if params[:nombre].present?
-    
-    @cargos = @cargos.page(params[:page]).per(10)
+    if params[:ente_id].present?
+      ente = Ente.find(params[:ente_id])
+      @cargos = ente.cargos
+    else
+      @cargos = Cargo
+      @cargos = @cargos.where("nombre like ?", "%#{params[:nombre]}%") if params[:nombre].present?
+      @cargos = @cargos.page(params[:page]).per(10)
+    end
     
     respond_to do |format|
       format.html # index.html.erb
@@ -83,7 +86,7 @@ class CargosController < ApplicationController
       @cargo.destroy
       flash[:notice] = "Cargo Eliminado Correctamente."
     rescue ActiveRecord::DeleteRestrictionError
-        flash[:alert] = 'No se puede eliminar el Cargo!.'
+      flash[:alert] = 'No se puede eliminar el Cargo!.'
     end
     respond_to do |format|
       format.html { redirect_to cargos_url}

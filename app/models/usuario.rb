@@ -5,14 +5,14 @@ class Usuario < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable  
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :nombres, :apellidos, :documento, :ente_id, :rol_id, :login
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :nombres, :apellidos, :documento, :persona_fisica_id, :rol_id, :login
 
   # validaciones
   validates :login, :presence => true
   validates :nombres, :presence => true
   validates :apellidos, :presence => true
   validates :documento, :presence => true
-  validates :ente_id, :presence => true
+  validates :persona_fisica_id, :presence => true
   validates :rol_id, :presence => true
   
   validates_uniqueness_of :documento
@@ -21,7 +21,7 @@ class Usuario < ActiveRecord::Base
   
   # asociaciones
   belongs_to :rol, :foreign_key => :rol_id
-  belongs_to :persona_fisica, :foreign_key => :ente_id
+  belongs_to :persona_fisica, :foreign_key => :persona_fisica_id
   
   has_many :expedientes, :dependent => :restrict
   #has_many :tarea_expedientes, :dependent => :restrict

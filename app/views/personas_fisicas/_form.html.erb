@@ -1,18 +1,38 @@
 <%= simple_form_for @persona_fisica, :html => { :class => 'form-horizontal' } do |f| %>
-  <%= f.error_notification %>
+<%= f.error_notification %>
 
-  <%= f.input :nombre %>
-  <%= f.input :apellido %>
-  <%= f.input :documento, :label => "Documento (CI)" %>
-  <%= f.input :direccion, :label => "Direcci&oacute;n" %>
-  <%= f.input :telefono, :label => "Tel&eacute;fono" %>
-  <%= f.input :cargo_ente_id, :collection =>  CargoEnte.all, :label_method => :nombre, :prompt => '-- Seleccione --' %>
-  <%= f.input :territorio_id, :label => "Ciudad", :collection => Ciudad.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
-
-  <%= f.input :tipo_documento_id, :as => :hidden, :input_html => { :value => "1" } %> <!-- 1 CIN -->
-
-  <div class="form-actions">
-    <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
-    <%= link_to 'Cancelar', personas_fisicas_path, :class => "btn" %>
+<%= f.input :nombre %>
+<%= f.input :apellido %>
+<%= f.input :documento, :label => "Documento (CI)" %>
+<%= f.input :direccion, :label => "Direcci&oacute;n" %>
+<%= f.input :telefono, :label => "Tel&eacute;fono" %>
+<div class="control-group string optional">
+  <div class="control-label">
+    <%= label 'ente_id', "Organismo Interno" %>
+    <div class="controls">
+      <%= select_tag 'ente_id', options_from_collection_for_select(OrganismoInterno.all, "id", "nombre", @ente.present? ? @ente.id : nil), :prompt => "-- Seleccione --" %>
+    </div>
   </div>
+</div>
+
+<div class="control-group string optional">
+  <div class="control-label">
+    <%= label 'cargo_id', "Puesto de Trabajo" %>
+    <div class="controls">
+      <%= select_tag 'cargo_id', options_from_collection_for_select(@cargos.present? ? @cargos : Cargo.all, "id", "nombre", @cargo.present? ? @cargo.id : nil), :prompt => "-- Seleccione --" %>
+    </div>
+  </div>
+</div>
+<%#= f.input :cargo_ente_id, :label => "Puesto de Trabajo" ,:collection =>  Cargo.all, :label_method => :nombre, :prompt => '-- Seleccione --' %>
+
+<%= linked_combo 'cargo_id', :linked => 'ente_id', :param => 'ente_id', :url => '/cargos.json' %>
+
+<%= f.input :territorio_id, :label => "Ciudad", :collection => Ciudad.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+
+<%= f.input :tipo_documento_id, :as => :hidden, :input_html => { :value => "1" } %> <!-- 1 CIN -->
+
+<div class="form-actions">
+  <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
+  <%= link_to 'Cancelar', personas_fisicas_path, :class => "btn" %>
+</div>
 <% end %>
