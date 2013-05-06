@@ -1,0 +1,3 @@
+<% @cargos.each do |cargo| %>
+<div class="span4"><%= check_box_tag "cargo_id_#{cargo.id}", cargo.id, @cargos_actuales.include?(cargo), :name => "cargos[]" %> <%= cargo.nombre %></div>
+<% end %>  

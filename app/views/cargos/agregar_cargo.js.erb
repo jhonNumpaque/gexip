@@ -1,0 +1,4 @@
+$('#modal-body').html("<%= escape_javascript( render( :partial => 'form_cargo', :locals => { :cargo => @cargo })) %>")
+$('#add-cargo-modal').css('width' , '500px')
+$('#add-cargo-modal').css('height' , '230px')
+$('#wizard').smartWizard();

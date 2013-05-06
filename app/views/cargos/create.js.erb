@@ -1,0 +1,5 @@
+alert("Cargo Agregado")
+$('#modal-body').html("")
+$('#add-cargo-modal').hide();
+$('#campos-cargos').html("")
+$('#campos-cargos').html("<%= escape_javascript( render( :partial => 'organismos_internos/campos_cargos', :locals => { :cargos => @cargos })) %>")

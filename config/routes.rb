@@ -45,6 +45,7 @@ Gexip::Application.routes.draw do
     get "/logout" => "sesiones#destroy"
   end
 
+#usuarios
   resources :usuarios
 	match '/usuarios/datos/cambiar_clave/' => 'usuarios#cambiar_clave', :as => :cambiar_clave
   match '/usuarios/datos/modificar_datos/:id' => 'usuarios#modificar_datos', :as => :modificar_datos
@@ -58,6 +59,8 @@ Gexip::Application.routes.draw do
   match 'finalizar_tarea' => 'tareas#finalizar_tarea', :as => 'finalizar_tarea'
   match 'cancelar_tarea' => 'tareas#cancelar_tarea', :as => 'cancelar_tarea'
   match 'iniciar_tarea_logica' => 'tareas#iniciar_tarea_logica', :as => 'iniciar_tarea_logica'
+  #cargos
+  match 'agregar_cargo' => 'cargos#agregar_cargo', :as => 'agregar_cargo'
   
   # file upload
   resources :uploads
