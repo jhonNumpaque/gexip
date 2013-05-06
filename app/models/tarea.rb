@@ -37,6 +37,10 @@ class Tarea < ActiveRecord::Base
   def es_logica?
     self.tipo == TIPO_TAREA_LOGICA
   end
+
+  def tree_state
+    
+  end
   
   def es_proceso_si?
     self.tipo == 'PROCESO_SI'

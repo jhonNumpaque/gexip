@@ -1,5 +1,7 @@
 Gexip::Application.routes.draw do
 
+  # tree procedimientos y cia
+  match 'obtener/arbol' => 'procedimientos#jstree', :as => :procedimientos_jstree
   match 'procedimientos/ni' => 'procedimientos#new_index', :as => :new_procedimientos_index
   
   resources :organismos_internos

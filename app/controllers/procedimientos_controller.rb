@@ -119,4 +119,38 @@ class ProcedimientosController < ApplicationController
     @macroprocesos = Macroproceso.all
     render :layout => 'jstree'
   end  
+
+  def jstree
+    if params[:operation] == 'search'
+      data = []
+      data << Procedimiento.where('nombre like ?', "%#{params[:search_str]}%").all
+      data << Serieproceso.where('nombre like ?', "%#{params[:search_str]}%").all
+      data << Actividad.where('descripcion like ?', "%#{params[:search_str]}%").all
+
+      data.flatten!
+      
+      response = data.map { |d| { attr: { id: "node_#{d.id}", rel: d.class.to_s.downcase, type: d.class.to_s.downcase  }, data: d.nombre, state: 'open' }}
+    else
+      if params[:id] == '0'
+        data = Macroproceso.all
+      else      
+        if params[:type] == 'proceso' || params[:type] == 'subproceso'
+          data = Procedimiento.where(serieproceso_id: params[:id]).all
+          data.concat(Serieproceso.where(serieproceso_id: params[:id]).all)
+          data.compact!
+        elsif params[:type] == 'procedimiento'
+          data = Actividad.where(procedimiento_id: params[:id]).all      
+        else
+          data = Serieproceso.where(serieproceso_id: params[:id]).all
+        end
+        
+        #image = data.first ? data.first.type : nil
+      end
+      response = data.map { |d| { attr: { id: "node_#{d.id}", rel: d.class.to_s.downcase, type: d.class.to_s.downcase  }, data: d.nombre, state: d.tree_state }}
+    end
+
+    respond_to do |format|
+      format.json { render json: response }
+    end
+  end
 end

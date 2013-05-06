@@ -1,41 +1,27 @@
-<div class="span5 bordered">
-	<div id="main">
+<div class="span5 left-panel">
+	<div class="reference bordered">
 		<ul>
-
-			<% @macroprocesos.each do |macroproceso| %>
-				<li rel="macroproceso" data-id="<%= macroproceso.id %>">
-					<%= link_to macroproceso.nombre, '#' %>
-					<% if macroproceso.procesos %>					
-						<ul>
-							<% macroproceso.procesos.each do |proceso| %>
-								<li rel="proceso" data-id="<%= proceso.id %>"><%= link_to proceso.nombre, '#' %>
-									<% if proceso.subprocesos %>
-										<ul>
-										<% proceso.subprocesos.each do |subproceso| %>										
-											<li rel="subproceso" data-id="<%= subproceso.id %>">
-												<%= link_to subproceso.nombre, '#' %>
-												<% if subproceso.procedimientos %>
-													<ul>
-														<% subproceso.procedimientos.each do |procedimiento| %>
-															<li rel="procedimiento" data-id="<%= procedimiento.id %>"><%= link_to procedimiento.nombre, '#' %></li>
-														<% end %>
-													</ul>
-												<% end %>
-											</li>											
-										<% end %>
-										</ul>
-									<% end %>
-								</li>
-							<% end %>
-						</ul>
-					<% end %>
-				</li>
-			<% end %>
+			<li class="span2"><%= image_tag 'icons/macroproceso.png' %> Macroproceso</li>
+			<li class="span2"><%= image_tag 'icons/proceso.png' %> Proceso</li>
+			<li class="span2"><%= image_tag 'icons/subproceso.png' %> Sub-Proceso</li>
+			<li class="span2"><%= image_tag 'icons/procedimiento.png' %> Procedimiento</li>
+			<li class="span2"><%= image_tag 'icons/actividad.png' %> Actividad</li>
+			<li class="span2"><%= image_tag 'icons/tarea.png' %> Tarea</li>
 		</ul>
+		<div class="clearfix"></div>
+	</div>
+	<div class="search bordered" style="margin:3px 0">		
+			<%= text_field_tag :text, nil, :placeholder => 'Buscar', :class => 'input-xlarge' %>
+			<button type="submit" class="btn" id="search">Buscar</button>			
+			<button class="btn" id="clear_search">Limpiar</button>			
+	</div>
+
+	<div id="main" class="bordered">
+		
 	</div>
 </div>
 
-<div class="span11 pull-right bordered" id="contenido">
+<div class="span11 pull-right bordered right-panel" id="contenido">
 	<p class="descipt"></p>
 	<table class="table table-condensed">
 		<tr>

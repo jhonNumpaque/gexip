@@ -4,7 +4,7 @@
   <%= f.input :nombre %>
   <%= f.input :objetivo, :as => :text, :input_html => { :style => 'width:80%;', :rows => 7, :cols => 20  } %>
   <%= f.input :codigo %>
-  <%= f.input :cargo_id, :label => "Cargo", :collection => Cargo.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+  <%#= f.input :cargo_id, :label => "Cargo", :collection => Cargo.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
   <% if @from_tree %>
     <%= f.hidden_field :serieproceso_id, :value => params[:proceso_id] %>
   <% else %>

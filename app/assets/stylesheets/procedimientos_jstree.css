@@ -9,3 +9,34 @@ body {
 .sidebar-nav {
   padding: 9px 0;
 }
+
+.reference {
+	height: 65px;
+	padding: 4px 0;
+}
+
+.reference li {
+	list-style: none;
+}
+
+.left-panel, .right-panel {
+	margin-left: 0;
+}
+
+#main {
+	overflow: auto;
+	max-height: 400px;
+}
+
+.search {
+	height: 48px;
+}
+
+.search input[type="text"] {
+	width: 50%;
+	margin-left: 10px;
+}
+
+.search input, .search button {
+	margin: 10px 0 ;
+}
