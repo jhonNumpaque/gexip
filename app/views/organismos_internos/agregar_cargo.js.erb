@@ -1,0 +1,4 @@
+$('#modal-body').html("<%= escape_javascript( render( :partial => 'campos_cargo', :locals => { :cargo => @cargo, :ente_id => @ente_id })) %>")
+$('#add-tarea-modal').css('width' , '1300px')
+$('#add-tarea-modal').css('height' , '600px')
+$('#wizard').smartWizard();

@@ -56,6 +56,7 @@ class CargosController < ApplicationController
         format.json { render json: @cargo, status: :created, location: @cargo }
       else
         format.html { render action: "new" }
+        format.js
         format.json { render json: @cargo.errors, status: :unprocessable_entity }
       end
     end
@@ -91,6 +92,14 @@ class CargosController < ApplicationController
     respond_to do |format|
       format.html { redirect_to cargos_url}
       format.json { head :no_content }
+    end
+  end
+
+  def agregar_cargo
+    @cargo = Cargo.new
+
+    respond_to do |format|
+      format.js
     end
   end
 end

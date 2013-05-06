@@ -28,26 +28,31 @@
       <%= link_to_function icon_tag('Marcar Todos', :class => "icon-check icon-white"), 'markAll()', :class => 'btn btn-primary' %>
       &nbsp;
       <%= link_to_function icon_tag('Desmarcar Todos', :class => 'icon-remove icon-white'), 'unmarkAll()', :class => 'btn btn-primary'   %> 
-      <%= link_to_function icon_tag('Agregar Cargo', :class => 'icon-plus-sign icon-white'), 'mostrarPopupCargos()', :class => 'btn btn-primary'   %> 
-    </legend>    
-    <% @cargos.each do |cargo| %>
-    <div class="span4"><%= check_box_tag "cargo_id_#{cargo.id}", cargo.id, @cargos_actuales.include?(cargo), :name => "cargos[]" %> <%= cargo.nombre %></div>
-    <% end %>    
+      <%#= link_to_function icon_tag('Agregar Cargo', :class => 'icon-plus-sign icon-white'), 'mostrarPopupCargos()', :class => 'btn btn-primary'   %>
+      <%= link_to icon_tag('Agregar Cargo', :class => 'icon-plus-sign icon-white'), agregar_cargo_path, :remote => true, :onclick => 'mostrarPopupCargos()', :class => 'btn btn-primary' %> 
+    </legend>
+    <div id="carmpos-cargos">    
+      <%= render 'campos_cargos' %>  
+    </div>
   </fieldset>  
 
   <div class="form-actions">
     <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
     <%= link_to 'Cancelar', organismos_internos_path, :class => "btn" %>
   </div>
-
-  <div class="modal" id="cargo-modal" style="display: none; width: 660px; padding: 10px">
-    <a class="close" data-dismiss="modal">x</a>
-    <%= render 'form_cargo' %>
-  </div>
   <% end %>
-  <script type="text/javascript">
-  function mostrarPopupCargos(){
-    $('#cargo-modal').modal('toggle');
-    $('#search').focus();
-  }
-  </script>
+  <div class="modal" id="add-cargo-modal" style="display: none; width: 660px; padding: 10px">
+    <div class="modal-header">
+     <a class="close" data-dismiss="modal">x</a>
+     <h3>Agregar Cargo</h3>
+   </div>
+   <div class="modal-body" id ="modal-body">
+    <%#= render 'campos_tarea' %>
+  </div>
+</div>
+<script type="text/javascript">
+function mostrarPopupCargos(){
+  $('#add-cargo-modal').modal('toggle');
+  $('#nombre').focus();
+}
+</script>
