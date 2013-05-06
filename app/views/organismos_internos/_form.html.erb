@@ -30,8 +30,9 @@
       <%= link_to_function icon_tag('Desmarcar Todos', :class => 'icon-remove icon-white'), 'unmarkAll()', :class => 'btn btn-primary'   %> 
       <%#= link_to_function icon_tag('Agregar Cargo', :class => 'icon-plus-sign icon-white'), 'mostrarPopupCargos()', :class => 'btn btn-primary'   %>
       <%= link_to icon_tag('Agregar Cargo', :class => 'icon-plus-sign icon-white'), agregar_cargo_path, :remote => true, :onclick => 'mostrarPopupCargos()', :class => 'btn btn-primary' %> 
+      <%#= link_to icon_tag('prueba', :class => 'icon-plus-sign icon-white'), '#',:onclick => 'verCheckbox()', :class => 'btn btn-primary' %> 
     </legend>
-    <div id="carmpos-cargos">    
+    <div id="campos-cargos">    
       <%= render 'campos_cargos' %>  
     </div>
   </fieldset>  

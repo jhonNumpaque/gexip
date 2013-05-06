@@ -10,6 +10,7 @@ class CargosController < ApplicationController
       @cargos = Cargo
       @cargos = @cargos.where("nombre like ?", "%#{params[:nombre]}%") if params[:nombre].present?
       @cargos = @cargos.page(params[:page]).per(10)
+      @cargos_actuales = []
     end
     
     respond_to do |format|
@@ -53,6 +54,7 @@ class CargosController < ApplicationController
     respond_to do |format|
       if @cargo.save
         @cargos = Cargo.all
+        @cargos_actuales = [@cargo]
         format.html { redirect_to cargos_path, notice: 'Cargo creado' }
         format.json { render json: @cargo, status: :created, location: @cargo }
         format.js
