@@ -52,8 +52,10 @@ class CargosController < ApplicationController
 
     respond_to do |format|
       if @cargo.save
+        @cargos = Cargo.all
         format.html { redirect_to cargos_path, notice: 'Cargo creado' }
         format.json { render json: @cargo, status: :created, location: @cargo }
+        format.js
       else
         format.html { render action: "new" }
         format.js
