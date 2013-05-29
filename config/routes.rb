@@ -10,8 +10,12 @@ Gexip::Application.routes.draw do
 
   resources :personas_fisicas
 
-  resources :expedientes
+  resources :funcionarios
 
+  resources :estructuras
+
+  resources :expedientes
+  
   resources :unidades_tiempos
   resources :tareas
 

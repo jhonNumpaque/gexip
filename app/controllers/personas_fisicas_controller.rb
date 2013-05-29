@@ -1,4 +1,5 @@
 class PersonasFisicasController < ApplicationController
+  before_filter :authenticate_usuario!
   # GET /personas_fisicas
   # GET /personas_fisicas.json
   def index
@@ -69,8 +70,10 @@ class PersonasFisicasController < ApplicationController
   def create
     @persona_fisica = PersonaFisica.new(params[:persona_fisica])
 
-    cargo_ente = CargoEnte.where("cargo_id = ? and ente_id = ?", "#{params[:cargo_id]}", "#{params[:ente_id]}").first
-    @persona_fisica.cargo_ente_id = cargo_ente.id
+    if params[:cargo_id].present? && params[:ente_id].present?
+      cargo_ente = CargoEnte.where("cargo_id = ? and ente_id = ?", "#{params[:cargo_id]}", "#{params[:ente_id]}").first
+      @persona_fisica.cargo_ente_id = cargo_ente.id
+    end
 
     respond_to do |format|
       if @persona_fisica.save

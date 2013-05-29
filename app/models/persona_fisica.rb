@@ -1,4 +1,4 @@
-class PersonaFisica < ActiveRecord::Base
+class PersonaFisica < Ente
   #validaciones
   validates :apellido, :presence => true
   validates :nombre, :presence => true
@@ -9,8 +9,8 @@ class PersonaFisica < ActiveRecord::Base
 
   belongs_to :tipo_documento, :foreign_key => :tipo_documento_id 
   belongs_to :ciudad, :foreign_key => :territorio_id 
-  belongs_to :cargo_ente, :foreign_key => :cargo_ente_id
-  has_one :cargo, :through => :cargo_ente 
+  #belongs_to :cargo_ente, :foreign_key => :cargo_ente_id
+  #has_one :cargo, :through => :cargo_ente 
 
   
   # CONSTANTE

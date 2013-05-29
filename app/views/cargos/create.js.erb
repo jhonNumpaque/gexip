@@ -10,7 +10,7 @@ $('#campos-cargos').find("input[type=checkbox]").each(function(){
   $("#" + id).attr('checked') ? array.push("#" + id) : null;
 })  
 $('#campos-cargos').html("")
-$('#campos-cargos').html("<%= escape_javascript( render( :partial => 'organismos_internos/campos_cargos', :locals => { :cargos => @cargos, :cargos_actuales => @cargos_actuales })) %>")
+$('#campos-cargos').html("<%= escape_javascript( render( :partial => 'estructuras/campos_cargos', :locals => { :cargos => @cargos, :cargos_actuales => @cargos_actuales })) %>")
 //volver a checkear
 $.each(array, function(key, object){
 	$(object).attr('checked', true);

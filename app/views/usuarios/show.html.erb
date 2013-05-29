@@ -19,23 +19,14 @@
         <p>
 
         <dl>
+          <dt>Funcionario</dt>
+          <dd><%= @usuario.funcionario.apellido_nombre %></dd>
+
           <dt>Usuario</dt>
           <dd><%= @usuario.login %></dd>
 
           <dt>E-mail</dt>
           <dd><%= @usuario.email %></dd>
-
-          <dt>Nombre(s)</dt>
-          <dd><%= @usuario.nombres %></dd>
-
-          <dt>Apellido(s)</dt>
-          <dd><%= @usuario.apellidos %></dd>
-
-          <dt>Documento</dt>
-          <dd><%= @usuario.documento %></dd>
-
-          <dt>Organismo</dt>
-          <dd><%#= @usuario.ente.nombre %> debe mostrarse el Cargo que desempenha en el organismo</dd>
 
           <dt>Rol</dt>
           <dd><%= @usuario.rol.nombre %></dd>
