@@ -6,26 +6,6 @@
 <%= f.input :documento, :label => "Documento (CI)" %>
 <%= f.input :direccion, :label => "Direcci&oacute;n" %>
 <%= f.input :telefono, :label => "Tel&eacute;fono" %>
-<div class="control-group string optional">
-  <div class="control-label">
-    <%= label 'ente_id', "Organismo Interno" %>
-    <div class="controls">
-      <%= select_tag 'ente_id', options_from_collection_for_select(OrganismoInterno.all, "id", "nombre", @ente.present? ? @ente.id : nil), :prompt => "-- Seleccione --" %>
-    </div>
-  </div>
-</div>
-
-<div class="control-group string optional">
-  <div class="control-label">
-    <%= label 'cargo_id', "Puesto de Trabajo" %>
-    <div class="controls">
-      <%= select_tag 'cargo_id', options_from_collection_for_select(@cargos.present? ? @cargos : Cargo.all, "id", "nombre", @cargo.present? ? @cargo.id : nil), :prompt => "-- Seleccione --" %>
-    </div>
-  </div>
-</div>
-<%#= f.input :cargo_ente_id, :label => "Puesto de Trabajo" ,:collection =>  Cargo.all, :label_method => :nombre, :prompt => '-- Seleccione --' %>
-
-<%= linked_combo 'cargo_id', :linked => 'ente_id', :param => 'ente_id', :url => '/cargos.json' %>
 
 <%= f.input :territorio_id, :label => "Ciudad", :collection => Ciudad.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
 

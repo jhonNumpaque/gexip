@@ -1,4 +1,5 @@
 class UnidadesTiemposController < ApplicationController
+  before_filter :authenticate_usuario!
   # GET /unidades_tiempos
   # GET /unidades_tiempos.json
   def index

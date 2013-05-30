@@ -1,0 +1,38 @@
+<%= simple_form_for @funcionario, :html => { :class => 'form-horizontal' } do |f| %>
+<%= f.error_notification %>
+
+<%= f.input :nombres %>
+<%= f.input :apellidos %>
+<%= f.input :documento, :label => "Documento (CI)" %>
+<%= f.input :direccion, :label => "Direcci&oacute;n" %>
+<%= f.input :telefono, :label => "Tel&eacute;fono" %>
+<div class="control-group string optional">
+  <div class="control-label">
+    <%= label 'estructura_id', "Estructura" %>
+    <div class="controls">
+      <%= select_tag 'estructura_id', options_from_collection_for_select(Estructura.all, "id", "nombre", @estructura.present? ? @estructura.id : nil), :prompt => "-- Seleccione --" %>
+    </div>
+  </div>
+</div>
+
+<div class="control-group string optional">
+  <div class="control-label">
+    <%= label 'cargo_id', "Puesto de Trabajo" %>
+    <div class="controls">
+      <%= select_tag 'cargo_id', options_from_collection_for_select(@cargos.present? ? @cargos : Cargo.all, "id", "nombre", @cargo.present? ? @cargo.id : nil), :prompt => "-- Seleccione --" %>
+    </div>
+  </div>
+</div>
+<%#= f.input :cargo_funcionario_id, :label => "Puesto de Trabajo" ,:collection =>  Cargo.all, :label_method => :nombre, :prompt => '-- Seleccione --' %>
+
+<%= linked_combo 'cargo_id', :linked => 'estructura_id', :param => 'estructura_id', :url => '/cargos.json' %>
+
+<%= f.input :territorio_id, :label => "Ciudad", :collection => Ciudad.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+
+<%= f.input :tipo_documento_id, :as => :hidden, :input_html => { :value => "1" } %> <!-- 1 CIN -->
+
+<div class="form-actions">
+  <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
+  <%= link_to 'Cancelar', funcionarios_path, :class => "btn" %>
+</div>
+<% end %>

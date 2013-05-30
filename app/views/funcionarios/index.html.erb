@@ -1,17 +1,17 @@
 <section>
   <div class="page-header">
-    <h1>Personas F&iacute;sicas <small>Disponibles</small></h1>
+    <h1>Funcionarios <small>Disponibles</small></h1>
   </div>
 
   <%= form_tag controller_name, :class => "well form-inline", :method => :get do %>
 
-    <%= link_to icon_tag('Agregar', :class => 'icon-plus-sign icon-white'), new_persona_fisica_path, :class => 'btn btn-primary' %>
+    <%= link_to icon_tag('Agregar', :class => 'icon-plus-sign icon-white'), new_funcionario_path, :class => 'btn btn-primary' %>
     <%= link_to icon_tag('Todos', :class => 'icon-eye-open icon-white'), personas_fisicas_path, :class => 'btn btn-primary' %>
     <i class="icon-th-large"></i>
     <%= label_tag 'Buscar:' %>
     <%= text_field_tag 'valor', params[:valor], :style => "width:120px;" %>
     <%= label_tag 'Tipo' %>
-    <%= select_tag :tipo_busqueda, options_for_select(PersonaFisica::TIPO_BUSQUEDA.map{|c| [c,c]},params[:tipo_busqueda]) %>
+    <%= select_tag :tipo_busqueda, options_for_select(Funcionario::TIPO_BUSQUEDA.map{|c| [c,c]},params[:tipo_busqueda]) %>
     <%= submit_tag 'Buscar',  :class => 'btn btn-primary'%>
     <hr />
 
@@ -23,29 +23,31 @@
 
 <br />
 
-<% if @personas_fisicas.present? %>
+<% if @funcionarios.present? %>
   <table class="table table-striped table-bordered table-condensed">
     <tr>
       <th>Nombre</th>
       <th>Documento</th>
       <th>Tel&eacute;fono</th>
       <th>Ciudad</th>
-      
+      <th>Cargo</th>
+
       <th></th>
     </tr>
-    <% @personas_fisicas.each do |persona_fisica| %>
+    <% @funcionarios.each do |funcionario| %>
       <tr>
-        <td><%= persona_fisica.apellido_nombre %></td>
-        <td><%= persona_fisica.tipo_documento.nombre + " " + persona_fisica.documento %></td>
-        <td><%= persona_fisica.telefono %></td>
-        <td><%= persona_fisica.ciudad.nombre %></td>
+        <td><%= link_to funcionario.apellido_nombre, funcionario %></td>
+        <td><%= funcionario.tipo_documento.nombre + " " + funcionario.documento %></td>
+        <td><%= funcionario.telefono %></td>
+        <td><%= funcionario.ciudad.nombre %></td>
+        <td><%= funcionario.cargo.present? ? funcionario.cargo.nombre : nil %></td>
         <td>
 
           <div class="btn-group">              
             <%= link_to 'Acciones <b class="caret"></b>'.html_safe, '#', :class => 'btn btn-primary dropdown-toggle', 'data-toggle' => 'dropdown' %>
             <ul id="menu1" class="dropdown-menu">
-              <li><%= link_to icon_tag('Editar', :class => 'icon-pencil'), edit_persona_fisica_path(persona_fisica) %></li>
-              <li><%= link_to icon_tag('Eliminar', :class => 'icon-trash'), persona_fisica, confirm: '¿Está seguro de eliminar este registro?. Esta acción no se puede deshacer', method: :delete %></li>
+              <li><%= link_to icon_tag('Editar', :class => 'icon-pencil'), edit_funcionario_path(funcionario) %></li>
+              <li><%= link_to icon_tag('Eliminar', :class => 'icon-trash'), funcionario, confirm: '¿Está seguro de eliminar este registro?. Esta acción no se puede deshacer', method: :delete %></li>
 
             </ul>              
           </div>
@@ -53,11 +55,11 @@
       </tr>
     <% end %>
   </table> 
-  <%= paginate @personas_fisicas %>
+  <%= paginate @funcionarios %>
 
 <% else %>
   <p class="alert-message warning">
-    Todavía no hay personas_fisicas, <%= link_to 'agregar', new_persona_fisica_path %>.
+    Todavía no hay funcionarios, <%= link_to 'agregar', new_funcionario_path %>.
   </p>
 <% end %>
 

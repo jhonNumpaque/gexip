@@ -1,4 +1,5 @@
 class OrganismosInternosController < ApplicationController
+  before_filter :authenticate_usuario!
   # GET /organismos_internos
   # GET /organismos_internos.json
   def index
@@ -46,9 +47,6 @@ class OrganismosInternosController < ApplicationController
   def new
     @organismo_interno = OrganismoInterno.new
 
-    @cargos = Cargo.all
-    @cargos_actuales = []
-
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @organismo_interno }
@@ -58,17 +56,12 @@ class OrganismosInternosController < ApplicationController
   # GET /organismos_internos/1/edit
   def edit
     @organismo_interno = OrganismoInterno.find(params[:id])
-    @cargos = Cargo.all
-    @cargos_actuales = @organismo_interno.cargos
   end
 
   # POST /organismos_internos
   # POST /organismos_internos.json
   def create
     @organismo_interno = OrganismoInterno.new(params[:organismo_interno])
-
-    cargos = Cargo.where(:id => params[:cargos])
-    @organismo_interno.cargos = cargos
 
     respond_to do |format|
       if @organismo_interno.save

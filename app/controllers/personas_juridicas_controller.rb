@@ -1,4 +1,5 @@
 class PersonasJuridicasController < ApplicationController
+  before_filter :authenticate_usuario!
   # GET /personas_juridicas
   # GET /personas_juridicas.json
   def index

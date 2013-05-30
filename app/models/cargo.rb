@@ -1,9 +1,8 @@
 class Cargo < ActiveRecord::Base
 	validates :nombre, :presence => true
-    validates :nombre, :uniqueness => true
+    #validates :nombre, :uniqueness => true
   
 	#has_many :ente, :dependent => :restrict
-	has_many :cargos_entes, :dependent => :restrict
-	has_many :organismos_internos, :through => :cargos_entes
-	has_many :personas_fisicas, :through => :cargos_entes
+	has_many :cargos_estructuras, :dependent => :restrict
+	has_many :funcionarios, :through => :cargos_estructuras
 end

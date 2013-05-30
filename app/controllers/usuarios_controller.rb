@@ -11,12 +11,13 @@ class UsuariosController < ApplicationController
       case params[:tipo_busqueda]
       when "USUARIO"
         @usuarios = @usuarios.where(" login LIKE ? ", "%"+params[:valor]+"%")
-      when "NOMBRE"
-        @usuarios = @usuarios.where(" nombres LIKE ? ", "%"+params[:valor]+"%")
-      when "APELLIDO"
-        @usuarios = @usuarios.where(" apellidos LIKE ? ", "%"+params[:valor]+"%")
-      when "DOCUMENTO"
-        @usuarios = @usuarios.where(" documento LIKE ? ", "%"+params[:valor]+"%")
+      when "FUNCIONARIO"
+        #buscar los funcionarios con esas caracteristicas
+        funcionarios = Funcionario.where("nombres LIKE ? OR apellidos LIKE ? ", "%"+params[:valor]+"%","%"+params[:valor]+"%").all
+        #verificar cuales son los usuarios que corresponden a esos funcionarios
+        if funcionarios.present?
+          @usuarios = @usuarios.where(" funcionario_id in  (" + funcionarios.map(&:id).join(", ") +") ")
+        end
       else
         @usuarios = @usuarios.where(" login LIKE ? OR nombres LIKE ? OR apellidos LIKE ? OR documento LIKE ? ", "%"+params[:valor]+"%","%"+params[:valor]+"%","%"+params[:valor]+"%","%"+params[:valor]+"%")
       end

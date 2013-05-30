@@ -21,36 +21,12 @@
   <%#= f.input :cargo_id, :as => :hidden, :input_html => { :value => "1" }  %> <!-- organismo sin cargo -->
   <%= f.input :tipo_documento_id, :as => :hidden, :input_html => { :value => "1" } %> <!-- 1 CIN -->
 
-
-  <fieldset>
-    <legend>
-      Cargos 
-      <%= link_to_function icon_tag('Marcar Todos', :class => "icon-check icon-white"), 'markAll()', :class => 'btn btn-primary' %>
-      &nbsp;
-      <%= link_to_function icon_tag('Desmarcar Todos', :class => 'icon-remove icon-white'), 'unmarkAll()', :class => 'btn btn-primary'   %> 
-      <%#= link_to_function icon_tag('Agregar Cargo', :class => 'icon-plus-sign icon-white'), 'mostrarPopupCargos()', :class => 'btn btn-primary'   %>
-      <%= link_to icon_tag('Agregar Cargo', :class => 'icon-plus-sign icon-white'), agregar_cargo_path, :remote => true, :onclick => 'mostrarPopupCargos()', :class => 'btn btn-primary' %> 
-      <%#= link_to icon_tag('prueba', :class => 'icon-plus-sign icon-white'), '#',:onclick => 'verCheckbox()', :class => 'btn btn-primary' %> 
-    </legend>
-    <div id="campos-cargos">    
-      <%= render 'campos_cargos' %>  
-    </div>
-  </fieldset>  
-
   <div class="form-actions">
     <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
     <%= link_to 'Cancelar', organismos_internos_path, :class => "btn" %>
   </div>
   <% end %>
-  <div class="modal" id="add-cargo-modal" style="display: none; width: 660px; padding: 10px">
-    <div class="modal-header">
-     <a class="close" data-dismiss="modal">x</a>
-     <h3>Agregar Cargo</h3>
-   </div>
-   <div class="modal-body" id ="modal-body">
-    <%#= render 'campos_tarea' %>
-  </div>
-</div>
+
 <script type="text/javascript">
 function mostrarPopupCargos(){
   $('#add-cargo-modal').modal('toggle');

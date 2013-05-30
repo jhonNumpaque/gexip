@@ -5,23 +5,24 @@ class Usuario < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable  
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :nombres, :apellidos, :documento, :persona_fisica_id, :rol_id, :login
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :funcionario_id, :rol_id, :login
 
   # validaciones
   validates :login, :presence => true
-  validates :nombres, :presence => true
-  validates :apellidos, :presence => true
-  validates :documento, :presence => true
-  validates :persona_fisica_id, :presence => true
+  #validates :nombres, :presence => true
+  #validates :apellidos, :presence => true
+  #validates :documento, :presence => true
+  validates :funcionario_id, :presence => true, :uniqueness => true
   validates :rol_id, :presence => true
+  validates :email, :presence => true
   
-  validates_uniqueness_of :documento
+  #validates_uniqueness_of :documento
   validates_uniqueness_of :login
   validates_uniqueness_of :email
   
   # asociaciones
   belongs_to :rol, :foreign_key => :rol_id
-  belongs_to :persona_fisica, :foreign_key => :persona_fisica_id
+  belongs_to :funcionario, :foreign_key => :funcionario_id
   
   has_many :expedientes, :dependent => :restrict
   #has_many :tarea_expedientes, :dependent => :restrict
@@ -36,14 +37,5 @@ class Usuario < ActiveRecord::Base
   end
   
   # CONSTANTE
-  TIPO_BUSQUEDA = %w{TODOS USUARIO NOMBRE APELLIDO DOCUMENTO}
-  
-  #Concatena nombre y apellido
-  def nombre_completo
-    "#{self.nombres} #{self.apellidos}".strip
-  end
-  #Concatena apellido y nombre
-  def apellido_nombre
-    "#{self.apellidos}, #{self.nombres}".strip
-  end
+  TIPO_BUSQUEDA = %w{TODOS USUARIO FUNCIONARIO}
 end

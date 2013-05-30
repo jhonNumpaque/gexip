@@ -1,30 +1,32 @@
 <%= simple_form_for @usuario, :html => { :class => 'form-horizontal' }  do |f| %>
-  <fieldset>
-    <%= f.error_notification %>
-    
-    
-    
-      <%= f.input :documento %>
+<fieldset>
+  <%= f.error_notification %>
+  
+  
+  
+  <%#= f.input :documento %>
 
-      <%= f.input :nombres %>
+  <%#= f.input :nombres %>
 
-      <%= f.input :apellidos %>
+  <%#= f.input :apellidos %>
 
-      <%= f.input :login, :label => 'Usuario' %>
+  <%= f.input :funcionario_id, :collection => Funcionario.all, :label_method => :nombres, :prompt => '-- Seleccione --', :label => "Funcionario" %>
 
-      <%= f.input :email %>
-      <% if @usuario.new_record? %>
-      <%= f.input :password, :as => :password, :label => 'Contraseña' %>
+  <%= f.input :login, :label => 'Usuario' %>
 
-      <%= f.input :password_confirmation, :as => :password, :label =>  'Confirmar Contraseña' %>
-      <% end #if @usuario.new_record? %>
-      <%= f.input :persona_fisica_id, :collection => PersonaFisica.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Funcionario" %>
+  <%= f.input :email %>
+  <% if @usuario.new_record? %>
+  <%= f.input :password, :as => :password, :label => 'Contraseña' %>
 
-      <%= f.input :rol_id, :collection => Rol.all, :label_method => :nombre, :prompt => '-- Seleccione --' %>
+  <%= f.input :password_confirmation, :as => :password, :label =>  'Confirmar Contraseña' %>
+  <% end #if @usuario.new_record? %>
+  
 
-    <div class="form-actions">
-      <%= f.button :submit, 'Guardar', class: 'btn btn-success' %>
-      <%= link_to 'Cancelar', usuarios_path, :class => "btn" %>
-    </div>
-  </fieldset>
-  <% end %>
+  <%= f.input :rol_id, :collection => Rol.all, :label_method => :nombre, :prompt => '-- Seleccione --' %>
+
+  <div class="form-actions">
+    <%= f.button :submit, 'Guardar', class: 'btn btn-success' %>
+    <%= link_to 'Cancelar', usuarios_path, :class => "btn" %>
+  </div>
+</fieldset>
+<% end %>

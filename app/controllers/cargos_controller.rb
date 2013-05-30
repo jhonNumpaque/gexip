@@ -3,9 +3,9 @@ class CargosController < ApplicationController
   # GET /cargos
   # GET /cargos.json
   def index
-    if params[:ente_id].present?
-      ente = Ente.find(params[:ente_id])
-      @cargos = ente.cargos
+    if params[:estructura_id].present?
+      estructura = Estructura.find(params[:estructura_id])
+      @cargos = estructura.cargos
     else
       @cargos = Cargo
       @cargos = @cargos.where("nombre like ?", "%#{params[:nombre]}%") if params[:nombre].present?
