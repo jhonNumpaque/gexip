@@ -1,0 +1,8 @@
+	<div class="well">
+		<%= link_to icon_tag('Volver', :class => 'icon-arrow-left icon-white'), informes_path, class: 'btn btn-primary' %>
+	</div>
+	<h1>Informes: Promedios</h1>
+
+	<%= simple_form_for controller_name, :method => :get do |f| %>
+	<%= f.input 'nombre' %>
+	<% end %>

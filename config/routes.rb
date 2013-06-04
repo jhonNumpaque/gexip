@@ -45,6 +45,8 @@ Gexip::Application.routes.draw do
   resources :entes
 
   resources :roles
+  
+  resources :informes
 
   devise_for :usuarios, :controllers => { :registrations => "usuarios", :sessions => 'sesiones' } do 
     get "/login" => "sesiones#new"
@@ -70,6 +72,9 @@ Gexip::Application.routes.draw do
   
   # file upload
   resources :uploads
+
+  #informes
+  match 'mostrar_formulario/:tipo_informe' => 'informes#mostrar_formulario', :as => :mostrar_formulario
   
   #entes
   match '/search' => 'entes#search', :as => 'search_ente'

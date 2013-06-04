@@ -6,13 +6,15 @@
 	<br />
 
 	<div>
-		<p><%= link_to "Demora de expedientes", "#" %></p>
-		<p><%= link_to "Procesos mas demandados", "#" %></p>
-		<p><%= link_to "Procesos menos demandados", "#" %></p>
-		<p><%= link_to "Expedientes procesados", "#" %></p>
-		<p><%= link_to "Expedientes entregados", "#" %></p>
-		<p><%= link_to "Expedientes archivados", "#" %></p>
-		<p><%= link_to "Expedientes cancelados", "#" %></p>
-		<p><%= link_to "Expedientes en proceso", "#" %></p>
+		<p><%= link_to "Tiempo promedio de expedientes", mostrar_formulario_path('promedio') %></p>
+		<p><%= link_to "Demora de expedientes", mostrar_formulario_path('demora') %></p>
+		<p><%= link_to "Demanda de procesos", mostrar_formulario_path('demanda') %></p>
+		<p><%= link_to "Resumen de expedientes (conteo por estados)", mostrar_formulario_path('resumen')%></p>
+		<p><%#= link_to "Procesos menos demandados", "#" %></p>
+		<p><%#= link_to "Expedientes procesados", "#" %></p>
+		<p><%#= link_to "Expedientes entregados", "#" %></p>
+		<p><%#= link_to "Expedientes archivados", "#" %></p>
+		<p><%#= link_to "Expedientes cancelados", "#" %></p>
+		<p><%#= link_to "Expedientes en proceso", "#" %></p>
 	</div>
 </section>
