@@ -1,1 +1,25 @@
-<h1>Informes: Demanda</h1>
+	<div class="well">
+		<%= link_to icon_tag('Volver', :class => 'icon-arrow-left icon-white'), informes_path, class: 'btn btn-primary' %>
+	</div>
+	<h1>Informes: Demanda</h1>
+
+
+	<%= simple_form_for controller_name, :method => :get do |f| %>
+
+	<%= f.input 'cantidad_items' %>
+	<%= f.input 'fecha_inicio' %>
+	<%= f.input 'fecha_fin' %>
+	<%= f.input 'demanda', :collection => {'Mayor Demana' => 'mayor', 'Menor Demanda' => 'menor'}, :prompt => '-- Seleccione --', :label => "Tipo Demanda" %>	
+	
+	<!--En caso de un procedmimiento-->
+	<%= f.input 'proceso', :collection => Proceso.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Proceso" %>	
+
+	<%= f.input 'Rango en anhos' %>
+
+	<%= f.hidden_field 'filtro', :value => 'demanda'%>
+
+	<div class="form-actions">
+		<%= f.button :submit, 'Buscar', class: 'btn btn-success' %>
+	</div>
+
+	<% end %>

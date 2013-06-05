@@ -1,1 +1,26 @@
-<h1>Informes: Demora</h1>
+	<div class="well">
+		<%= link_to icon_tag('Volver', :class => 'icon-arrow-left icon-white'), informes_path, class: 'btn btn-primary' %>
+	</div>
+	<h1>Informes: Demora</h1>
+
+	<%= simple_form_for controller_name, :method => :get do |f| %>
+
+	<%= f.input 'tipo', :collection => {'No Culminado' => 'no_culminado', 'Culminado' => 'culminado'}, :prompt => '-- Seleccione --', :label => 'Tipo' %>
+	<%= f.input 'procedimiento', :collection => Procedimiento.all, :prompt => '-- Seleccione --', :label_method => :nombre, :label => 'Procedimiento' %>
+
+	<!--En caso de un procedmimiento-->
+	<%= f.input 'usuario', :collection => Usuario.all, :label_method => :login, :prompt => '-- Seleccione --', :label => "Usuario" %>
+	<!-- Deberia de ser por cargo_estructura -->
+	<%= f.input 'usuario', :collection => CargoEstructura.all, :label_method => :cargo_id, :prompt => '-- Seleccione --', :label => "Funcion" %>
+	
+	
+
+	<%= f.input 'rango', :label => 'Rango en Anhos' %>
+
+	<%= f.hidden_field 'filtro', :value => 'demora'%>
+
+	<div class="form-actions">
+		<%= f.button :submit, 'Buscar', class: 'btn btn-success' %>
+	</div>
+
+	<% end %>
