@@ -33,7 +33,7 @@
     <% @estructuras.each do |estructura| %>
       <tr>
         <td><%= link_to estructura.nombre, estructura  %></td>
-        <td><%#= estructura.estructura_id.nombre %></td>
+        <td><%= estructura.estructura.nombre if estructura.estructura.present? %></td>
         <td>
 
           <div class="btn-group">              
