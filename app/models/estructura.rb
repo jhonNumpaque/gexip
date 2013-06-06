@@ -6,6 +6,8 @@ class Estructura < ActiveRecord::Base
   has_many :cargos, :through => :cargos_estructuras
   has_many :funcionarios, :through => :cargos_estructuras
 
+  belongs_to :estructura
+
   # CONSTANTE
   TIPO_BUSQUEDA = %w{TODOS NOMBRE}
 end
