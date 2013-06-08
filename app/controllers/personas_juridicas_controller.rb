@@ -21,7 +21,6 @@ class PersonasJuridicasController < ApplicationController
     end
     
     @personas_juridicas = @personas_juridicas.where(" territorio_id = ?", params[:filtro_ciudad]) if params[:filtro_ciudad].present?
-    @personas_juridicas = @personas_juridicas.where(" cargo_id = ?", params[:filtro_cargo]) if params[:filtro_cargo].present?
     
     @personas_juridicas = @personas_juridicas.page(params[:page]).per(10)
 
