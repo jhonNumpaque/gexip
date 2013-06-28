@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>GexIP :: <%= controller_name.humanize  %></title>
-    <meta name="description" content="">
-    <meta name="author" content="">
+<head>
+  <meta charset="utf-8">
+  <title>GexIP :: <%= controller_name.humanize  %></title>
+  <meta name="description" content="">
+  <meta name="author" content="">
 
-    <%= stylesheet_link_tag    "application", :media => "all" %>
-    <%= javascript_include_tag "application" %>
-    <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js" %>
-    <%= stylesheet_link_tag   "http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/redmond/jquery-ui.css" %>
-    <%= csrf_meta_tags %>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js" %>
+  <%= stylesheet_link_tag   "http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/redmond/jquery-ui.css" %>
+  <%= csrf_meta_tags %>
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+  <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+      <![endif]-->
 
-    <!-- Le styles -->    
-    <style type="text/css">
+      <!-- Le styles -->    
+      <style type="text/css">
       body {
         padding-top: 60px;
         padding-bottom: 40px;
@@ -26,14 +26,21 @@
       .sidebar-nav {
         padding: 9px 0;
       }
-    </style>
-    <!-- <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet"> -->
+      </style>
+      <!-- <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet"> -->
 
-    <!-- Le fav and touch icons -->
+      <!-- Le fav and touch icons -->
     <!--<link rel="shortcut icon" href="images/favicon.ico">
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">-->
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('.datepicker').datepicker()
+      })
+    </script>
+
   </head>
 
   <body>
@@ -46,92 +53,92 @@
             <span class="i-bar"></span>
             <span class="i-bar"></span>
           </a>
-<%#= link_to 'GexIP', root_path, :class => 'brand' %>          
+          <%#= link_to 'GexIP', root_path, :class => 'brand' %>          
           <%= link_to image_tag('logo.png'), root_path, :class => 'brand', :style => 'padding-bottom:0;padding-top: 4px;' %>          
           <div class="nav-collapse">
             <% if usuario_signed_in? %>            
-              <ul class="nav">
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    Administraci&oacute;n
-                    <b class="caret"></b>
-                  </a>
-                  <ul class="dropdown-menu">
-                    <li><%= link_to 'Usuarios',usuarios_path %></li>
-                    <li><%= link_to 'Funcionarios',funcionarios_path %></li>
-                    <li><%= link_to 'Estructura Organizacional',estructuras_path %></li>
-                    <li><%= link_to 'Roles',roles_path %></li>
-                    <li><%= link_to 'Cargos',cargos_path %></li>
-                    <!--<li><%= link_to 'Entes', entes_path %></li>-->
-                    <li><%= link_to 'Paises', paises_path %></li>
-                    <li><%= link_to 'Ciudades', ciudades_path %></li>
-                    <li><%= link_to 'Unidades de Tiempo', unidades_tiempos_path %></li>
-                  </ul>
-                </li>
-               
-              </ul>
-            <ul class="nav pull-right">
-               <li class="dropdown">
-               <%= link_to 'Contectado como ' + current_usuario.login, '#', :class => 'dropdown-toggle', 'data-toggle' => 'dropdown' %>
+            <ul class="nav">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  Administraci&oacute;n
+                  <b class="caret"></b>
+                </a>
                 <ul class="dropdown-menu">
-                  <li><%= link_to icon_tag(' Ver Perfil', :class => 'icon-user'),  usuario_path(current_usuario.id) %></li>
-                  <li><%= link_to icon_tag(' Cambiar Clave', :class => 'icon-edit'),  cambiar_clave_path %></li>
-                  <li><%= link_to icon_tag(' Salir', :class => 'icon-share'), logout_path %></li>
+                  <li><%= link_to 'Usuarios',usuarios_path %></li>
+                  <li><%= link_to 'Funcionarios',funcionarios_path %></li>
+                  <li><%= link_to 'Estructura Organizacional',estructuras_path %></li>
+                  <li><%= link_to 'Roles',roles_path %></li>
+                  <li><%= link_to 'Cargos',cargos_path %></li>
+                  <!--<li><%= link_to 'Entes', entes_path %></li>-->
+                  <li><%= link_to 'Paises', paises_path %></li>
+                  <li><%= link_to 'Ciudades', ciudades_path %></li>
+                  <li><%= link_to 'Unidades de Tiempo', unidades_tiempos_path %></li>
                 </ul>
-                </li>
-            </ul>
+              </li>
 
-            <% end %>
-          </div><!--/.nav-collapse -->
-        </div>
+            </ul>
+            <ul class="nav pull-right">
+             <li class="dropdown">
+               <%= link_to 'Contectado como ' + current_usuario.login, '#', :class => 'dropdown-toggle', 'data-toggle' => 'dropdown' %>
+               <ul class="dropdown-menu">
+                <li><%= link_to icon_tag(' Ver Perfil', :class => 'icon-user'),  usuario_path(current_usuario.id) %></li>
+                <li><%= link_to icon_tag(' Cambiar Clave', :class => 'icon-edit'),  cambiar_clave_path %></li>
+                <li><%= link_to icon_tag(' Salir', :class => 'icon-share'), logout_path %></li>
+              </ul>
+            </li>
+          </ul>
+
+          <% end %>
+        </div><!--/.nav-collapse -->
       </div>
     </div>
+  </div>
 
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="span2">
-          <div class="well sidebar-nav">
-            <ul class="nav nav-list">
-              <li class="nav-header">Personas/Organismos</li>
-              <li><%= link_to 'Personas Físicas', personas_fisicas_path %></li>
-              <li><%= link_to 'Personas Juridicas', personas_juridicas_path %></li>
-              <li><%= link_to 'Organismos Internos', organismos_internos_path %></li>
-              <li class="nav-header">Procesos</li>
-              <li><%= link_to 'MacroProcesos', macroprocesos_path %></li>
-              <li><%= link_to 'Procesos', procesos_path %></li>
-              <li><%= link_to 'SubProcesos', subprocesos_path %></li>
-              <li><%= link_to 'Procedimientos', procedimientos_path %></li>
-              <li class="nav-header">Expedientes</li>
-              <li><%= link_to 'Expedientes', expedientes_path %></li>
-              <li class="nav-header">Informes y consultas</li>
-              <li><%= link_to 'Informes', informes_path %></li>
-            </ul>
-          </div><!--/.well -->
-        </div><!--/span-->
-        <div class="span10">
-          <% if notice %>
-            <div class="alert alert-success">
-              <p><%= notice %></p>
-            </div>
-          <% end %>
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span2">
+        <div class="well sidebar-nav">
+          <ul class="nav nav-list">
+            <li class="nav-header">Personas/Organismos</li>
+            <li><%= link_to 'Personas Físicas', personas_fisicas_path %></li>
+            <li><%= link_to 'Personas Juridicas', personas_juridicas_path %></li>
+            <li><%= link_to 'Organismos Internos', organismos_internos_path %></li>
+            <li class="nav-header">Procesos</li>
+            <li><%= link_to 'MacroProcesos', macroprocesos_path %></li>
+            <li><%= link_to 'Procesos', procesos_path %></li>
+            <li><%= link_to 'SubProcesos', subprocesos_path %></li>
+            <li><%= link_to 'Procedimientos', procedimientos_path %></li>
+            <li class="nav-header">Expedientes</li>
+            <li><%= link_to 'Expedientes', expedientes_path %></li>
+            <li class="nav-header">Informes y consultas</li>
+            <li><%= link_to 'Informes', informes_path %></li>
+          </ul>
+        </div><!--/.well -->
+      </div><!--/span-->
+      <div class="span10">
+        <% if notice %>
+        <div class="alert alert-success">
+          <p><%= notice %></p>
+        </div>
+        <% end %>
 
-          <% if alert  %>
-            <div class="alert alert-error">
-              <p><%= alert %></p>
-            </div>
-          <% end %>
+        <% if alert  %>
+        <div class="alert alert-error">
+          <p><%= alert %></p>
+        </div>
+        <% end %>
 
-          <%= yield %>
-        </div><!--/span-->
-      </div><!--/row-->
+        <%= yield %>
+      </div><!--/span-->
+    </div><!--/row-->
 
-      <hr>
+    <hr>
 
-      <footer>
-        <p>&copy; Company 2012</p>
-      </footer>
+    <footer>
+      <p>&copy; Company 2012</p>
+    </footer>
 
-    </div><!--/.fluid-container-->
+  </div><!--/.fluid-container-->
 
     <!-- Le javascript
     ================================================== -->
@@ -141,4 +148,4 @@
     <script src="../assets/js/bootstrap-collapse.js"></script>-->
     <%= yield :javascripts %>
   </body>
-</html>
+  </html>

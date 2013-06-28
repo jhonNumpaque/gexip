@@ -3,18 +3,19 @@
 	</div>
 	<h1>Informes: Demanda</h1>
 
-
+<% if !@resultados.present? %>
 	<%= simple_form_for controller_name, :method => :get do |f| %>
 
 	<%= f.input 'cantidad_items' %>
-	<%= f.input 'fecha_inicio' %>
-	<%= f.input 'fecha_fin' %>
+	<%= f.input 'fecha_inicio', :input_html => {:class => "datepicker" }, :autocomplete => 'off' %>
+	<%= f.input 'fecha_fin', :input_html => {:class => "datepicker" }, :autocomplete => 'off' %>
 	<%= f.input 'demanda', :collection => {'Mayor Demana' => 'mayor', 'Menor Demanda' => 'menor'}, :prompt => '-- Seleccione --', :label => "Tipo Demanda" %>	
 	
 	<!--En caso de un procedmimiento-->
-	<%= f.input 'proceso', :collection => Proceso.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Proceso" %>	
+	<%= f.input 'proceso', :collection => Proceso.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Proceso", :input_html => { :onchange => "desactivarCampos()" } %>	
 
-	<%= f.input 'Rango en anhos' %>
+	<%= f.input 'anho_inicio', :collection => @rango_anhos, :prompt => '-- Seleccione --' %>
+	<%= f.input 'anho_fin', :collection => @rango_anhos, :prompt => '-- Seleccione --' %>
 
 	<%= f.hidden_field 'filtro', :value => 'demanda'%>
 
@@ -23,3 +24,25 @@
 	</div>
 
 	<% end %>
+
+	<script type="text/javascript">
+	function desactivarCampos(){
+		if($("#informes_proceso option:selected").val() != "") {
+			$("#informes_cantidad_items").attr('disabled','disabled');
+			$("#informes_fecha_inicio").attr('disabled','disabled');
+			$("#informes_fecha_fin").attr('disabled','disabled');
+			$("#informes_demanda").attr('disabled','disabled');
+		} else {
+			$("#informes_cantidad_items").removeAttr('disabled');
+			$("#informes_fecha_inicio").removeAttr('disabled');
+			$("#informes_fecha_fin").removeAttr('disabled');
+			$("#informes_demanda").removeAttr('disabled');
+		}	
+	}
+	</script>
+<% else %>
+        <% @resultados.each  do |f| %>
+        <p><%= f.cantidad %> </p>
+        <p><%= f.tiempo %> </p>
+        <% end %>
+<% end %>
