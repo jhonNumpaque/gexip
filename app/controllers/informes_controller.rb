@@ -143,6 +143,10 @@ class InformesController < ApplicationController
       #   and esp.created_at between '#{fecha_inicio}' and '#{fecha_fin}' -- rango de fechaan
       # group by sp.nombre, sp.codigo"
 
+      fecha_inicio = fecha_inicio.strftime("%Y-%m-%d")
+      fecha_fin = fecha_fin.strftime("%Y-%m-%d")
+      
+      
       resultado = resultado.where(:created_at => fecha_inicio .. fecha_fin)
       case demanda
       when 'mayor'
