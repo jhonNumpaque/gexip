@@ -1,19 +1,35 @@
-	<div class="well">
-		<%= link_to icon_tag('Volver', :class => 'icon-arrow-left icon-white'), informes_path, class: 'btn btn-primary' %>
-	</div>
-	<h1>Informes: Resumen</h1>
+<div class="well">
+  <%= link_to icon_tag('Volver', :class => 'icon-arrow-left icon-white'), informes_path, class: 'btn btn-primary' %>
+  </div>
+  <h1>Informes: Resumen</h1>
+  <% if !@resultados.present? %>
+    <%= simple_form_for controller_name, :method => :get do |f| %>
 
-	<%= simple_form_for controller_name, :method => :get do |f| %>
+      <%= f.input 'fecha_inicio', :input_html => {:class => "datepicker", :autocomplete => 'off'} %>
+      <%= f.input 'fecha_fin', :input_html => {:class => "datepicker" }, :autocomplete => 'off'%>
 
-	<%= f.input 'fecha_inicio', :label => 'Fecha Inicio' %>
-	<%= f.input 'fecha_fin', :label => 'Fecha Fin' %>
+      <%= f.input 'estado', :collection => {'Finalizado' => 'FINALIZADO', 'Entregados' => 'ENTREGADO', 'Archivados' => 'ARCHIVADOS', 'Cancelados' => 'CANCELADOS', 'En poceso' => 'PROCESO'}, :prompt => '-- Seleccione --', :label => 'Estado del expediente' %>
+      <%= f.input 'tipo', :collection => {'Anhos' => 'YEAR', 'Meses' => 'MONTH', 'Dias' => 'DAY'}, :prompt => '-- Seleccione --', :label => 'Mostrar en Formato' %>
 
-	<%= f.input 'estado', :collection => {'Procesados' => 'procesados', 'Entregados' => 'entregados', 'Archivados' => 'archivados', 'Cancelados' => 'cancelados', 'En poceso' => 'en_proceso'}, :prompt => '-- Seleccione --', :label => 'Estado del expediente' %>
+      <%= f.hidden_field 'filtro', :value => 'resumen'%>
 
-	<%= f.hidden_field 'filtro', :value => 'resumen'%>
+      <div class="form-actions">
+        <%= f.button :submit, 'Buscar', class: 'btn btn-success' %>
+        </div>
 
-	<div class="form-actions">
-		<%= f.button :submit, 'Buscar', class: 'btn btn-success' %>
-	</div>
+      <% end %>
+    <% else %>
+      <table>
+        <tr>
+          <th>Cantidad</th>
+          <th>Fecha</th>
+        </tr>
 
-	<% end %>
+        <% @resultados.each  do |f| %>
+          <tr>
+            <td><%= f.contador %> </td>
+            <td><%= f.fecha %> </td>
+          </tr>
+        <% end %>
+      </table>
+    <% end %>
