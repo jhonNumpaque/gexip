@@ -143,6 +143,9 @@ class InformesController < ApplicationController
       #   and esp.created_at between '#{fecha_inicio}' and '#{fecha_fin}' -- rango de fechaan
       # group by sp.nombre, sp.codigo"
 
+      puts fecha_fin
+      
+      #Rails entiende a la fecha inicio como m/d/y
       fecha_inicio = fecha_inicio.to_date.strftime('%Y-%m-%d')
       fecha_fin = fecha_fin.to_date.strftime('%Y-%m-%d')
       
