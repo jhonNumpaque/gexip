@@ -202,7 +202,7 @@ class InformesController < ApplicationController
       #order by tt.tiempo  asc;
       #      "
    
-      resultado = resultado.where(:createt_at => fecha_inicio .. fecha_fin)
+      resultado = resultado.where(:created_at => fecha_inicio .. fecha_fin)
       
     end
     
