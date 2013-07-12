@@ -1,48 +1,62 @@
-	<div class="well">
-		<%= link_to icon_tag('Volver', :class => 'icon-arrow-left icon-white'), informes_path, class: 'btn btn-primary' %>
-	</div>
-	<h1>Informes: Demanda</h1>
+<div class="well">
+  <%= link_to icon_tag('Volver', :class => 'icon-arrow-left icon-white'), informes_path, class: 'btn btn-primary' %>
+  </div>
+  <h1>Informes: Demanda</h1>
 
-<% if !@resultados.present? %>
-	<%= simple_form_for controller_name, :method => :get do |f| %>
+  <% if !@resultados.present? %>
+    <%= simple_form_for controller_name, :method => :get do |f| %>
 
-	<%= f.input 'cantidad_items' %>
-	<%= f.input 'fecha_inicio', :input_html => {:class => "datepicker" }, :autocomplete => 'off' %>
-	<%= f.input 'fecha_fin', :input_html => {:class => "datepicker" }, :autocomplete => 'off' %>
-	<%= f.input 'demanda', :collection => {'Mayor Demana' => 'mayor', 'Menor Demanda' => 'menor'}, :prompt => '-- Seleccione --', :label => "Tipo Demanda" %>	
-	
-	<!--En caso de un procedmimiento-->
-	<%= f.input 'proceso', :collection => Proceso.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Proceso", :input_html => { :onchange => "desactivarCampos()" } %>	
+      <%= f.input 'cantidad_items' %>
+      <%= f.input 'fecha_inicio', :input_html => {:class => "datepicker" }, :autocomplete => 'off' %>
+      <%= f.input 'fecha_fin', :input_html => {:class => "datepicker" }, :autocomplete => 'off' %>
+      <%= f.input 'demanda', :collection => {'Mayor Demana' => 'mayor', 'Menor Demanda' => 'menor'}, :prompt => '-- Seleccione --', :label => "Tipo Demanda" %>	
 
-	<%= f.input 'anho_inicio', :collection => @rango_anhos, :prompt => '-- Seleccione --' %>
-	<%= f.input 'anho_fin', :collection => @rango_anhos, :prompt => '-- Seleccione --' %>
+      <!--En caso de un procedmimiento-->
+      <%= f.input 'proceso', :collection => Proceso.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Proceso", :input_html => { :onchange => "desactivarCampos()" } %>	
 
-	<%= f.hidden_field 'filtro', :value => 'demanda'%>
+      <%= f.input 'anho_inicio', :collection => @rango_anhos, :prompt => '-- Seleccione --' %>
+      <%= f.input 'anho_fin', :collection => @rango_anhos, :prompt => '-- Seleccione --' %>
 
-	<div class="form-actions">
-		<%= f.button :submit, 'Buscar', class: 'btn btn-success' %>
-	</div>
+      <%= f.hidden_field 'filtro', :value => 'demanda'%>
 
-	<% end %>
+      <div class="form-actions">
+        <%= f.button :submit, 'Buscar', class: 'btn btn-success' %>
+        </div>
 
-	<script type="text/javascript">
-	function desactivarCampos(){
-		if($("#informes_proceso option:selected").val() != "") {
-			$("#informes_cantidad_items").attr('disabled','disabled');
-			$("#informes_fecha_inicio").attr('disabled','disabled');
-			$("#informes_fecha_fin").attr('disabled','disabled');
-			$("#informes_demanda").attr('disabled','disabled');
-		} else {
-			$("#informes_cantidad_items").removeAttr('disabled');
-			$("#informes_fecha_inicio").removeAttr('disabled');
-			$("#informes_fecha_fin").removeAttr('disabled');
-			$("#informes_demanda").removeAttr('disabled');
-		}	
-	}
-	</script>
-<% else %>
-        <% @resultados.each  do |f| %>
-        <p><%= f.cant_expedientes %> </p>
-        <p><%= f.tiempo %> </p>
-        <% end %>
-<% end %>
+      <% end %>
+
+      <script type="text/javascript">
+        function desactivarCampos(){
+          if($("#informes_proceso option:selected").val() != "") {
+            $("#informes_cantidad_items").attr('disabled','disabled');
+            $("#informes_fecha_inicio").attr('disabled','disabled');
+            $("#informes_fecha_fin").attr('disabled','disabled');
+            $("#informes_demanda").attr('disabled','disabled');
+          } else {
+            $("#informes_cantidad_items").removeAttr('disabled');
+            $("#informes_fecha_inicio").removeAttr('disabled');
+            $("#informes_fecha_fin").removeAttr('disabled');
+            $("#informes_demanda").removeAttr('disabled');
+          }	
+        }
+      </script>
+    <% else %>
+      <table>
+        <thead>
+          <tr>
+            <th>Proceso</th>
+            <th>Cantidad de Expedientes</th>
+            <th>Tiempo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @resultados.each  do |f| %>
+            <tr>
+              <td><%= f.cant_expedientes %> </td>
+              <td><%= f.cant_expedientes %> </td>
+              <td><%= f.tiempo %> </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
