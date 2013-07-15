@@ -19,6 +19,44 @@
 
       <% end %>
     <% else %>
+      <script type="text/javascript">
+        $(function() {
+          new Highcharts.Chart({
+            chart: {
+              renderTo: "chart"
+            },
+            title: {
+              text: "Resumen de Expedientes"
+            },
+            xAxis: {
+              type: "datetime"
+            },
+            yAxis: {
+              title: {
+                text: "Cantidad"
+              }
+            },
+            tooltip: {
+              formatter: function() {
+                return Highcharts.dateFormat("%B %e, %Y", this.x) + ': ' +
+                  "$" + Highcharts.numberFormat(this.y, 2);
+              }
+            },
+            series: [
+      <% @resultados.each do |f| %>
+          {
+            data: <%=  f.contador %>
+            
+          },
+      <% end %>
+      ]
+      });
+      });
+      </script>
+
+      <div id="chart" style="width: 560px; height: 300px;"></div>
+
+
       <table>
         <tr>
           <th>Cantidad</th>

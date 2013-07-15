@@ -51,6 +51,7 @@ class InformesController < ApplicationController
     end
   end
 
+  #PROMEDIO DE EXPEDIENTES
   def filtros_promedio
     fecha_inicio = params[:informes][:fecha_inicio]	
     fecha_fin = params[:informes][:fecha_fin]	
@@ -58,63 +59,51 @@ class InformesController < ApplicationController
     proceso = params[:informes][:proceso]	
     procedimiento = params[:informes][:procedimiento]
 
-    if fecha_inicio.present? and fecha_fin.present?
-      sql = "select sum(t.tiempo)/count(t.tiempo) promedio, count(t.tiempo)  cantidad_expedientes
-            from (
-               select ex.fecha_finalizo - ex.created_at tiempo
-               from expedientes ex
-               where ex.estado = 'FINALIZADO'
-               and ex.created_at between '"+fecha_inicio+"' and '"+fecha_fin+"' -- rango de fechaan
-      "
-
-      if estructura.present?
-        sql += "and ex.id in (
-                     select te.expediente_id
-                     from estructuras e, cargos_estructuras ce, funcionarios f, usuarios u, tareas_expedientes te
-                     where e.id = "+estructura+"
-                     and e.id = ce.estructura_id
-                     and ce.id = f.cargo_estructura_id
-                     and f.id = u.funcionario_id
-                     and (te.usuario_inicio_id = u.id or te.usuario_fin_id = u.id)
-                     )"
-      end
-
-      if procedimiento.present?
-        sql += "and ex.id in (
-      select te.expediente_id
-      from tareas_expedientes te, tareas t, actividades a, procedimientos p
-      where te.tarea_id = t.id
-      and t.actividad_id = a.id
-      and a.procedimiento_id = p.id
-      and p.id = #{procedimiento}
-      )"
-      end
-
-      if proceso.present? 
-        sql += "and ex.id in (
-      select te.expediente_id
-      from tareas_expedientes te, tareas t, actividades a, procedimientos p
-      where te.tarea_id = t.id
-      and t.actividad_id = a.id
-      and a.procedimiento_id = p.id
-      and p.serieproceso_id in (
-         select sp.id from serieprocesos sp
-         where sp.id = #{proceso}
-         union
-         select sp.id from serieprocesos sp
-         where sp.serieproceso_id = #{proceso}
-         )
-)"
-      end
-
-      sql += ") t;"
-
-
-      @expedientes = ActiveRecord::Base.connection.execute(sql).first
-      return @expedientes
+    #    fecha_inicio = fecha_inicio.to_date.strftime('%Y-%m-%d')
+    #    fecha_fin = fecha_fin.to_date.strftime('%Y-%m-%d')
+    
+    resultado = VistaExpedienteProceso
+    
+    if proceso.present?
+      resultado = resultado.where("serieproceso_id  = #{proceso}")
     end
+    
+    if estructura.present?
+      resultado = resultado.where("cargo_escrutura_tarea_estructura_id = #{estructura}")
+    end
+    
+    if procedimiento.present?
+      resultado = resultado.where("procedimiento_id = #{procedimiento}")
+    end
+    
+    resultado = resultado.where("expediente_estado = 'FINALIZADO'")
+    resultado = resultado.where(:expediente_created_at => fecha_inicio .. fecha_fin)
+    
+    if resultado.present?
+      p = {}  
+      resultado.each do |r|
+        p[r.expediente_id] ||= [0,0]
+        p[r.expediente_id][0] += (r.expediente_fecha_finalizo.to_datetime - r.expediente_created_at.to_datetime).to_i
+      end
+    
+      dias = p.map{ |id, hash| hash[0]}
+    
+      result = {}
+      result['dias'] = (dias.inject{ |aux,x| aux + x  }).to_i / p.size.to_i
+      result['cantidad'] = p.size
+    
+    else
+      result = {}
+      result['dias'] = 0
+      result['cantidad'] = 0
+    end
+    
+    
+    return result
   end
 
+  
+  #DEMANDA DE EXPEDIENTES
   def filtros_demanda
 
     fecha_inicio = params[:informes][:fecha_inicio] 
@@ -124,94 +113,114 @@ class InformesController < ApplicationController
     proceso = params[:informes][:proceso]
     anho_inicio = params[:informes][:anho_inicio]
     anho_fin = params[:informes][:anho_fin]
-    resultado = VistaProcesoDemandado
- 
-    if demanda.present?
-      
-      #      sql = "select sp.nombre, sp.codigo, count(ex.expedientes) cant_expedientes
-      #  from serieprocesos sp, expedientes esp, (
-      #					    select te.expediente_id as expedientes, p.serieproceso_id as procesos
-      #					      from tareas_expedientes te, tareas t, actividades a, procedimientos p
-      #					     where te.tarea_id = t.id
-      #					       and t.actividad_id = a.id
-      #					       and a.procedimiento_id = p.id
-      #					     group by te.expediente_id, p.serieproceso_id
-      #					   ) ex
-      #where ex.procesos = sp.id
-      # and esp.id = ex.expedientes
-      #and esp.estado = 'FINALIZADO'
-      #   and esp.created_at between '#{fecha_inicio}' and '#{fecha_fin}' -- rango de fechaan
-      # group by sp.nombre, sp.codigo"
-
-      puts fecha_fin
-      
-      #Rails entiende a la fecha inicio como m/d/y
-      fecha_inicio = fecha_inicio.to_date.strftime('%Y-%m-%d')
-      fecha_fin = fecha_fin.to_date.strftime('%Y-%m-%d')
-      
-      
-      resultado = resultado.where(:created_at => fecha_inicio .. fecha_fin)
-      case demanda
-      when 'mayor'
-        resultado = resultado.order("cant_expedientes desc")
-      when 'menor'
-        resultado = resultado.order("cant_expedientes asc")
-      end
-
-      if cantidad.present?
-        resultado = resultado.limit(cantidad)
-      end
+    #   resultado = VistaProcesoDemandado
+    resultado = VistaExpedienteProceso
     
-      puts resultado.all
-      
+    resultado = resultado.select("DISTINCT expediente_id, serieproceso_id")
+    if fecha_inicio.present? && fecha_fin.present?
+      resultado = resultado.where(:expediente_created_at => fecha_inicio .. fecha_fin)
     end
     
-    #en caso que se haya elegido el proceso
+    #    case demanda
+    #    when 'mayor'
+    #      resultado = resultado.order("cant_expedientes desc")
+    #    when 'menor'
+    #      resultado = resultado.order("cant_expedientes asc")
+    #    end
+    
+    if cantidad.present?
+      resultado = resultado.limit(cantidad)
+    end
+    
     if proceso.present?
-      resultado = resultado.where('id = ?',  proceso)
-      
-      #en caso que el anho fin sea menor que el anho inicio, el anho fin sera del mismo valor que el del anho inicio
-      #      sql = "select count(expedientes) cantidad, tt.tiempo from ( "
-      if anho_inicio.present? && anho_fin.present?
-        if(anho_fin <= anho_inicio)
-          anho_fin = anho_inicio
-          #          sql += "select te.expediente_id as expedientes, to_char(sp.created_at, 'MM/yyyy') as tiempo"
-        else
-          # sql += "select te.expediente_id as expedientes, to_char(sp.created_at, 'yyyy') as tiempo "
-        end
-      end
-    
-      
-      #concatenar para el inicio y el fin de los anhos
-      fecha_inicio = anho_inicio + "-01-01"
-      fecha_fin = anho_fin + "-01-01"
-          
-      #concatenar el sql
-      #sql += "
-      #  from expedientes sp, tareas_expedientes te, tareas t, actividades a, procedimientos p
-      #	 where sp.id = te.expediente_id
-      #	   and te.tarea_id = t.id
-      #	   and t.actividad_id = a.id
-      #	   and a.procedimiento_id = p.id
-      #	   and sp.estado = 'FINALIZADO'
-      #	   and sp.created_at between '#{fechainicio}' and '#{fechafin}' -- rango de fechaan
-      #	   and p.serieproceso_id = #{proceso} -- proceso seleccionado
-      #	 group by te.expediente_id, sp.created_at
-      #	) tt
-      #group by tt.tiempo 
-      #order by tt.tiempo  asc;
-      #      "
-   
-      resultado = resultado.where(:created_at => fecha_inicio .. fecha_fin)
-      
+      resultado = resultado.where('serieproceso_id = ?',  proceso)
     end
+    
+    if anho_inicio.present? && anho_fin.present?
+      anho_inicio = anho_inicio + '-01-01'
+      anho_fin = anho_fin + '-01-01'
+      resultado = resultado.where(:expediente_created_at => anho_inicio .. anho_fin)
+    end
+    
+    p = {}
+    resultado.each do |r|
+      p[r.serieproceso_id] ||= [0,0]
+      p[r.serieproceso_id][0] +=1
+    end
+
+    
+    case demanda
+    when 'mayor'
+      p = p.sort{ |a,b| b[1] <=> a[1]}
+    when 'menor'
+      p = p.sort{ |a,b| a[1] <=> b[1]}
+    end
+    
+    #    if demanda.present?    
+    #      
+    #      resultado = resultado.where(:created_at => fecha_inicio .. fecha_fin)
+    #      case demanda
+    #      when 'mayor'
+    #        resultado = resultado.order("cant_expedientes desc")
+    #      when 'menor'
+    #        resultado = resultado.order("cant_expedientes asc")
+    #      end
+    #
+    #      if cantidad.present?
+    #        resultado = resultado.limit(cantidad)
+    #      end
+    #    
+    #      puts resultado.all
+    #      
+    #    end
+    #    
+    #    #en caso que se haya elegido el proceso
+    #    if proceso.present?
+    #      resultado = resultado.where('id = ?',  proceso)
+    #      
+    #      #en caso que el anho fin sea menor que el anho inicio, el anho fin sera del mismo valor que el del anho inicio
+    #      #      sql = "select count(expedientes) cantidad, tt.tiempo from ( "
+    #      if anho_inicio.present? && anho_fin.present?
+    #        if(anho_fin <= anho_inicio)
+    #          anho_fin = anho_inicio
+    #          #          sql += "select te.expediente_id as expedientes, to_char(sp.created_at, 'MM/yyyy') as tiempo"
+    #        else
+    #          # sql += "select te.expediente_id as expedientes, to_char(sp.created_at, 'yyyy') as tiempo "
+    #        end
+    #      end
+    #    
+    #      
+    #      #concatenar para el inicio y el fin de los anhos
+    #      fecha_inicio = anho_inicio + "-01-01"
+    #      fecha_fin = anho_fin + "-01-01"
+    #          
+    #      #concatenar el sql
+    #      #sql += "
+    #      #  from expedientes sp, tareas_expedientes te, tareas t, actividades a, procedimientos p
+    #      #	 where sp.id = te.expediente_id
+    #      #	   and te.tarea_id = t.id
+    #      #	   and t.actividad_id = a.id
+    #      #	   and a.procedimiento_id = p.id
+    #      #	   and sp.estado = 'FINALIZADO'
+    #      #	   and sp.created_at between '#{fechainicio}' and '#{fechafin}' -- rango de fechaan
+    #      #	   and p.serieproceso_id = #{proceso} -- proceso seleccionado
+    #      #	 group by te.expediente_id, sp.created_at
+    #      #	) tt
+    #      #group by tt.tiempo 
+    #      #order by tt.tiempo  asc;
+    #      #      "
+    #   
+    #      resultado = resultado.where(:created_at => fecha_inicio .. fecha_fin)
+      
+    #  end
     
     
     #resultados = ActiveRecord::Base.connection.execute(sql).first
-    return resultado
+    return p
 
   end
   
+  #DEMORA DE EXPEDIENTES
   def filtros_demora
     fecha_inicio = params[:informes][:fecha_inicio] 
     fecha_fin = params[:informes][:fecha_fin] 
@@ -220,10 +229,75 @@ class InformesController < ApplicationController
     estructura = params[:informes][:estructura]
     cargo = params[:informes][:cargo]
     
+    resultado = VistaExpedienteProceso
     
-    resultado = VistaProcesoDemorado
+    if tipo == "culminado"
+      resultado = resultado.where("expediente_estado = 'FINALIZADO'")
+    elsif tipo == "no_culminado"
+      resultado = resultado.where("expediente_estado <> 'FINALIZADO'")
+      resultado = resultado.where("expediente_estado <> 'ENTREGADO'")
+    end
+    
+    if usuario.present?
+      resultado = resultado.where(:tarea_expediente_usuario_inicio => usuario)
+    end
+    
+    if estructura.present? && cargo.present?
+      cargo_estructura = CargoEstructura.where(:cargo_id => cargo, :estructura_id => estructura).first
+      resultado = resultado.where(:tarea_cargo_estructura => cargo_estructura.id)
+    end
+    
+    resultado = resultado.where(:expediente_created_at => fecha_inicio .. fecha_fin)
+    
+    
+    if resultado.present?
+      p = {}  
+      resultado.each do |r|
+        #        p[r.expediente_id] ||= ['dias', 'usuario_id']
+        p[r.expediente_id] ||= [0,0]
+        if tipo == "culminado"
+          p[r.expediente_id][0] += (r.expediente_fecha_finalizo.to_datetime - r.expediente_created_at.to_datetime).to_i
+        elsif tipo == "no_culminado"         
+          if p[r.expediente_id][0].present? || p[r.expediente_id][0] <  r.expediente_created_at.to_datetime
+            p[r.expediente_id][0] = r.expediente_created_at.to_datetime
+          end
+          p[r.expediente_id][1] = r.tarea_expediente_usuario_inicio
+          p[r.expediente_id][2] = r.procedimiento_id
+          p[r.expediente_id][3] = r.tarea_cargo_estructura
+        end
+      end
+      
+      
+      result = {}
+      if tipo == "culminado"
+        resultado.each do |r|
+          result[r.expediente_id] ||= [0,0]
+          dias = p.map{ |id, hash| hash[0]}
+          result[r.expediente_id][0] = (dias.inject{ |aux,x| aux + x  }).to_i / p.size.to_i
+          result[r.expediente_id][1] = r.tarea_expediente_usuario_fin
+          result[r.expediente_id][2] = r.procedimiento_id
+          result[r.expediente_id][3] = r.tarea_cargo_estructura
+        end
+      elsif tipo == "no_culminado"
+        resultado.each do |r|
+          result[r.expediente_id] ||= [0,0]
+          result[r.expediente_id][0] = (r.expediente_fecha_finalizo.to_datetime - p[r.expediente_id][0]).to_i
+          result[r.expediente_id][1] = p[r.expediente_id][1]
+          result[r.expediente_id][2] = p[r.expediente_id][2]
+          result[r.expediente_id][3] = p[r.expediente_id][3]
+        end
+      end
+    else
+      result = {}
+      result['dias'] = 0
+      result['cantidad'] = 0
+    end
+    
+    return result
   end
 
+  
+  #FILTRO DE EXPEDIENTES
   def filtros_resumen
     fecha_inicio = params[:informes][:fecha_inicio] 
     fecha_fin = params[:informes][:fecha_fin] 

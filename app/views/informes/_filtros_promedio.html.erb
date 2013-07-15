@@ -1,73 +1,107 @@
-	<div class="well">
-		<%= link_to icon_tag('Volver', :class => 'icon-arrow-left icon-white'), informes_path, class: 'btn btn-primary' %>
-	</div>
-	<h1>Informes: Promedios</h1>
+<div class="well">
+  <%= link_to icon_tag('Volver', :class => 'icon-arrow-left icon-white'), informes_path, class: 'btn btn-primary' %>
+  </div>
+  <h1>Informes: Promedios</h1>
 
-	<% if !@resultados.present? %>
-	<%= simple_form_for controller_name, :method => :get do |f| %>
+  <% if !@resultados.present? %>
+    <%= simple_form_for controller_name, :method => :get do |f| %>
 
-	<%= f.input 'fecha_inicio', :input_html => {:class => "datepicker", :autocomplete => 'off'} %>
-	<%= f.input 'fecha_fin', :input_html => {:class => "datepicker" }, :autocomplete => 'off'%>
-	<%= f.input 'proceso', :collection => Proceso.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Proceso", :input_html => {:onchange => "desactivarCampos('proceso')"} %>	
-	<%= f.input 'estructura', :collection => Estructura.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Estructura", :input_html => {:onchange => "desactivarCampos('estructura')"} %>
-	<%= f.input 'procedimiento', :collection => Procedimiento.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Procedimiento", :input_html => { :onchange => "desactivarCampos('procedimiento')" } %>
+      <%= f.input 'fecha_inicio', :input_html => {:class => "datepicker", :autocomplete => 'off'} %>
+      <%= f.input 'fecha_fin', :input_html => {:class => "datepicker" }, :autocomplete => 'off'%>
+      <%= f.input 'proceso', :collection => Proceso.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Proceso", :input_html => {:onchange => "desactivarCampos('proceso')"} %>	
+      <%= f.input 'estructura', :collection => Estructura.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Estructura", :input_html => {:onchange => "desactivarCampos('estructura')"} %>
+      <%= f.input 'procedimiento', :collection => Procedimiento.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Procedimiento", :input_html => { :onchange => "desactivarCampos('procedimiento')" } %>
 
-	<%= f.hidden_field 'filtro', :value => 'promedios'%>
+      <%= f.hidden_field 'filtro', :value => 'promedios'%>
 
-	<div class="form-actions">
-		<%= f.button :submit, 'Buscar', class: 'btn btn-success' %>
-	</div>
+      <div class="form-actions">
+        <%= f.button :submit, 'Buscar', class: 'btn btn-success' %>
+        </div>
 
-	<% end %>
+      <% end %>
 
-	<script type="text/javascript">
-	function desactivarCampos(campo){
-		switch(campo){
-			case 'proceso':
-			if($("#informes_proceso option:selected").val() != "") {
-				$("#informes_procedimiento").attr('disabled','disabled');
-				$("#informes_estructura").attr('disabled','disabled');
-			} else {
-				$("#informes_procedimiento").removeAttr('disabled');
-				$("#informes_estructura").removeAttr('disabled');
-			}	
+      <script type="text/javascript">
+        function desactivarCampos(campo){
+          switch(campo){
+            case 'proceso':
+              if($("#informes_proceso option:selected").val() != "") {
+                $("#informes_procedimiento").attr('disabled','disabled');
+                $("#informes_estructura").attr('disabled','disabled');
+              } else {
+                $("#informes_procedimiento").removeAttr('disabled');
+                $("#informes_estructura").removeAttr('disabled');
+              }	
 
-			break
-			case 'procedimiento':
-			if($("#informes_procedimiento option:selected").val() != "") {
-				$("#informes_proceso").attr('disabled','disabled');
-				$("#informes_estructura").attr('disabled','disabled');
-			} else {
-				$("#informes_proceso").removeAttr('disabled');
-				$("#informes_estructura").removeAttr('disabled');
-			}
-			break	
-			case 'estructura':
-			if($("#informes_estructura option:selected").val() != "") {
-				$("#informes_procedimiento").attr('disabled','disabled');
-				$("#informes_proceso").attr('disabled','disabled');
-			} else {
-				$("#informes_procedimiento").removeAttr('disabled');
-				$("#informes_proceso").removeAttr('disabled');
-			}
-			break
-		}	
-	}
-	</script>
-	<% else %>
-	<p>El tiempo promedio de demora desde la fecha <%= @fecha_inicio %> hasta la fecha <%=  @fecha_fin %> de los expedientes es: </p>
+              break
+            case 'procedimiento':
+              if($("#informes_procedimiento option:selected").val() != "") {
+                $("#informes_proceso").attr('disabled','disabled');
+                $("#informes_estructura").attr('disabled','disabled');
+              } else {
+                $("#informes_proceso").removeAttr('disabled');
+                $("#informes_estructura").removeAttr('disabled');
+              }
+              break	
+            case 'estructura':
+              if($("#informes_estructura option:selected").val() != "") {
+                $("#informes_procedimiento").attr('disabled','disabled');
+                $("#informes_proceso").attr('disabled','disabled');
+              } else {
+                $("#informes_procedimiento").removeAttr('disabled');
+                $("#informes_proceso").removeAttr('disabled');
+              }
+              break
+          }	
+        }
+      </script>
+    <% else %>
 
-	<p>Promedio: <%= @resultados["promedio"] %> d&iacute;as</p>
-	<p>Cantidad Expedientes: <%= @resultados["cantidad_expedientes"] %></p>
+      <script type="text/javascript" charset="utf-8">
+        $(function() {
+          new Highcharts.Chart({
+            chart: {
+              renderTo: "chart"
+            },
+            title: {
+              text: "Procesos Mas Demandados"
+            },
+            xAxis: {
+              type: "datetime"
+            },
+            yAxis: {
+              title: {
+                text: "Cantidad"
+              }
+            },
+            tooltip: {
+              formatter: function() {
+                return Highcharts.dateFormat("%B %e, %Y", this.x) + ': ' +
+                  "$" + Highcharts.numberFormat(this.y, 2);
+              }
+            },
+            series: [{
+                data: [1,2,3,4]
+              }]
+          });
+        });
+      </script>
+
+      <div id="chart" style="width: 560px; height: 300px;"></div>
 
 
-	<% if @estructura.present? %>
-	<p>Los datos mostrados corresponden a la entidad: <strong><%= @estructura.nombre %></strong> </p>
-	<% end %>
-	<% if @proceso.present? %>
-	<p>Los datos mostrados corresponden al proceso: <strong><%= @proceso.nombre %></strong> </p>
-	<% end %>
-	<% if @procedimiento.present? %>
-	<p>Los datos mostrados corresponden al procedimiento: <strong><%= @procedimiento.nombre %></strong> </p>
-	<% end %>
-	<% end %>
+      <p>El tiempo promedio de demora desde la fecha <%= @fecha_inicio %> hasta la fecha <%=  @fecha_fin %> de los expedientes es: </p>
+
+      <p>Promedio: <%= @resultados['dias'] %> d&iacute;as</p>
+      <p>Cantidad Expedientes: <%= @resultados['cantidad'] %></p>
+
+
+      <% if @estructura.present? %>
+        <p>Los datos mostrados corresponden a la entidad: <strong><%= @estructura.nombre %></strong> </p>
+      <% end %>
+      <% if @proceso.present? %>
+        <p>Los datos mostrados corresponden al proceso: <strong><%= @proceso.nombre %></strong> </p>
+      <% end %>
+      <% if @procedimiento.present? %>
+        <p>Los datos mostrados corresponden al procedimiento: <strong><%= @procedimiento.nombre %></strong> </p>
+      <% end %>
+    <% end %>

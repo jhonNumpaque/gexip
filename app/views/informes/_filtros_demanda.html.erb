@@ -41,38 +41,7 @@
         }
       </script>
     <% else %>
-      <script type="text/javascript" charset="utf-8">
-  $(function() {
-    new Highcharts.Chart({
-      chart: {
-        renderTo: "chart"
-      },
-      title: {
-        text: "Procesos Mas Demandados"
-      },
-      xAxis: {
-        type: "datetime"
-      },
-      yAxis: {
-        title: {
-          text: "Cantidad"
-        }
-      },
-      tooltip: {
-        formatter: function() {
-          return Highcharts.dateFormat("%B %e, %Y", this.x) + ': ' +
-            "$" + Highcharts.numberFormat(this.y, 2);
-        }
-      },
-      series: [{
-          data: [1,2,3,4]
-      }]
-    });
-  });
-</script>
-      
-      <div id="chart" style="width: 560px; height: 300px;"></div>
-      
+
       <table>
         <thead>
           <tr>
@@ -82,12 +51,14 @@
           </tr>
         </thead>
         <tbody>
-          <% @resultados.each  do |f| %>
-            <tr>
-              <td><%= f.cant_expedientes %> </td>
-              <td><%= f.cant_expedientes %> </td>
-              <td><%= f.tiempo %> </td>
-            </tr>
+          <% @resultados.each  do |key, f| %>
+            <% if key.present? %>
+              <tr>
+                <td><%=  Proceso.find(key).nombre %> </td>
+                <td><%= f[0] %> </td>
+                <td><%#= f.tiempo %> </td>
+              </tr>
+            <% end %>
           <% end %>
         </tbody>
       </table>
