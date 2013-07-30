@@ -21,11 +21,15 @@
                   :as => :radio,
                   :input_html => { :onclick => "cambiarFiltro(this.value)" }
                   %>
-
+      <div id="procedimineto_idx">
       <%= f.input 'procedimineto_id', :collection => Procedimiento.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Procedimiento", :input_html => { :onchange => "desactivarCampos('procedimiento')" } %>
-
+      </div>
+      <div id="cargo_idx">
       <%= f.input 'cargo_id', :label => "Cargo" %>
+      </div>
+      <div id="funcionario_idx">
       <%= f.input 'funcionario_id', :label => "Funcionario" %>
+      </div>
 
       <div class="form-actions">
         <%= f.button :submit, 'Buscar', class: 'btn btn-success' %>
@@ -34,40 +38,27 @@
     <% end %>
 
       <script type="text/javascript">
-        function cambiarFiltro(p_filtro){
-          alert(p_filtro);
-          /*
-          switch(campo){
-            case 'proceso':
-              if($("#informes_proceso option:selected").val() != "") {
-                $("#informes_procedimiento").attr('disabled','disabled');
-                $("#informes_estructura").attr('disabled','disabled');
-              } else {
-                $("#informes_procedimiento").removeAttr('disabled');
-                $("#informes_estructura").removeAttr('disabled');
-              } 
-
-              break
-            case 'procedimiento':
-              if($("#informes_procedimiento option:selected").val() != "") {
-                $("#informes_proceso").attr('disabled','disabled');
-                $("#informes_estructura").attr('disabled','disabled');
-              } else {
-                $("#informes_proceso").removeAttr('disabled');
-                $("#informes_estructura").removeAttr('disabled');
-              }
-              break 
-            case 'estructura':
-              if($("#informes_estructura option:selected").val() != "") {
-                $("#informes_procedimiento").attr('disabled','disabled');
-                $("#informes_proceso").attr('disabled','disabled');
-              } else {
-                $("#informes_procedimiento").removeAttr('disabled');
-                $("#informes_proceso").removeAttr('disabled');
-              }
-              break
-          } 
-          */
+        $("#procedimineto_idx").css( "display", "none");
+        $("#cargo_idx").css( "display", "none");
+        $("#funcionario_idx").css( "display", "none");
+        function cambiarFiltro(p_filtro)
+        {
+          $("#procedimineto_idx").css( "display", "none");
+          $("#cargo_idx").css( "display", "none");
+          $("#funcionario_idx").css( "display", "none");
+          //alert(p_filtro);
+          switch(p_filtro)
+          {
+            case "1":
+            $("#procedimineto_idx").css( "display", "block");
+            break;
+            case "2":
+            $("#cargo_idx").css( "display", "block");
+            break;
+            case "3":
+            $("#funcionario_idx").css( "display", "block");
+            break;
+          }
         }
       </script>
 
