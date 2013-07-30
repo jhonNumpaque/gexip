@@ -1,0 +1,74 @@
+<section>
+  <div class="page-header">
+    <h1>Tiempos Demorados <small>---</small></h1>
+  </div>
+
+  <br />
+<!--
+ @photographer, :url => savenew_photographers_path 
+:action => 'savenew'
+-->
+
+    <%= simple_form_for :tiempos_demorados, :url => listar_path, :method => :get do |f| %>
+
+      <%= f.input 'fecha1', :input_html => {:class => "datepicker", :autocomplete => 'off'} %>
+      <%= f.input 'fecha2', :input_html => {:class => "datepicker", :autocomplete => 'off'} %>
+      
+      <%= f.input :filtro, 
+                  :collection => [["1", "Procedimiento"], ["2", "Cargo"], ["3", "Funcionario"]], 
+                  :label_method => :last, 
+                  :value_method => :first, 
+                  :as => :radio,
+                  :input_html => { :onclick => "cambiarFiltro(this.value)" }
+                  %>
+
+      <%= f.input 'procedimineto_id', :collection => Procedimiento.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Procedimiento", :input_html => { :onchange => "desactivarCampos('procedimiento')" } %>
+
+      <%= f.input 'cargo_id', :label => "Cargo" %>
+      <%= f.input 'funcionario_id', :label => "Funcionario" %>
+
+      <div class="form-actions">
+        <%= f.button :submit, 'Buscar', class: 'btn btn-success' %>
+      </div>
+
+    <% end %>
+
+      <script type="text/javascript">
+        function cambiarFiltro(p_filtro){
+          alert(p_filtro);
+          /*
+          switch(campo){
+            case 'proceso':
+              if($("#informes_proceso option:selected").val() != "") {
+                $("#informes_procedimiento").attr('disabled','disabled');
+                $("#informes_estructura").attr('disabled','disabled');
+              } else {
+                $("#informes_procedimiento").removeAttr('disabled');
+                $("#informes_estructura").removeAttr('disabled');
+              } 
+
+              break
+            case 'procedimiento':
+              if($("#informes_procedimiento option:selected").val() != "") {
+                $("#informes_proceso").attr('disabled','disabled');
+                $("#informes_estructura").attr('disabled','disabled');
+              } else {
+                $("#informes_proceso").removeAttr('disabled');
+                $("#informes_estructura").removeAttr('disabled');
+              }
+              break 
+            case 'estructura':
+              if($("#informes_estructura option:selected").val() != "") {
+                $("#informes_procedimiento").attr('disabled','disabled');
+                $("#informes_proceso").attr('disabled','disabled');
+              } else {
+                $("#informes_procedimiento").removeAttr('disabled');
+                $("#informes_proceso").removeAttr('disabled');
+              }
+              break
+          } 
+          */
+        }
+      </script>
+
+</section>

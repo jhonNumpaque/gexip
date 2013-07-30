@@ -1,0 +1,9 @@
+<section>
+
+<% if params[:tiempos_demorados][:filtro]=="1" then %>
+<%= render 'reporte_601' %>
+<% elsif params[:tiempos_demorados][:filtro]=="2" then %>
+<%= render 'reporte_602' %>
+<% end %>
+
+</section>
