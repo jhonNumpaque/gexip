@@ -1,0 +1,36 @@
+
+<% if flash[:error].present? %>
+<div class="alert-message error" style="margin-top:20px;">    
+	<p><%= flash[:error] %></p>
+</div> 
+<% end %>
+
+<%= form_tag consulta_verificar_expediente_path,  :class => 'form-stacked' do  %>
+
+<div class='clearfix'>
+	<%= label_tag :documento,'Numero de Documento' %>
+	<div class='input'>
+		<%= text_field_tag :documento, nil, :class => 'span6' %>
+	</div>
+</div>
+
+<div class='clearfix'>
+	<%= label_tag :password, 'Contrase&ntilde;a'.html_safe %>
+	<div class='input'>
+		<%= password_field_tag :password, nil, :class => 'span6' %>
+	</div>
+</div>
+
+<br />
+
+<div class='row'>
+	<div class='span2' style='width:75px'>
+		<p>
+			<%= submit_tag 'entrar', :class => 'btn primary large' %>        
+		</p>
+	</div>
+
+</div>
+
+<% end  %>
+

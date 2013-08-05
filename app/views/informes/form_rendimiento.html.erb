@@ -1,0 +1,41 @@
+  <div class="well">
+    <%= link_to icon_tag('Volver', :class => 'icon-arrow-left icon-white'), informes_path, class: 'btn btn-primary' %>
+  </div>
+
+  <div class="page-header">
+    <h1>Informes <small>Rendimiento del personal</small></h1>
+  </div>
+  <%= simple_form_for controller_name, :url => show_rendimiento_path, :method => :post do |f| %>
+  <!--Fechas -->
+  <%= f.input 'fecha_inicio', :input_html => {:class => "datepicker", :autocomplete => 'off'} %>
+  <%= f.input 'fecha_fin', :input_html => {:class => "datepicker" }, :autocomplete => 'off'%>
+  <!--Estructura y cargo -->
+  <%#= f.input 'estructura', :collection => Estructura.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Estructura", input_html:  {id: 'estructura_id'}%>
+  <%#= f.input 'cargo', :collection => Cargo.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Cargo", input_html:  {id: 'cargo_id'} %>
+  <%#= linked_combo 'cargo_id', :linked => 'estructura_id', :param => 'estructura_id', :url => '/cargos.json' %>
+
+  <!--Funcionario-->  
+  <%#= f.input('funcionario', :collection => Funcionario.all, :as => :grouped_select, :group_method => :cargo_estructura_id, :group_label_method => :cargo_estructura_id, :label_method => :nombres, :prompt => '-- Seleccione --' ,:input_html => {:id => 'funcionario_id'}) %>
+  <%= f.input 'funcionario', :as => :grouped_select, :collection => get_funcionarios_group,:group_method => :last, :input_html => {:id => 'funcionario_id', :multiple => ''} %>
+  <%#= f.input :author, :as => :grouped_select, :collection => [['Authors', ['Jose', 'Carlos']], ['General', ['Bob', 'John']]], :group_method => :last %>
+
+
+
+  <%= f.input 'formato', :collection => {'Meses' => 'meses', 'Semanas' => 'semanas', 'Dias' => 'dias'}, :prompt => '-- Seleccione --', :label => 'Mostrar en Formato' %>
+
+  <%= f.hidden_field 'filtro', :value => 'resumen'%>
+
+  <div class="form-actions">
+    <%= f.button :submit, 'Buscar', class: 'btn btn-success' %>
+  </div>
+
+  <% end %>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('#funcionario_id').select2({
+        allowClear: true,
+        width: '300px'
+      });
+    })
+  </script>

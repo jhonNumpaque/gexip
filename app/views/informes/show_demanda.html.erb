@@ -1,0 +1,102 @@
+<section>
+  <div class="well">
+    <%= link_to icon_tag('Volver', :class => 'icon-arrow-left icon-white'), form_demanda_path, class: 'btn btn-primary' %>
+    </div>
+
+    <div class="page-header">
+      <h1>Informes <small> Demanda de procesos</small></h1>
+    </div>
+  <%= render 'graph_demanda' %>
+    <%#*<script type="text/javascript">%>
+      <%#*$(function() {%>
+        <%#*new Highcharts.Chart({%>
+          <%#*chart: {%>
+            <%#*renderTo: "chart",%>
+            <%#*type: "column"%>
+          <%#*},%>
+          <%#*title: {%>
+            <%#*text: "Demanda de Procesos"%>
+          <%#*},%>
+          
+          <%#*xAxis: {%>
+  <%# case @formato %>
+  <%# when 'meses' %>
+            <%#*categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']%>
+  <%# when 'semanas' %>
+            <%#*categories: ['2012', '2013']%>
+  <%# when 'dias' %>
+            <%#*categories: [%>
+    <%#  @resultados.each do |r| %>
+      <%#= r.fecha_finalizo.to_datetime.strftime('%d') %>,
+    <%# end %>
+            <%#*]%>
+  <%#  else %>
+            <%#*categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']%>
+  <%# end %>
+        <%#*},%>
+        <%#*yAxis: {%>
+          <%#*title: {%>
+            <%#*text: "Dias"%>
+          <%#*}%>
+        <%#*},%>
+        <%#*tooltip: {%>
+          <%#*formatter: function() {%>
+            <%#*return '<b>'+ this.series.name +'</b><br/>'+%>
+              <%#*this.x +': '+ this.y;%>
+          <%#*}%>
+        <%#*},%>
+        <%#*series: [%>
+          <%#*{%>
+  <%# case @formato %>
+  <%# when 'meses' %>
+              <%#*data: [%>
+    <%# (1..12).each do |m| %>
+        <%# if @resultados[m].present?  %>
+          <%#= @resultados[m][0].to_s + "," %>
+          <%# else %>
+            <%#= 0.to_s + ","  %>
+          <%# end %>
+      <%# end %>
+                <%#*]%>
+    <%# when 'YEAR' %>
+                <%#*data: [100, 160]%>
+    <%# when 'DAY' %>
+                <%#*data: [%>
+
+      <%#  @resultados.each do |r| %>
+        <%#= r.contador %>,
+      <%# end %>
+                    
+                <%#*]%>
+    <%#  else %>
+                <%#*data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]%>
+    <%# end %>
+            <%#*},%>
+          <%#*]%>
+        <%#*});%>
+      <%#*});%>
+      <%#*</script>%>
+
+      <div id="chart" style="width: 560px; height: 300px;"></div>
+
+
+      <% if @proceso.present? %>
+        <p>Proceso: <strong><%= @proceso.nombre %></strong> </p>
+      <% end %>
+      <table>
+        <thead>
+          <tr>
+            <th>Cantidad de Expedientes</th>
+            <th>Origen del Expediente</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @resultados.each  do |key, r| %>
+            <tr>
+              <td><%=  r[0] %> </td>
+              <td><%= key %> </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </section>
