@@ -1,0 +1,65 @@
+<section>
+  <div class="page-header">
+    <h1>Tiempos Demorados <small>---</small></h1>
+  </div>
+
+  <br />
+<!--
+ @photographer, :url => savenew_photographers_path 
+:action => 'savenew'
+-->
+
+    <%= simple_form_for :tiempos_demorados, :url => listar_path, :method => :get do |f| %>
+
+      <%= f.input 'fecha1', :input_html => {:class => "datepicker", :autocomplete => 'off'} %>
+      <%= f.input 'fecha2', :input_html => {:class => "datepicker", :autocomplete => 'off'} %>
+      
+      <%= f.input :filtro, 
+                  :collection => [["1", "Procedimiento"], ["2", "Cargo"], ["3", "Funcionario"]], 
+                  :label_method => :last, 
+                  :value_method => :first, 
+                  :as => :radio,
+                  :input_html => { :onclick => "cambiarFiltro(this.value)" }
+                  %>
+      <div id="procedimineto_idx">
+      <%= f.input 'procedimineto_id', :collection => Procedimiento.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Procedimiento", :input_html => { :onchange => "desactivarCampos('procedimiento')" } %>
+      </div>
+      <div id="cargo_idx">
+      <%= f.input 'cargo_id', :label => "Cargo" %>
+      </div>
+      <div id="funcionario_idx">
+      <%= f.input 'funcionario_id', :label => "Funcionario" %>
+      </div>
+
+      <div class="form-actions">
+        <%= f.button :submit, 'Buscar', class: 'btn btn-success' %>
+      </div>
+
+    <% end %>
+
+      <script type="text/javascript">
+        $("#procedimineto_idx").css( "display", "none");
+        $("#cargo_idx").css( "display", "none");
+        $("#funcionario_idx").css( "display", "none");
+        function cambiarFiltro(p_filtro)
+        {
+          $("#procedimineto_idx").css( "display", "none");
+          $("#cargo_idx").css( "display", "none");
+          $("#funcionario_idx").css( "display", "none");
+          //alert(p_filtro);
+          switch(p_filtro)
+          {
+            case "1":
+            $("#procedimineto_idx").css( "display", "block");
+            break;
+            case "2":
+            $("#cargo_idx").css( "display", "block");
+            break;
+            case "3":
+            $("#funcionario_idx").css( "display", "block");
+            break;
+          }
+        }
+      </script>
+
+</section>

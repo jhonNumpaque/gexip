@@ -1,0 +1,32 @@
+  <div class="page-header">
+    <h1>Tiempos demorados <small>por procedimientos</small></h1>
+  </div>
+
+  <br />
+
+<%#= params[:fecha1] %><br />
+<%#= params[:fecha2] %><br />
+<%#= params[:procedimineto_id] %><br />
+
+
+
+<% if @tiempos_demorados.present? %>
+    <table class="table table-striped table-bordered table-condensed">
+      <tr>
+              <th>ctiempo</th>
+              <th>cnombres</th>
+              <th>capellidos</th>
+      </tr>
+      <% @tiempos_demorados.each do |tiempo_demorado| %>
+        <tr>
+          <td><%= tiempo_demorado.ctiempo %></td>
+          <td><%= tiempo_demorado.cnombres %></td>
+          <td><%= tiempo_demorado.capellidos %></td>
+        </tr>
+      <% end %>
+    </table> 
+  <% else %>
+    <p class="alert-message warning">
+      Todavía no hay tipos_documentos, <%= link_to 'agregar', tiempos_demorados_path %>.
+    </p>
+  <% end %>
