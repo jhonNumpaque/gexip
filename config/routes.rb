@@ -1,5 +1,7 @@
 Gexip::Application.routes.draw do
 
+  get "consultas/index"
+
   # tree procedimientos y cia
   match 'obtener/arbol' => 'procedimientos#jstree', :as => :procedimientos_jstree
   match 'procedimientos/ni' => 'procedimientos#new_index', :as => :new_procedimientos_index
@@ -48,6 +50,8 @@ Gexip::Application.routes.draw do
   
   resources :informes
 
+  resources :consultas
+
   devise_for :usuarios, :controllers => { :registrations => "usuarios", :sessions => 'sesiones' } do 
     get "/login" => "sesiones#new"
     get "/logout" => "sesiones#destroy"
@@ -75,6 +79,14 @@ Gexip::Application.routes.draw do
 
   #informes
   match 'mostrar_formulario/:tipo_informe' => 'informes#mostrar_formulario', :as => :mostrar_formulario
+  match 'form_demora' => 'informes#form_demora', :as => :form_demora
+  match 'form_demanda' => 'informes#form_demanda', :as => :form_demanda
+  match 'form_rendimiento' => 'informes#form_rendimiento', :as => :form_rendimiento
+  match 'show_demanda' => 'informes#show_demanda', :as => :show_demanda
+  match 'show_rendimiento' => 'informes#show_rendimiento', :as => :show_rendimiento
+
+  #consultas
+  match 'consulta_verificar_expediente' => 'consultas#verificar_expediente', :as => :consulta_verificar_expediente
   
   #entes
   match '/search' => 'entes#search', :as => 'search_ente'
