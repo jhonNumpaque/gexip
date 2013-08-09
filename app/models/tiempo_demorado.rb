@@ -1,9 +1,15 @@
 class TiempoDemorado
-  attr_accessor :ctiempo, :cnombres, :capellidos
-  def initialize(ctiempo, cnombres, capellidos)
-      @ctiempo = ctiempo
-      @cnombres = cnombres
-      @capellidos = capellidos
+  attr_accessor :cid, :cnumero, :cfecha_inicio, :cminutos_demorados, :cminutos_estimados, :cminutos, :cfuncionario
+  def initialize(cid, cnumero, cfecha_inicio, cminutos_demorados, cminutos_estimados, cminutos, cfuncionario)
+
+      @cid = cid
+      @cnumero = cnumero
+      @cfecha_inicio = cfecha_inicio
+      @cminutos_demorados = cminutos_demorados
+      @cminutos_estimados = cminutos_estimados
+      @cminutos = cminutos
+      @cfuncionario = cfuncionario
+
   end
   
   class << self
@@ -17,7 +23,7 @@ class TiempoDemorado
         return nil
       end
 
-        result.map { |r| TiempoDemorado.new(r["ctiempo"], r["cnombres"], r["capellidos"]) }        
+        result.map { |r| TiempoDemorado.new(r["cid"], r["cnumero"], r["cfecha_inicio"], r["cminutos_demorados"], r["cminutos_estimados"], r["cminutos"], r["cfuncionario"]) }
     end
   end
   
@@ -30,7 +36,7 @@ class TiempoDemorado
         return nil
       end
 
-        result.map { |r| TiempoDemorado.new(r["ctiempo"], r["cnombres"], r["capellidos"]) }        
+        result.map { |r| TiempoDemorado.new(r["cid"], r["cnumero"], r["cfecha_inicio"], r["cminutos_demorados"], r["cminutos_estimados"], r["cminutos"], r["cfuncionario"]) }
     end
   end
 

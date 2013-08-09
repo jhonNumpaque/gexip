@@ -48,6 +48,9 @@ Gexip::Application.routes.draw do
   
   resources :informes
 
+  resources :tiempos_demorados
+  match 'tiempos_demorados/reporte/listar/' => 'tiempos_demorados#listar', :as => :listar
+  
   devise_for :usuarios, :controllers => { :registrations => "usuarios", :sessions => 'sesiones' } do 
     get "/login" => "sesiones#new"
     get "/logout" => "sesiones#destroy"

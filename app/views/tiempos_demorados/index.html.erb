@@ -11,9 +11,16 @@
 
     <%= simple_form_for :tiempos_demorados, :url => listar_path, :method => :get do |f| %>
 
-      <%= f.input 'fecha1', :input_html => {:class => "datepicker", :autocomplete => 'off'} %>
-      <%= f.input 'fecha2', :input_html => {:class => "datepicker", :autocomplete => 'off'} %>
+      <%= f.input 'fecha1', :label => "Fecha Registro Inicial", :input_html => {:class => "datepicker", :autocomplete => 'off'} %>
+      <%= f.input 'fecha2', :label => "Fecha Registro Final", :input_html => {:class => "datepicker", :autocomplete => 'off'} %>
       
+      <%= f.input :expediente, 
+                  :collection => [["1", "Finalizado"], ["2", "No Finalizado"]], 
+                  :label_method => :last, 
+                  :value_method => :first, 
+                  :as => :radio
+                  %>
+
       <%= f.input :filtro, 
                   :collection => [["1", "Procedimiento"], ["2", "Cargo"], ["3", "Funcionario"]], 
                   :label_method => :last, 
