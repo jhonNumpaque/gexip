@@ -8,9 +8,9 @@
 <%= form_tag consulta_verificar_expediente_path,  :class => 'form-stacked' do  %>
 
 <div class='clearfix'>
-	<%= label_tag :documento,'Numero de Documento' %>
+	<%= label_tag :documento,'Numero del Expediente' %>
 	<div class='input'>
-		<%= text_field_tag :documento, nil, :class => 'span6' %>
+		<%= text_field_tag :documento, nil, :class => 'span6', :placeholder => 'Ejemplo: 1/2013' %>
 	</div>
 </div>
 
