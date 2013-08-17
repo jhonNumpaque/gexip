@@ -1,13 +1,7 @@
 <section>
   <div class="page-header">
-    <h1>Tiempos Demorados <small>---</small></h1>
+    <h1>Demora de Expendientes <small>control de tiempo</small></h1>
   </div>
-
-  <br />
-<!--
- @photographer, :url => savenew_photographers_path 
-:action => 'savenew'
--->
 
     <%= simple_form_for :tiempos_demorados, :url => listar_path, :method => :get do |f| %>
 
@@ -29,13 +23,14 @@
                   :input_html => { :onclick => "cambiarFiltro(this.value)" }
                   %>
       <div id="procedimineto_idx">
-      <%= f.input 'procedimineto_id', :collection => Procedimiento.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Procedimiento", :input_html => { :onchange => "desactivarCampos('procedimiento')" } %>
+      <%= f.input 'procedimineto_id', :collection => Procedimiento.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Procedimiento" %>
       </div>
       <div id="cargo_idx">
-      <%= f.input 'cargo_id', :label => "Cargo" %>
+      <%= f.input 'cargo_id', :collection => get_cargos_estructuras, :prompt => '-- Seleccione --', :label => "Cargo"  %>
+      <%#= f.input 'cargo_id', :label => "Cargo" %>
       </div>
       <div id="funcionario_idx">
-      <%= f.input 'funcionario_id', :label => "Funcionario" %>
+      <%= f.input 'funcionario_id', :collection => Funcionario.all, :label_method => :nombre_completo, :prompt => '-- Seleccione --', :label => "Funcionario" %>
       </div>
 
       <div class="form-actions">
