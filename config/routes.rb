@@ -82,8 +82,12 @@ Gexip::Application.routes.draw do
   match 'form_demora' => 'informes#form_demora', :as => :form_demora
   match 'form_demanda' => 'informes#form_demanda', :as => :form_demanda
   match 'form_rendimiento' => 'informes#form_rendimiento', :as => :form_rendimiento
+  match 'form_radicados' => 'informes#form_radicados', :as => :form_radicados
+  match 'form_anulados' => 'informes#form_anulados', :as => :form_anulados
   match 'show_demanda' => 'informes#show_demanda', :as => :show_demanda
   match 'show_rendimiento' => 'informes#show_rendimiento', :as => :show_rendimiento
+  match 'show_radicados' => 'informes#show_radicados', :as => :show_radicados
+  match 'show_anulados' => 'informes#show_anulados', :as => :show_anulados
 
   #consultas
   match 'consulta_verificar_expediente' => 'consultas#verificar_expediente', :as => :consulta_verificar_expediente
