@@ -1,0 +1,9 @@
+<div class='tasks tab-pane' id="tab1">'
+  <% if @tarea.new_record? %>
+      <h4>Seleccione el tipo de
+        tarea <%= '(lógico pendiente)' if @tarea.anterior.present? && @tarea.anterior.logica_nueva? %></h4>
+      <%= tipos_tareas(@tarea) %>
+  <% else %>
+    <%= mostrar_tipo_tarea(@tarea) %>
+  <% end %>
+</div>

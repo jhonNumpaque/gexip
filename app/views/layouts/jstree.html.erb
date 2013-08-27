@@ -5,8 +5,8 @@
     <title>GexIP :: <%= controller_name.humanize  %></title>
     <meta name="description" content="">
     <meta name="author" content="">
-    <%= stylesheet_link_tag    "application", :media => "all" %>
-    <%= stylesheet_link_tag    "procedimientos_jstree", :media => "all" %>
+    <%= stylesheet_link_tag    "application", "bootstrap-modal", :media => "all" %>    
+    <%= stylesheet_link_tag    "procedimientos_jstree", 'select2', 'select2-bootstrap', :media => "all" %>
     <%#= javascript_include_tag "application" %>
     <%= javascript_include_tag "tree" %>
 
@@ -88,6 +88,16 @@
       </div>
     </div>
 
+    <div class="modal hide fade" id="tarea-modal-wrapper" style='heigth:600px; margin-left: 349px'>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Cargando...</h3>
+      </div>
+      <div class="modal-body">
+        <p>Cargando, espere por favor…</p>
+      </div>      
+    </div>
+
 		<%= javascript_include_tag 'jquery.jstree' %>
     <script type="text/javascript">
       $(function(){
@@ -105,7 +115,7 @@
         $("#main").jstree({ 
           // List of active plugins
           "plugins" : [ 
-            "themes","json_data","ui","crrm","cookies","dnd","search","types","hotkeys","contextmenu" 
+            "themes","json_data","ui","crrm","cookies","dnd","search","types","hotkeys"
           ],
 
           // I usually configure the plugin that handles the data first
@@ -123,7 +133,7 @@
                 // the result is fed to the AJAX request `data` option
                 return { 
                   "operation" : "get_children", 
-                  "id" : n.attr ? n.attr("id").replace("node_","") : 0,
+                  "id" : n.attr ? n.attr("id").split('_')[1] : 0,
                   'type': n.attr ? n.attr("type") : 'macroproceso'
                 }; 
               }
@@ -235,90 +245,8 @@
            // "initially_open" : [ "node_2" , "node_3" ] 
          // }
         })
-        .bind("create.jstree", function (e, data) {
-          $.post(
-            "/static/v.1.0pre/_demo/server.php", 
-            { 
-              "operation" : "create_node", 
-              "id" : data.rslt.parent.attr("id").replace("node_",""), 
-              "position" : data.rslt.position,
-              "title" : data.rslt.name,
-              "type" : data.rslt.obj.attr("rel")
-            }, 
-            function (r) {
-              if(r.status) {
-                $(data.rslt.obj).attr("id", "node_" + r.id);
-              }
-              else {
-                $.jstree.rollback(data.rlbk);
-              }
-            }
-          );
-        })
-        .bind("remove.jstree", function (e, data) {
-          data.rslt.obj.each(function () {
-            $.ajax({
-              async : false,
-              type: 'POST',
-              url: "/static/v.1.0pre/_demo/server.php",
-              data : { 
-                "operation" : "remove_node", 
-                "id" : this.id.replace("node_","")
-              }, 
-              success : function (r) {
-                if(!r.status) {
-                  data.inst.refresh();
-                }
-              }
-            });
-          });
-        })
-        .bind("rename.jstree", function (e, data) {
-          $.post(
-            "/static/v.1.0pre/_demo/server.php", 
-            { 
-              "operation" : "rename_node", 
-              "id" : data.rslt.obj.attr("id").replace("node_",""),
-              "title" : data.rslt.new_name
-            }, 
-            function (r) {
-              if(!r.status) {
-                $.jstree.rollback(data.rlbk);
-              }
-            }
-          );
-        })
-        .bind("move_node.jstree", function (e, data) {
-          data.rslt.o.each(function (i) {
-            $.ajax({
-              async : false,
-              type: 'POST',
-              url: "/static/v.1.0pre/_demo/server.php",
-              data : { 
-                "operation" : "move_node", 
-                "id" : $(this).attr("id").replace("node_",""), 
-                "ref" : data.rslt.cr === -1 ? 1 : data.rslt.np.attr("id").replace("node_",""), 
-                "position" : data.rslt.cp + i,
-                "title" : data.rslt.name,
-                "copy" : data.rslt.cy ? 1 : 0
-              },
-              success : function (r) {
-                if(!r.status) {
-                  $.jstree.rollback(data.rlbk);
-                }
-                else {
-                  $(data.rslt.oc).attr("id", "node_" + r.id);
-                  if(data.rslt.cy && $(data.rslt.oc).children("UL").length) {
-                    data.inst.refresh(data.inst._get_parent(data.rslt.oc));
-                  }
-                }
-                $("#analyze").click();
-              }
-            });
-          });
-          
-        }).bind("select_node.jstree", function (event, data) {
-          var id = data.rslt.obj.attr('id').replace('node_', '');
+        .bind("select_node.jstree", function (event, data) {
+          var id = data.rslt.obj.attr('id').split('_')[1];
           var rel = data.rslt.obj.attr('type');
 
           if (rel == 'macroproceso') {
@@ -337,6 +265,10 @@
             $.get('<%= procedimientos_path %>/' + id + '.js', {}, function(data){
               //setData(data);
             }, 'script');
+          } else if (rel == 'actividad') {
+            $.get('<%= actividades_path %>/' + id + '.js', {}, function(data){
+              //setData(data);
+            }, 'script');  
           }          
                     
           $('.descipt').html(humanize(rel));

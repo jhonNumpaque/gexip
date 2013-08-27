@@ -29,7 +29,13 @@ class TareasController < ApplicationController
   # GET /tareas/new.json
 	#se encuentra en actividades_controller#agregar_tarea
   def new
-    @tarea_actual = Tarea.new
+    @tarea = Tarea.new
+    @tarea.actividad_id = params[:actividad_id]
+    #@tarea.tarea_ant_id = @tarea.anterior.id if @tarea.anterior && !@tarea.anterior.es_logica?
+    #@tarea.adjuntos.build
+    #@tarea.adjuntos.first.cargos_estructuras_adjuntos.build
+    @logicas_opciones = { :prompt => '-- Seleccione -- '}
+    @rutas_logicas = view_context.options_for_select(Tarea::RutasLogicas.map{ |r| [r,r] })
 
     respond_to do |format|
       format.html { render :layout => "popup_wf" } # new.html.erb
@@ -52,18 +58,18 @@ class TareasController < ApplicationController
   # POST /tareas
   # POST /tareas.json
   def create
-    tarea = Tarea.new(params[:tarea])
-    @actividad_id = tarea.actividad_id
-	
+    @tarea = Tarea.new(params[:tarea])
+    @actividad_id = @tarea.actividad_id
+
     respond_to do |format|
-      if tarea.save
-        @tareas = Tarea.where(:actividad_id => tarea.actividad_id).order("orden")
-        format.html { redirect_to tareas_path(:actividad_id => @tarea_actual.actividad_id), notice: 'Tarea Creada Correctamente.' }
-        format.json { render json: @tarea_actual, status: :created, location: @tarea_actual }
+      if @tarea.save
+        @tareas = Tarea.where(:actividad_id => @tarea.actividad_id).order("orden")
+        #format.html { redirect_to tareas_path(:actividad_id => @tarea_actual.actividad_id), notice: 'Tarea Creada Correctamente.' }
+        #format.json { render json: @tarea_actual, status: :created, location: @tarea_actual }
         format.js
       else
         format.html { render action: "new", :layout => "popup_wf" }
-        format.json { render json: @tarea_actual.errors, status: :unprocessable_entity }
+        #format.json { render json: @tarea_actual.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -258,6 +264,56 @@ class TareasController < ApplicationController
         @vista_tareas_siguientes = VistaTarea.where(qs, qv).select('id, nombre, actividad_descripcion').limit(2)      
     end
     
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def agregar_adjunto
+    @adjunto = Adjunto.new(tarea_id: params[:tarea_id])
+    
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def respuestas_logicas
+    tarea_logica = Tarea.find(params[:tarea_id])
+    respuestas = []
+    respuestas << { id: 'SI', valor: 'SI' } if tarea_logica.tarea_sgt_id.blank?
+    respuestas << { id: 'NO', valor: 'NO' } if tarea_logica.tarea_alt_id.blank?
+
+    respond_to do |format|
+      format.json { render json: respuestas }
+    end
+  end
+
+  def verificar_tarea_anterior
+    #tarea_anterior = Tarea.find(params[:tarea_anterior_id]) if params[:tarea_anterior_id].present?
+    tarea_logica = Tarea.find(params[:logica_id]) if params[:logica_id].present?
+
+    if tarea_logica.dos_rutas_pendientes?
+			@tarea_anterior = tarea_logica
+			@respuestas_pendientes = ["SI","NO"]
+    elsif tarea_logica.rutas_pendientes?
+			puts "{{{{{{{{{{{{{{{{{{"
+			@tareas_anteriores = { tarea_logica.logica_rutas_pendientes.first => tarea_logica }
+			@respuestas_pendientes = tarea_logica.logica_rutas_pendientes
+			ruta_disponible = tarea_logica.ruta_disponible?(tarea_logica.rutas_completadas.first)
+			if ruta_disponible
+				ruta_completada = tarea_logica.rutas_completadas.first
+				@respuestas_pendientes << ruta_completada
+				@tareas_anteriores[ruta_completada] = tarea_logica.ultima_en_rama(ruta_completada)
+			end
+			@tarea_anterior = @tareas_anteriores.values.first if @tareas_anteriores.keys.length == 1
+    end
+
+    puts "-----------------"
+    puts "tarea_anterior: #{@tarea_anterior.inspect}"
+    puts "respuestas_pendientes: #{@respuestas_pendientes.inspect}"
+    puts "tareas_anteriores: #{@tareas_anteriores.inspect}"
+    puts "-----------------"
+
     respond_to do |format|
       format.js
     end

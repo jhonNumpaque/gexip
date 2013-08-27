@@ -1,0 +1,3 @@
+$('#modal-wrapper .modal-header h3').html('Agregar Adjunto');
+$('#modal-wrapper .modal-body').html("<%= escape_javascript(render(:partial => 'form_tarea')) %>");
+$('#modal-wrapper').modal();

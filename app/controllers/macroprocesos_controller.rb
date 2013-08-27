@@ -51,12 +51,17 @@ class MacroprocesosController < ApplicationController
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @macroproceso }
+      format.js
     end
   end
 
   # GET /macroprocesos/1/edit
   def edit
     @macroproceso = Macroproceso.find(params[:id])
+
+    respond_to do |format|
+      format.js      
+    end
   end
 
   # POST /macroprocesos
@@ -68,9 +73,11 @@ class MacroprocesosController < ApplicationController
       if @macroproceso.save
         format.html { redirect_to macroprocesos_path, notice: 'MacroProceso Creado Correctamente.' }
         format.json { render json: @macroproceso, status: :created, location: @macroproceso }
+        format.js
       else
         format.html { render action: "new" }
         format.json { render json: @macroproceso.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end

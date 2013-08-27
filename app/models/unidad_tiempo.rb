@@ -4,4 +4,7 @@ class UnidadTiempo < ActiveRecord::Base
   validates :minutos, :presence => true, :numericality => true
   
   has_many :tareas, :dependent => :restrict
+
+  # Constantes
+  MinutoId = 2
 end

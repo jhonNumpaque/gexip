@@ -39,7 +39,7 @@ class ProcedimientosController < ApplicationController
 
 		actividad = @procedimiento.actividades.build
     @from_tree = params[:from].present?
-    @subproceso_id = params[:subproceso_id]
+    @subproceso_id = params[:subproceso_id].present? ? params[:subproceso_id] : params[:proceso_id]
 		
     respond_to do |format|
       format.html # new.html.erb
@@ -115,6 +115,37 @@ class ProcedimientosController < ApplicationController
     end
   end
 
+  def aprobables
+    @a_aprobar = Procedimiento.a_aprobar
+    @aprobados = Procedimiento.aprobados
+    @borradores = Procedimiento.borradores
+  end
+
+  def aprobar
+		procedimiento = Procedimiento.find(params[:id])
+		procedimiento.aprobar!
+
+		redirect_to :aprobables
+  end
+
+  def bloquear
+		procedimiento = Procedimiento.find(params[:id])
+		params[:tipo] == "true" ? procedimiento.desbloquear! : procedimiento.bloquear!
+
+		redirect_to :aprobables
+  end
+
+  def comprobar
+		@procedimiento = Procedimiento.find(params[:procedimiento_id])
+		actividades_completadas = @procedimiento.actividades_completas?
+		@finalizado = actividades_completadas && @procedimiento.finalizado?
+		@procedimiento.solicitar_autorizacion
+
+		respond_to do |format|
+		 format.js
+		end
+  end
+
   def new_index
     @macroprocesos = Macroproceso.all
     render :layout => 'jstree'
@@ -139,14 +170,14 @@ class ProcedimientosController < ApplicationController
           data.concat(Serieproceso.where(serieproceso_id: params[:id]).all)
           data.compact!
         elsif params[:type] == 'procedimiento'
-          data = Actividad.where(procedimiento_id: params[:id]).all      
+          data = Actividad.where(procedimiento_id: params[:id]).order('orden').all      
         else
           data = Serieproceso.where(serieproceso_id: params[:id]).all
         end
         
         #image = data.first ? data.first.type : nil
       end
-      response = data.map { |d| { attr: { id: "node_#{d.id}", rel: d.class.to_s.downcase, type: d.class.to_s.downcase  }, data: d.nombre, state: d.tree_state }}
+      response = data.map { |d| { attr: { id: "#{d.class.to_s.downcase}_#{d.id}", rel: d.class.to_s.downcase, type: d.class.to_s.downcase  }, data: d.nombre, state: d.tree_state }}
     end
 
     respond_to do |format|

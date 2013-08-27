@@ -1,5 +1,8 @@
 <% if @proceso.errors.empty? %>
 	$('#pso-body').append('<tr id="pso-<%= @proceso.id %>"><%= escape_javascript(render("macroprocesos/proceso", :proceso => @proceso)) %></tr>')
+
+	$("#main").jstree("create",$('#macroproceso_<%= @proceso.serieproceso_id %>'), "inside", { attr: { id: "proceso_<%= @proceso.id %>", rel: '<%= @proceso.class.to_s.downcase %>', type: '<%= @proceso.class.to_s.downcase %>'  }, data: '<%= @proceso.nombre %>', state: '<%= @proceso.tree_state %>' }, false, true);
+
 	$('#modal-wrapper .modal-header h3').html("&iexcl;&Eacute;xito!");
 	$('#modal-wrapper .modal-body').html("&iexcl;Guardado correctamente!");
 	$('#modal-wrapper .modal-footer').hide();	

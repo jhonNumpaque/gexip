@@ -1,0 +1,21 @@
+<%= form_for @actividad, remote: true, html: { class: 'form-horizontal form_remote' } do |f| %>
+  <% if @actividad.errors.present? %>
+    <div class="alert alert-block alert-error">
+      <h4>No se ha podido guardar el registro, verifique lo siguiente:</h4>
+      <ul>
+        <% @actividad.errors.full_messages.each do |error| %>
+          <li><%= error %></li>
+        <% end %>
+      </ul>
+    </div>   
+  <% end %>
+  <div class="control-group">
+    <%= f.label :descripcion, required_label('Nombre'), class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :descripcion %>      
+    </div>
+  </div>
+
+  <%= f.hidden_field :orden %>
+  <%= f.hidden_field :procedimiento_id %>
+<% end %>

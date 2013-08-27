@@ -1,0 +1,16 @@
+<td>
+	<%= tarea.orden %>
+	<%= link_to icon_tag('', :class => 'icon-chevron-up'), '#' %>
+	<%= link_to icon_tag('', :class => 'icon-chevron-down'), '#' %>
+</td>
+<td><%= image_tag 'icons/tarea.png' %> <%= truncate(tarea.nombre, :length => 80) %> <span class='label label-info pull-right'><%= tarea.tipo %></span></td>
+<td><%= format_date(tarea.updated_at) %></td>
+<td>
+	<div class="pull-right">
+		<%= link_to icon_tag('', :class => 'icon-trash'), tarea_path(tarea), 
+		:title => 'Eliminar tarea', :method => :delete, :remote => true,
+		:confirm => "¿Está seguro de eliminar esta tarea?.\nEsta acción no se puede revertir" %> 
+		<%= link_to icon_tag('', :class => 'icon-pencil'), 
+		edit_tarea_path(id: tarea, from: 'tree'), remote: true %>		
+	</div>
+</td>

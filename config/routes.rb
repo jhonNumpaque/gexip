@@ -1,11 +1,25 @@
 Gexip::Application.routes.draw do
 
-  get "consultas/index"
+	# tree procedimientos y cia
+	match 'obtener/arbol' => 'procedimientos#jstree', :as => :procedimientos_jstree
+	match 'procedimientos/ni' => 'procedimientos#new_index', :as => :new_procedimientos_index
+	match 'cargos/estructuras' => 'cargos#cargo_estructuras', :as => :cargo_estructuras
+	match 'adjuntos/agregar' => 'tareas#agregar_adjunto', :as => :agregar_adjunto
 
-  # tree procedimientos y cia
-  match 'obtener/arbol' => 'procedimientos#jstree', :as => :procedimientos_jstree
-  match 'procedimientos/ni' => 'procedimientos#new_index', :as => :new_procedimientos_index
-  
+	match 'tareas/respuestas_logicas' => 'tareas#respuestas_logicas', :as => :respuestas_logicas
+	match 'tareas/verificar_tarea_anterior' => 'tareas#verificar_tarea_anterior', :as => :verificar_tarea_anterior
+
+	match 'procedimientos/:procedimiento_id/comprobar' => 'procedimientos#comprobar', :as => :comprobar_procedimiento
+	match 'procedimientos/aprobar/lista' => 'procedimientos#aprobables', :as => :aprobables
+	match 'procedimientos/:id/:tipo/aprobar' => 'procedimientos#aprobar', :as => :aprobar_procedimiento
+	match 'procedimientos/:id/bloquear/:tipo' => 'procedimientos#bloquear', :as => :lock_procedimiento
+
+	get "consultas/index"
+
+    # tree procedimientos y cia
+	match 'obtener/arbol' => 'procedimientos#jstree', :as => :procedimientos_jstree
+    match 'procedimientos/ni' => 'procedimientos#new_index', :as => :new_procedimientos_index
+
   resources :organismos_internos
 
   resources :personas_juridicas
@@ -19,6 +33,7 @@ Gexip::Application.routes.draw do
   resources :expedientes
   
   resources :unidades_tiempos
+  resources :actividades
   resources :tareas
 
   resources :subprocesos

@@ -1,0 +1,13 @@
+<tr>
+  <td>
+    <%#= f.hidden_tag : %>
+    <%= f.object.descripcion %>
+    <%= content_tag(:span, 'Requerido', :class => 'label label-important pull-right') %>
+  </td>
+  <td style='width: 163px;'>
+    <%= link_to_remove_fields('Eliminar', f, { class: 'btn btn-primary' }) %>
+    <a href="#" class="btn btn-info popver" data-original-title="Visible a"
+       data-toggle="popover"
+       data-content="<ul><%= (f.object.cargos_estructuras_adjuntos.present? ? f.object.cargos_estructuras_adjuntos.map{ |c| content_tag(:li, c.descripcion) }.join('') : '<li>Todos</li>').html_safe %>">Visibilidad</a>
+  </td>
+</tr>

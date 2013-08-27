@@ -106,4 +106,14 @@ class CargosController < ApplicationController
       format.js
     end
   end
+
+  def cargo_estructuras
+    cargo_estructuras = CargoEstructura.where(:estructura_id => params[:estructura_id]).all
+
+    cargo_estructuras = cargo_estructuras.map { |c| { id: c.id, descripcion: c.descripcion } }
+
+    respond_to do |format|
+      format.json { render json: cargo_estructuras }
+    end
+  end
 end

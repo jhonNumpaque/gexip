@@ -1,5 +1,5 @@
 <% if @subproceso.errors.empty? %>
-	$('#pso-<%= @subproceso.id %>').html('<%= escape_javascript(render("procesos/subproceso", :subproceso => @subproceso)) %>')
+	$('#spso-<%= @subproceso.id %>').html('<%= escape_javascript(render("procesos/subproceso", :subproceso => @subproceso)) %>')
 	$('#modal-wrapper .modal-header h3').html("&iexcl;&Eacute;xito!");
 	$('#modal-wrapper .modal-body').html("&iexcl;Guardado correctamente!");
 	$('#modal-wrapper .modal-footer').hide();	

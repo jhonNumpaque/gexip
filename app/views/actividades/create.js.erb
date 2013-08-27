@@ -1,0 +1,15 @@
+	<% if @actividad.errors.empty? %>	
+	$('#pso-body').append('<tr id="pso-<%= @actividad.id %>"><%= escape_javascript(render("procedimientos/actividad", :actividad => @actividad)) %></tr>')
+
+	$('#modal-wrapper .modal-header h3').html("&iexcl;&Eacute;xito!");
+	$('#modal-wrapper .modal-body').html("&iexcl;Guardado correctamente!");
+	$('#modal-wrapper .modal-footer').hide();	
+
+	$("#main").jstree("create", $('#procedimiento_<%= @actividad.procedimiento_id %>'), "inside", { attr: { id: "actividad_<%= @actividad.id %>", rel: '<%= @actividad.class.to_s.downcase %>', type: '<%= @actividad.class.to_s.downcase %>'  }, data: '<%= @actividad.descripcion %>', state: '<%= @actividad.tree_state %>' }, false, true	);
+
+<% else %>
+	$('#modal-wrapper .modal-header h3').html("&iexcl;Error! Agregar Actividad");
+	$('#modal-wrapper .modal-body').html('<%= escape_javascript(render("form")) %>');
+	$('#modal-wrapper .modal-footer').show();	
+	$('#modal-wrapper').heigth('800px');	
+<% end %>

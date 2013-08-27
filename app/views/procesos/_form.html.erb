@@ -11,6 +11,8 @@
     <%= f.hidden_field :serieproceso_id, :value => params[:macroproceso_id] %>
   <% end %>
 
+  <%= f.input :cargo_estructura_id, :label => "Cargo Responsable", :collection => CargoEstructura.all, :label_method => :descripcion, :prompt => "-- Seleccione --" %>
+  
   <% unless @from_tree -%>
     <div class="form-actions">
       <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>    
