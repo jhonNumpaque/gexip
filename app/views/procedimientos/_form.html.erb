@@ -11,13 +11,15 @@
   <%= f.input :definiciones %>
   <%= f.input :elabora_fecha, :as => :string, :input_html => { :class => 'date_picker' }%>
   <%#= f.input :elabora_usuario %>
-  <%= f.input :elabora_usuario, :collection =>  Usuario.all, :label_method => :nombres, :prompt => '-- Seleccione --' %>
+  <%= f.input :elabora_usuario, :collection =>  Usuario.all, :label_method => :nombre_completo, :prompt => '-- Seleccione --' %>
   <%#= f.input :revisado_fecha, :as => :string, :input_html => { :class => 'date_picker' } %>
   <%#= f.input :revisado_usuario %>
   <%#= f.input :revisado_usuario, :collection =>  Usuario.all, :label_method => :nombres, :prompt => '-- Seleccione --' %>
   <%#= f.input :aprobado_fecha, :as => :string, :input_html => { :class => 'date_picker' } %>
   <%#= f.input :aprobado_usuario %>
   <%#= f.input :aprobado_usuario, :collection =>  Usuario.all, :label_method => :nombres, :prompt => '-- Seleccione --' %>
+
+  
 
   <% unless @from_tree %>
     <fieldset>

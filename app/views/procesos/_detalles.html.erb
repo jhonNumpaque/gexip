@@ -1,4 +1,17 @@
 <h2 style="text-align:center;background-color:#ccc">Proceso</h2>
+<div class="well" style="padding: 5px;">
+	<div class="span8 pull-left">
+		<%= image_tag 'icons/proceso.png' %> <%= @proceso.codigo %> - <%= @proceso.nombre %>
+	</div>
+	<div class="span2 pull-right">
+		<%= link_to icon_tag('Editar', :class => 'icon-pencil'), 
+		edit_proceso_path(id: @proceso, from: 'tree'), remote: true %>
+
+		<%= link_to icon_tag('Eliminar', :class => 'icon-trash'), proceso_path(@proceso), 
+		:title => 'Eliminar Proceso', :method => :delete, :remote => true,
+		:confirm => "¿Está seguro de eliminar este proceso?.\nEsta acción no se puede revertir" %> 
+	</div>
+</div>
 <table class="table">
 	<tbody>
 		<tr>
@@ -32,16 +45,55 @@
 			</th>
 			<td class="add-place"><%= link_to icon_tag('Agregar', :class => 'icon-plus-sign'), new_subproceso_path(:from => 'tree', :proceso_id => @proceso.id), :id => 'add-proceso', :class => 'btn pull-right', :remote => true %></td>
 		</tr>
-		<tr>
-			<th>Nombre</th>
-			<th>Fecha</th>
-			<th>&nbsp;</th>
+		<% for subproceso in @subprocesos -%>
+			<tr>
+				<th>Nombre</th>
+				<th>Fecha</th>
+				<th>&nbsp;</th>
+			</tr>
+		<% end -%>
+	</thead>
+	<tbody id="pso-body1">
+		<% if @subprocesos.present? %>
+			<% for subproceso in @subprocesos -%>
+				<tr id="spso-<%= subproceso.id %>">
+					<%= render 'procesos/subproceso', :subproceso => subproceso %>
+				</tr>
+			<% end -%>
+		<% else -%>
+			<tr>
+				<td colspan="3" class='alert alert-warning'>No hay registros</td>
+			</tr>
+		<% end -%>
+	</tbody>
+</table>
+
+<table class="table">
+	<thead>
+		<tr style="background-color:#ccc">
+			<th colspan="2" style="text-align:center;">
+				<h3>Procedimientos</h3>					
+			</th>
+			<td class="add-place"><%= link_to icon_tag('Agregar', :class => 'icon-plus-sign'), new_procedimiento_path(:from => 'tree', :proceso_id => @proceso.id), :id => 'add-proceso', :class => 'btn pull-right', :remote => true %></td>
 		</tr>
+		<% if @procedimientos.present? %>
+			<tr>
+				<th>Nombre</th>
+				<th>Fecha</th>
+				<th>&nbsp;</th>
+			</tr>
+		<% end -%>
 	</thead>
 	<tbody id="pso-body">
-		<% for subproceso in @subprocesos -%>
-			<tr id="pso-<%= subproceso.id %>">
-				<%= render 'procesos/subproceso', :subproceso => subproceso %>
+		<% if @procedimientos.present? %>
+			<% for procedimiento in @procedimientos -%>
+				<tr id="pso-<%= procedimiento.id %>">
+					<%= render 'subprocesos/procedimiento', :procedimiento => procedimiento %>
+				</tr>
+			<% end -%>
+		<% else -%>
+			<tr>
+				<td colspan="3" class='alert alert-warning'>No hay registros</td>
 			</tr>
 		<% end -%>
 	</tbody>

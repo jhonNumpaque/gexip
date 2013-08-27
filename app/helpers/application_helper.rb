@@ -23,4 +23,8 @@ module ApplicationHelper
     date.strftime(format)
   end
 
+  def required_label(label)
+    content_tag(:em, "*", class: 'required').concat(" #{label}")
+  end
+
 end

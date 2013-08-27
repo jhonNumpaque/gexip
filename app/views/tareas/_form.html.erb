@@ -1,95 +1,192 @@
-<%= simple_form_for @tarea, :html => { :class => 'form-horizontal' } do |f| %>
-  <div id="wizard" class="swMain">
-    <ul>
-      <li>
-        <a href="#step-1">
-          <label class="stepNumber">1</label>
-          <span class="stepDesc">Tipo <br />
-            <small>Seleccione el tipo de tarea</small>
-          </span>
-        </a>
-      </li>
+<div id="rootwizard">
+  <ul>
+    <li><a href="#tab1" data-toggle="tab">Tipo de Tarea</a></li>
+    <li class='tabli tab2'><a href="#tab2" data-toggle="tab">Datos B&aacute;sicos</a></li>
+    <li class='tabli tab3'><a href="#tab3" data-toggle="tab">Responsable</a></li>
+    <li class='tabli tab4'><a href="#tab4" data-toggle="tab">Adjuntos</a></li>
+    <!--<li class='tabli tab5'><a href="#tab5" data-toggle="tab">Proc. Relacionado</a></li>-->
+  </ul>
+  <%= form_for @tarea, remote: true, html: { class: 'form-horizontal form_remote', id: 'form-tarea' } do |f| %>
+      <div class="tab-content">
+        <%= f.hidden_field :tipo %>
+        <%= f.hidden_field :actividad_id %>
 
-      <li>
-        <a href="#step-2">
-          <label class="stepNumber">2</label>
-          <span class="stepDesc">Nombre y Método <br />
-            <small>Escriba el nombre y el método de la tarea</small>
-          </span>
-        </a>
-      </li>
+        <%= render 'tipo_tarea', f: f %>
 
-      <li>
-        <a href="#step-3">
-          <label class="stepNumber">3</label>
-          <span class="stepDesc">Responsable y Tiempo <br />
-            <small>Seleccione un responsable e indique el tiempo estimado</small>
-          </span>
-        </a>
-      </li>
+        <%= render 'datos_tarea', f: f %>
 
-      <li>
-        <a href="#step-4">
-          <label class="stepNumber">4</label>
-          <span class="stepDesc">Documentos <br />
-            <small>Indique los documentos que intervienen de tarea</small>
-          </span>
-        </a>
-      </li>
+        <%= render 'datos_estructura', f: f %>
 
-    </ul>
+        <%= render 'datos_adjuntos', f: f %>
 
-    <div id="step-1">
-      <h2 class="StepTitle">Tipo</h2>
-      <%= f.error_notification %>
+        <div class="tab-pane" id='tab5'>
+        </div>
 
-      <%= f.input :tipo, :collection => Tarea::TIPO_TAREA.map{|c| [c,c]}, :prompt => "-- Seleccione --" %>
-
-      <% if Tarea.tareas_anteriores(params[:actividad_id], @tarea.id).present? %>
-        <div class="control-group integer required">
-          <%= label_tag :ant_id, raw("#{content_tag(:abbr, '*', :title => 'requerido')} Tarea Anterior"), :class => 'integer required' %>
-
-          <div class="controls">
-            <%#= f.collection_select :tarea_anterior_id, Tarea.tareas_anteriores(params[:actividad_id], @tarea.id), :id, :nombre, {}, { :class => 'numeric integer required'} %>
-          </div>
-        </div>  
-      <% end %>
-    </div>
-
-    <div id="step-2">
-      <h2 class="StepTitle">Nombre y Método</h2>
-      <%#= f.input :orden %>
-      <%= f.input :nombre %>
-      <%= f.input :metodo %>
-    </div>
-
-    <div id="step-3">
-      <h2 class="StepTitle">Responsable y Tiempo</h2>
-      <%= f.input :tiempo_ejecucion %>
-      <%= f.input :unidad_tiempo_id %>
-      <%= f.input :cargo_id, :label => "Cargo", :collection => Cargo.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
-    </div>
-    
-    <div id="step-4">
-      <h2 class="StepTitle">Documentos</h2>
-      
-    </div>
-    <%#= f.input :tarea_sgt_id %>
-    <%#= f.input :tarea_alt_id %>
-    <!--
-    arreglar aca para cuando sea un nuevo tome del parametro
-    :as => :hidden
-    -->
-
-    <% if @tarea.actividad_id.present? %>
-      <%= f.input :actividad_id, :as => :hidden %>
-    <% else %>
-      <%= f.input :actividad_id, :as => :hidden,  :input_html => { :value => "4" }  %> 
-    <% end %>
-
-    <!--<div class="form-actions">
-      <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
-      <%= link_to 'Cancelar', tareas_path(:actividad_id => params[:actividad_id]), :remote => true, :class => "btn" %>
-    </div>-->
+        <ul class="pager wizard modal-footer">
+          <li class="previous"><a href="#">Anterior</a></li>
+          <li class="next" id='next-task'><a href="#">Siguiente</a></li>
+          <li id='save-task' class="next finish"><a href="#">Guardar</a></li>
+        </ul>
+  <% end %>
   </div>
-<% end %>
+</div>
+
+<style type='text/css'>
+    .tasks ul {
+        list-style: none;
+    }
+
+    .tasks ul li {
+        float: left;
+        padding: 2px;
+    }
+
+    .tabli { display: <%= @tarea.new_record? ? 'none' : 'block' %> }
+
+    <% unless @tarea.new_record? %>
+        .tabli, .pager li {
+            display: block;
+        }
+    <% end %>
+</style>
+<script type='text/javascript'>
+    var opcion_si;
+    var opcion_no;
+    function remove_fields(link) {
+        $(link).prev("input[type=hidden]").val("1");
+        $(link).parent().parent().hide();
+        return false;
+    }
+
+    $(function () {
+        $('.dos-respuestas').change(function(){
+            var val = $(this).children(':selected').text().toLowerCase();
+            $('.ant-desc-cont').hide();
+            $('#' + val).show();
+            $('#tarea_tipo_logica').val(val);
+            $('.logic-answer').show();
+        });
+        $('#add-adjunto').click(function () {
+            var $task_name = $('#descripcion').val();
+            var $task_required = $('#requerido').is(':checked')
+            var $selected_cargos = $('#cargo_estructura_adjunto_id').select2('data');
+            var $visible_to = [];
+            $.each($selected_cargos, function (i, val) {
+                $visible_to.push(val.id)
+            });
+
+            var requerido = '<span class="label label-important pull-right">Requerido</span>';
+            if (!$task_required)
+                requerido = '';
+
+            var new_adjunto_id = new Date().getTime();
+            var new_cargo_id;
+
+            var hiddens = [];
+            hiddens.push('<input id="tarea_adjuntos_attributes_' + new_adjunto_id +
+                    '_descripcion" name="tarea[adjuntos_attributes][' + new_adjunto_id + '][descripcion]" type="hidden" value="' + $task_name + '">');
+
+            hiddens.push('<input id="tarea_adjuntos_attributes_' + new_adjunto_id +
+                    '_requerido" name="tarea[adjuntos_attributes][' + new_adjunto_id + '][requerido]" type="hidden" value="' + $task_required + '">');
+
+            $.each($visible_to, function (i, val) {
+                new_cargo_id = new_adjunto_id + i + 1;
+                hiddens.push('<span class="cargo_cont" id="c-' + new_cargo_id + '"><input id="tarea_adjuntos_attributes_' + new_cargo_id +
+                        '_cargos_estructuras_adjuntos_attributes_' + new_adjunto_id + '_cargo_estructura_id" name="tarea[adjuntos_attributes][' + new_adjunto_id +
+                        '][cargos_estructuras_adjuntos_attributes][' + new_cargo_id + '][cargo_estructura_id]" type="hidden" value="' + val + '">' + '</span>');
+            });
+
+
+            var content = "<tr><td>" + $task_name + requerido + hiddens.join(' ') + "</td><td style='width: 163px;'>" +
+                    '<a href="#" class="btn btn-primary">Eliminar</a> <a href="#" class="btn btn-info visibility">Visibilidad</a></td></tr>';
+
+            $('#adjuntos-list').append(content);
+            $('#descripcion').val('');
+            $('#requerido').attr('checked', false);
+            $('#cargo_estructura_adjunto_id').select2('val', 'all');
+
+            return false;
+        });
+
+        $('#save-task').click(function () {
+            $('#form-tarea').submit();
+        });
+
+        $('.popver').popover();
+
+        $('.select2').select2({ placeholder: '' });
+
+        $('#tarea_tarea_sgt_id').change(function () {
+            if ($(this).val() != '') {
+                $('#tarea_tarea_alt_id').val('');
+            }
+        });
+
+        $('#tarea_tarea_alt_id').change(function () {
+            if ($(this).val() != '') {
+                $('#tarea_tarea_sgt_id').val('');
+            }
+        });
+
+        $('#logicas_abiertas').change(function () {
+            if ($(this).val() != '') {
+                logica_seleccionada = $(this).val();
+
+                $.get('<%= verificar_tarea_anterior_path() %>', { logica_id: logica_seleccionada }, null, 'script');
+            }
+        });
+
+        $('.tipo_tarea').live('click', function () {
+            var tipo_tarea = $(this).attr('rel');
+            $('#tarea_tipo').val(tipo_tarea);
+
+            switch (tipo_tarea) {
+                case 'logica':
+                    $('.tab2').show();
+                    $('.pager li').show();
+                    $('.method').hide();
+                    $('.exec_time').hide();
+                    $('.logic-values').show();
+                    $('#tarea_nombre').focus();
+                    $('#next-task').hide();
+                    break;
+                case 'traslado':
+                    $('.destiny').show();
+                default:
+                    $('.tabli').show();
+                    $('.pager li').show();
+                    //$('#save-task').hide();
+                    break;
+            }
+            $('#rootwizard li:eq(1) a').tab('show');
+        });
+
+        $('.visibility').click(function () {
+            $('#modal-wrapper').modal({ backdrop: false });
+        })
+
+        $('#rootwizard').bootstrapWizard({'tabClass': 'nav nav-pills'},
+                { onNext: function (tab, navigation, index) {
+                    //console.debug(index)
+                    if (index == 2) {
+                        // Make sure we entered the name
+                        if (!$('#nombre').val()) {
+                            alert('Ingrese el nombre');
+                            $('#nombre').focus();
+                            return false;
+                        }
+                    }
+
+                }, onTabClick: function (tab, navigation, index) {
+                    alert('on tab click disabled');
+                    return false;
+                }});
+    });
+</script>
+
+<%= linked_combo "tarea_cargo_estructura_id", :linked => "estructura_id",
+                 :url                                 => cargo_estructuras_path(format: 'json'), :param => "estructura_id", :display => 'descripcion' %>
+
+<%= linked_combo "tarea_tipo_logica", :linked => "tarea_tarea_ant_id",
+                 :url                         => respuestas_logicas_path(format: 'json'), :param => "tarea_id", :display => 'valor' %>
+

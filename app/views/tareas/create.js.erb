@@ -1,4 +1,17 @@
-$('#modal-body').html("")
-$('#modal-body').html("<%= escape_javascript( render( :partial => 'actividades/listar_tareas', :locals => { :tareas => @tareas })) %>")
-$('#add-tarea-modal').css('width' , '800px')
-$('#add-tarea-modal').css('height' , '600px')
+<% if @tarea.errors.empty? %>
+	$('#pso-body').append('<tr id="pso-<%= @tarea.id %>"><%= escape_javascript(render("tareas/tarea", :tarea => @tarea)) %></tr>');
+	$('#pso-body .alert-warning').parent().remove();
+	
+	$('#tarea-modal-wrapper .modal-header h3').html("&iexcl;&Eacute;xito!");
+	$('#tarea-modal-wrapper .modal-body').html("&iexcl;Guardado correctamente!");
+	$('#tarea-modal-wrapper .modal-footer').hide();	
+<% else %>
+	$('#tarea-modal-wrapper .modal-header h3').html("&iexcl;Error!");
+	$('#tarea-modal-wrapper .modal-body').html("No se ha podido guardar el registro, verifique lo siguiente:");
+	$('#tarea-modal-wrapper .modal-body').append('<ul>');
+	<% @tarea.errors.full_messages.each do |error| %>
+		$('#modal-wrapper .modal-body').append('<li><%= error %></li>');
+	<% end %>
+	$('#tarea-modal-wrapper .modal-body').append('</ul>');
+	$('#tarea-modal-wrapper .modal-footer').hide();
+<% end %>

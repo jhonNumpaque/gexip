@@ -1,7 +1,7 @@
 <div class="span5 left-panel">
 	<div class="reference bordered">
 		<ul>
-			<li class="span2"><%= image_tag 'icons/macroproceso.png' %> Macroproceso</li>
+		    <li class="span2"><%= image_tag 'icons/macroproceso.png' %> Macroproceso</li>
 			<li class="span2"><%= image_tag 'icons/proceso.png' %> Proceso</li>
 			<li class="span2"><%= image_tag 'icons/subproceso.png' %> Sub-Proceso</li>
 			<li class="span2"><%= image_tag 'icons/procedimiento.png' %> Procedimiento</li>
@@ -22,52 +22,8 @@
 </div>
 
 <div class="span11 pull-right bordered right-panel" id="contenido">
-	<p class="descipt"></p>
-	<table class="table table-condensed">
-		<tr>
-			<th>Id</th>
-			<td id="id"></td>
-		</tr>
-		<tr>
-			<th>Nombre</th>
-			<td id="nombre"></td>
-		</tr>
-		<tr>
-			<th>Objetivo</th>
-			<td id="objetivo"></td>
-		</tr>
-		<tr>
-			<th>Definiciones</th>
-			<td id="definiciones"></td>
-		</tr>
-		<tr>
-			<th>Clasificación</th>
-			<td id="clasificacion"></td>
-		</tr>
-		<tr>
-			<th>Código</th>
-			<td id="codigo"></td>
-		</tr>
-		<tr>
-			<th>Fecha de Elaboración</th>
-			<td id="fecha_elaboracion"></td>
-		</tr>
-		<tr>
-			<th>Cargo Responsable</th>
-			<td id="cargo"></td>
-		</tr>
-	</table>
-	<hr />
-	<table class="table table-condensed" id="children">
-		<thead>
-			<tr>
-				<th>Id</th>
-				<th>Código</th>
-				<th>Nombre</th>
-			</tr>
-		</thead>
-		<tbody id="children_body">
-
-		</tbody>
-	</table>
+	<h2>Estadísticas</h2>
+	<div class="well">
+		Macroproceso: <%= link_to icon_tag('Agregar', :class => 'icon-plus-sign'), new_macroproceso_path(remote: true), :remote => true %>
+	</div>
 </div>

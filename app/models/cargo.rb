@@ -1,5 +1,5 @@
 class Cargo < ActiveRecord::Base
-	validates :nombre, :presence => true
+	validates :nombre, :presence => true, :uniqueness => true
     #validates :nombre, :uniqueness => true
   
 	#has_many :ente, :dependent => :restrict

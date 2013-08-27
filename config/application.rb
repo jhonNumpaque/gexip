@@ -75,5 +75,9 @@ module Gexip
     config.time_zone = 'America/Asuncion'
     config.active_record.default_timezone = :local
     config.active_record.time_zone_aware_attributes = false
+
+    config.action_view.field_error_proc = Proc.new { |html_tag, instance| 
+      "#{html_tag}".html_safe 
+    }
   end
 end

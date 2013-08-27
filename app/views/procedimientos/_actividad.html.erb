@@ -1,0 +1,12 @@
+<td><%= actividad.orden %></td>
+<td><%= actividad.descripcion %></td>
+<td><%= format_date(actividad.updated_at) %></td>
+<td class='actions'>
+	<div class="pull-right">
+		<%= link_to icon_tag('', :class => 'icon-trash'), actividad_path(actividad), 
+		:title => 'Eliminar Actividad', :method => :delete, :remote => true,
+		:confirm => "¿Está seguro de eliminar esta actividad?.\nEsta acción no se puede revertir" %> 
+		<%= link_to icon_tag('', :class => 'icon-pencil'), 
+		edit_actividad_path(id: actividad, from: 'tree'), remote: true %>
+	</div>
+</td>

@@ -1,0 +1,13 @@
+	<% if @macroproceso.errors.empty? %>	
+	$('#modal-wrapper .modal-header h3').html("&iexcl;&Eacute;xito!");
+	$('#modal-wrapper .modal-body').html("&iexcl;Guardado correctamente!");
+	$('#modal-wrapper .modal-footer').hide();	
+
+	$("#main").jstree("create", $('#main'), "last", { attr: { id: "node_<%= @macroproceso.id %>", rel: '<%= @macroproceso.class.to_s.downcase %>', type: '<%= @macroproceso.class.to_s.downcase %>'  }, data: '<%= @macroproceso.nombre %>', state: '<%= @macroproceso.tree_state %>' }, false, true);
+
+<% else %>
+	$('#modal-wrapper .modal-header h3').html("&iexcl;Error! Agregar Macroproceso");
+	$('#modal-wrapper .modal-body').html('<%= escape_javascript(render("form")) %>');
+	$('#modal-wrapper .modal-footer').show();	
+	$('#modal-wrapper').heigth('800px');	
+<% end %>

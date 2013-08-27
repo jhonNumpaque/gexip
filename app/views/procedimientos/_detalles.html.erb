@@ -1,4 +1,20 @@
-<h2 style="text-align:center;background-color:#ccc">Procedimiento</h2>
+<h2 style="text-align:center;background-color:#ccc" class="detail-title">Procedimiento <%= '(Terminado)' if @procedimiento.por_autorizar? %></h2>
+<div class='well' style='padding: 5px;'>
+	<div class="span6 pull-left">
+		<%= image_tag 'icons/procedimiento.png' %> <%= @procedimiento.nombre %>
+	</div>
+	<div class="span4 pull-right">
+      <%= link_to icon_tag('Comprobar y Terminar', class: 'icon-check'),
+            comprobar_procedimiento_path(procedimiento_id: @procedimiento.id), remote: true%>
+
+		<%= link_to icon_tag('Editar', :class => 'icon-pencil'), 
+		edit_procedimiento_path(id: @procedimiento, from: 'tree'), remote: true %>
+
+		<%= link_to icon_tag('Eliminar', :class => 'icon-trash'), procedimiento_path(@procedimiento), 
+		:title => 'Eliminar procedimiento', :method => :delete, :remote => true,
+		:confirm => "¿Está seguro de eliminar este procedimiento?.\nEsta acción no se puede revertir" %> 
+	</div>
+</div>
 <table class="table">
 	<tbody>
 		<tr>
@@ -11,7 +27,7 @@
 		</tr>
 		<tr>
 			<th>Fecha de Elaboración</th>
-			<td><%= format_date(@procedimiento.elabora_fecha) %></td>
+			<td><%= format_date(@procedimiento.elabora_fecha) if @procedimiento.elabora_fecha? %></td>
 		</tr>
 		<tr>
 			<th>Elaborado por</th>
@@ -36,23 +52,29 @@
 
 <table class="table">
 	<thead>
-		<tr>
-			<th colspan="4" style="text-align:center;background-color:#ccc"><h3>Actividades<h3></th>
+		<tr style="background-color:#ccc">
+			<th colspan="3" style="text-align:center;"><h3>Actividades</h3></th>
+			<td class="add-place"><%= link_to icon_tag('Agregar', :class => 'icon-plus-sign'), new_actividad_path(:from => 'tree', :procedimiento_id => @procedimiento.id), :id => 'add-proceso', :class => 'btn pull-right', :remote => true %></td>
 		</tr>
-		<tr>
-			<th>Orden</th>
-			<th>Nombre</th>
-			<th>Fecha</th>
-			<th>&nbsp;</th>
-		</tr>
-	</thead>
-	<tbody>
-		<% for actividad in @actividades -%>
+		<% if @actividades.present? -%>
 			<tr>
-				<td><%= actividad.orden %></td>
-				<td><%= actividad.descripcion %></td>
-				<td><%= format_date(actividad.updated_at) %></td>
-				<td><div class="pull-right"><%= link_to icon_tag('', :class => 'icon-pencil'), '#' %></div></td>
+				<th>Orden</th>
+				<th>Nombre</th>
+				<th>Fecha</th>
+				<th>&nbsp;</th>
+			</tr>
+		<% end -%>
+	</thead>
+	<tbody id='pso-body'>
+		<% if @actividades.present? -%>
+			<% for actividad in @actividades -%>
+				<tr>
+					<%= render 'actividad', actividad: actividad %>
+				</tr>
+			<% end -%>
+		<% else -%>
+			<tr>
+				<td colspan="4" class='alert alert-warning'>No hay registros</td>
 			</tr>
 		<% end -%>
 	</tbody>

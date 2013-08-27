@@ -4,3 +4,8 @@
 //= require jquery.jstree
 //= require jquery.cookie
 //= require jquery.hotkeys
+//= require jquery.bootstrap.wizard
+//= require tree_related
+//= require bootstrap-modal
+//= require bootstrap-modalmanager
+//= require select2.min

@@ -11,9 +11,11 @@ gem 'devise'
 gem 'kaminari'
 gem 'time_diff'
 gem 'carrierwave'
+gem 'awesome_nested_set', "~> 2.0"
+gem 'hirb'
 
 group :development do 
-  gem 'mongrel'
+  gem 'thin'
 end
 
 
