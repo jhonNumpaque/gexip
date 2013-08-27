@@ -14,4 +14,6 @@ class Estructura < ActiveRecord::Base
   Hora_Trabajo_Fin = 15
   Minutos_Dias = 480 #minutos equivalentes a 8 horas
   Minutos_Semana = 2400 #minutos equivalentes a una semana
+  Minutos_Mes = 14400
+  Minutos_Anho = 172800
 end

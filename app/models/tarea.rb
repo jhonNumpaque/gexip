@@ -8,7 +8,8 @@ class Tarea < ActiveRecord::Base
   validates :tiempo_ejecucion, :presence => true
   
   #Relaciones
-  belongs_to :cargo, :foreign_key => :cargo_id
+  belongs_to :cargo, :foreign_key => :cargo_estructura_id
+  belongs_to :estructura, :foreign_key => :cargo_estructura_id
   belongs_to :actividad, :foreign_key => :actividad_id
   belongs_to :unidad_tiempo, :foreign_key => :unidad_tiempo_id
   belongs_to :tarea_siguiente, :foreign_key => :tarea_sgt_id, :class_name => 'Tarea'
