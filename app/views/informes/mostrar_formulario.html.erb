@@ -1,0 +1,10 @@
+<% case @tipo_informe %>
+<% when 'promedio'%>
+<%= render 'filtros_promedio'%>
+<% when 'demora'%>
+<%= render 'filtros_demora'%>
+<% when 'demanda'%>
+<%= render 'filtros_demanda'%>
+<% when 'resumen'%>
+<%= render 'filtros_resumen'%>
+<% end %>

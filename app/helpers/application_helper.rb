@@ -22,6 +22,13 @@ module ApplicationHelper
     format = "%d/%m/%Y" if date.is_a?(Date)
     date.strftime(format)
   end
+  
+  def fecha_formato_en_a_es(fecha)
+    arr = fecha.split('-')
+    # arr[0] => mes arr[1] => dia arr[2] => anho
+    fecha = arr[1] + "-" + arr[0]  + "-" + arr[2] 
+    fecha.to_datetime
+  end
 
   def required_label(label)
     content_tag(:em, "*", class: 'required').concat(" #{label}")

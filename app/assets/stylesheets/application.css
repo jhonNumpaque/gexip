@@ -11,5 +11,6 @@
  *= require_self  
  *= require bootstrap
  *= require expedientes
+ *= require select2
  *= require estilos_globales
 */

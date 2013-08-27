@@ -1,0 +1,73 @@
+<div class="well">
+  <%= link_to icon_tag('Volver', :class => 'icon-arrow-left icon-white'), informes_path, class: 'btn btn-primary' %>
+  </div>
+  <h1>Informes: Resumen</h1>
+  <% if !@resultados.present? %>
+    <%= simple_form_for controller_name, :method => :get do |f| %>
+
+      <%= f.input 'fecha_inicio', :input_html => {:class => "datepicker", :autocomplete => 'off'} %>
+      <%= f.input 'fecha_fin', :input_html => {:class => "datepicker" }, :autocomplete => 'off'%>
+
+      <%= f.input 'estado', :collection => {'Finalizado' => 'FINALIZADO', 'Entregados' => 'ENTREGADO', 'Archivados' => 'ARCHIVADOS', 'Cancelados' => 'CANCELADOS', 'En poceso' => 'PROCESO'}, :prompt => '-- Seleccione --', :label => 'Estado del expediente' %>
+      <%= f.input 'tipo', :collection => {'Anhos' => 'YEAR', 'Meses' => 'MONTH', 'Dias' => 'DAY'}, :prompt => '-- Seleccione --', :label => 'Mostrar en Formato' %>
+
+      <%= f.hidden_field 'filtro', :value => 'resumen'%>
+
+      <div class="form-actions">
+        <%= f.button :submit, 'Buscar', class: 'btn btn-success' %>
+        </div>
+
+      <% end %>
+    <% else %>
+      <script type="text/javascript">
+        $(function() {
+          new Highcharts.Chart({
+            chart: {
+              renderTo: "chart"
+            },
+            title: {
+              text: "Resumen de Expedientes"
+            },
+            xAxis: {
+              type: "datetime"
+            },
+            yAxis: {
+              title: {
+                text: "Cantidad"
+              }
+            },
+            tooltip: {
+              formatter: function() {
+                return Highcharts.dateFormat("%B %e, %Y", this.x) + ': ' +
+                  "$" + Highcharts.numberFormat(this.y, 2);
+              }
+            },
+            series: [
+      <% @resultados.each do |f| %>
+          {
+            data: <%=  f.contador %>
+            
+          },
+      <% end %>
+      ]
+      });
+      });
+      </script>
+
+      <div id="chart" style="width: 560px; height: 300px;"></div>
+
+
+      <table>
+        <tr>
+          <th>Cantidad</th>
+          <th>Fecha</th>
+        </tr>
+
+        <% @resultados.each  do |f| %>
+          <tr>
+            <td><%= f.contador %> </td>
+            <td><%= f.fecha %> </td>
+          </tr>
+        <% end %>
+      </table>
+    <% end %>

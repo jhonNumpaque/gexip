@@ -1,0 +1,77 @@
+<div class="well">
+  <%= link_to icon_tag('Volver', :class => 'icon-arrow-left icon-white'), informes_path, class: 'btn btn-primary' %>
+  </div>
+  <h1>Informes: Demora</h1>
+
+  <% if !@resultados.present? %>
+    <%= simple_form_for controller_name, :method => :get do |f| %>
+
+      <%= f.input 'fecha_inicio', :input_html => {:class => "datepicker", :autocomplete => 'off'} %>
+      <%= f.input 'fecha_fin', :input_html => {:class => "datepicker" }, :autocomplete => 'off'%>
+
+      <%= f.input 'tipo', :collection => {'No Culminado' => 'no_culminado', 'Culminado' => 'culminado'}, :prompt => '-- Seleccione --', :label => 'Tipo' %>
+      <%= f.input 'procedimiento', :collection => Procedimiento.all, :prompt => '-- Seleccione --', :label_method => :nombre, :label => 'Procedimiento' %>
+
+      <!--En caso de un procedmimiento-->
+      <%= f.input 'usuario', :collection => Usuario.all, :label_method => :login, :prompt => '-- Seleccione --', :label => "Usuario" %>
+      <!-- Deberia de ser por cargo_estructura -->
+      <%= f.input 'estructura', :collection => Estructura.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Estructura", input_html:  {id: 'estructura_id'}%>
+      <%= f.input 'cargo', :collection => Cargo.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Cargo", input_html:  {id: 'cargo_id'} %>
+      <%= linked_combo 'cargo_id', :linked => 'estructura_id', :param => 'estructura_id', :url => '/cargos.json' %>
+
+
+
+      <%= f.input 'rango', :label => 'Rango en Anhos' %>
+
+      <%= f.hidden_field 'filtro', :value => 'demora'%>
+
+      <div class="form-actions">
+        <%= f.button :submit, 'Buscar', class: 'btn btn-success' %>
+        </div>
+
+      <% end %>
+    <% else %>
+      <script type="text/javascript">
+        $(function() {
+          new Highcharts.Chart({
+            chart: {
+              renderTo: "chart",
+              type: 'column'
+            },
+            xAxis: {
+              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            },
+            legend: {
+              layout: 'vertical',
+              floating: true,
+              backgroundColor: '#FFFFFF',
+              align: 'right',
+              verticalAlign: 'top',
+              y: 60,
+              x: -60
+            },
+            tooltip: {
+              formatter: function() {
+                return '<b>'+ this.series.name +'</b><br/>'+
+                  this.x +': '+ this.y;
+              }
+            },
+            series: [{
+                data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+              }]
+          });
+        });
+      </script> 
+
+      <div id="chart" style="width: 560px; height: 300px;"></div>
+
+
+      <% @resultados.each do |key, value| %>
+        <% expediente = Expediente.find(key)   %>
+        <% #usuario = Usuario.find(value[1])   %>
+        <p>Expediente: <%= expediente.id %> </p>
+        <p>Dias de Demora: <%= value[0] %> </p>
+        <p>Usuario interniviente: <%#=   usuario.funcionario.nombres + " " + usuario.funcionario.apellidos %> </p>
+        <p>Procedimiento: <%#= Procedimiento.find(value[2]).nombre%> </p>
+      <% end %>
+    <% end %>

@@ -56,13 +56,14 @@ class PersonasFisicasController < ApplicationController
   # GET /personas_fisicas/1/edit
   def edit
     @persona_fisica = PersonaFisica.find(params[:id])
-    #para mostrar el cargo y el ente que se encuentran seleccionados
-    cargo_ente = CargoEnte.find(@persona_fisica.cargo_ente_id)
-    @ente = Ente.find(cargo_ente.ente_id)
-    @cargo = Ente.find(cargo_ente.cargo_id)
-    #buscar todos los cargos del ente para mostrar en el select
-    cargos_ente = CargoEnte.where(:ente_id => @ente.id).all
-    @cargos = Cargo.find(cargos_ente.map{|x| x.cargo_id})
+    #
+    ##para mostrar el cargo y el ente que se encuentran seleccionados
+    #cargo_ente = CargoEnte.find(@persona_fisica.cargo_ente_id)
+    #@ente = Ente.find(cargo_ente.ente_id)
+    #@cargo = Ente.find(cargo_ente.cargo_id)
+    ##buscar todos los cargos del ente para mostrar en el select
+    #cargos_ente = CargoEnte.where(:ente_id => @ente.id).all
+    #@cargos = Cargo.find(cargos_ente.map{|x| x.cargo_id})
   end
 
   # POST /personas_fisicas

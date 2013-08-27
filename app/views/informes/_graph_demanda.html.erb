@@ -1,0 +1,189 @@
+<script type="text/javascript">
+  $(function() {
+<% if @proceso.present? %>
+      //obtener la fecha de creacion
+  <%  date = @resultados[@proceso.id].map{ |c| c[1][1]} %>
+      //convertir a datetime
+  <% date = date[0].to_datetime %>
+      //obtener los dias del mes
+  <% days = Time.days_in_month(date.month, date.year) %>
+  <% weeks = date.total_weeks %>
+  <% months = { 1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 =>'Abril', 5 =>'Mayo', 6 =>'Junio', 7 =>'Julio', 8 =>'Agosto', 9 =>'Septiembre', 10 =>'Octubre', 11 =>'Noviembre', 12 => 'Diciembre'} %>
+      new Highcharts.Chart({
+        chart: {
+          renderTo: "chart",
+          type: "column"
+        },
+        title: {
+          text: "Demanda de Procesos"
+        },
+          
+        xAxis: {
+  <% case @formato %>
+  <% when 'meses' %>
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  <% when 'semanas' %>
+            title: { text: 'Mes de <%= months[date.month] %>'},
+            categories: [
+    <% (1..weeks).each do |m| %>     
+      <%= m.to_s + "," %>
+    <% end %>
+            ]
+  <% when 'dias' %>
+            title: { text: 'Mes de <%= months[date.month] %>'},
+            categories: [
+    <% (1..days).each do |m| %>     
+      <%= m.to_s + "," %>
+    <% end %>
+            ]
+  <%  else %>
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  <% end %>
+        },
+        yAxis: {
+          title: {
+            text: "Cantidad de Expedientes"
+          }
+        },
+        tooltip: {
+          formatter: function() {
+            return '<b>'+ this.series.name +'</b><br/>'+
+              this.x +': '+ this.y;
+          }
+        },
+        series: [
+          {
+            name: '<%= @proceso.nombre %>',
+  <% case @formato %>
+  <% when 'meses' %>
+              data: [
+    <% (1..12).each do |m| %>
+      <% if @resultados[@proceso.id.to_i][m].present?  %>
+        <%= @resultados[@proceso.id.to_i][m][0].to_s + "," %>
+      <% else %>
+        <%= 0.to_s + ","  %>
+      <% end %>
+    <% end %>
+              ]
+  <% when 'semanas' %>
+              data: [
+    <% (1..weeks).each do |m| %>     
+      <%  result = @resultados[@proceso.id.to_i].map { |key, c| key == m ? c[0] : 0.to_s }  %>
+      <%= result[0].to_s + ","   %>
+    <% end %>
+              ]
+  <% when 'dias' %>
+              data: [
+    <% (1..days).each do |m| %>
+      <%  result = @resultados[@proceso.id.to_i].map { |key, c| Date.ordinal(date.year, key).day == m ? c[0] : 0.to_s }  %>
+      <%= result[0].to_s + ","   %>
+    <% end %>
+              ]
+  <%  else %>
+              data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+  <% end %>
+          },
+        ]
+      });
+<% else %>
+  <% fecha_ini = fecha_formato_en_a_es(@fecha_inicio) %>
+  <% fecha_fin = fecha_formato_en_a_es(@fecha_fin) %>
+  <% if fecha_ini.month == fecha_fin.month %>
+    <% days = Time.days_in_month(fecha_ini.month, fecha_ini.year) %>
+    <% weeks = fecha_ini.total_weeks %>
+  <% end %>
+  <% months = { 1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 =>'Abril', 5 =>'Mayo', 6 =>'Junio', 7 =>'Julio', 8 =>'Agosto', 9 =>'Septiembre', 10 =>'Octubre', 11 =>'Noviembre', 12 => 'Diciembre'} %>
+
+      $('#chart').highcharts({
+        title: {
+          text: "Demanda de Procesos"
+        },
+        xAxis: {
+  <% case @formato %>
+  <% when 'meses' %>
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  <% when 'semanas' %>
+            title: { text: 'Mes de <%= months[fecha_ini.month] %>'},
+            categories: [
+    <% (1..weeks).each do |m| %>     
+      <%= m.to_s + "," %>
+    <% end %>
+            ]
+  <% when 'dias' %>
+            title: { text: 'Mes de <%= months[fecha_ini.month] %>'},
+            categories: [
+    <% (1..days).each do |m| %>     
+      <%= m.to_s + "," %>
+    <% end %>
+            ]
+  <%  else %>
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  <% end %>
+        },
+        yAxis: {
+          title: {
+            text: 'Cantidad de expedientes'
+          },
+          plotLines: [{
+              value: 0,
+              width: 1,
+              color: '#808080'
+            }]
+        },
+        legend: {
+          layout: 'vertical',
+          align: 'right',
+          verticalAlign: 'middle',
+          borderWidth: 0
+        },
+        series: [
+  <% case @formato %>
+  <% when 'meses' %>
+    <% @resultados.each do |key, value| %>
+              {
+                name: '<%= key.present? ? Proceso.find(key).nombre : 'Auxiliar' %> ',
+                data: [
+      <% (1..12).each do |m| %>
+        <% if value[m].present?  %>
+          <%= value[m][0].to_s + "," %>
+        <% else %>
+          <%= 0.to_s + ","  %>
+        <% end %>
+      <% end %>
+                ]
+              },
+    <% end %>
+  <% when 'semanas' %>
+    <% @resultados.each do |key, value| %>
+              {
+                name: '<%= key.present? ? Proceso.find(key).nombre : 'Auxiliar' %> ',
+                data: [
+      <% (1..weeks).each do |m| %>
+        <% if value[m].present?  %>
+          <%  result = @resultados[key].map { |key, c| key == m ? c[0] : 0.to_s }  %>
+          <%= result[0].to_s + ","   %>
+        <% else %>
+          <%= 0.to_s + ","  %>
+        <% end %>
+      <% end %>
+                ]
+              },
+    <% end %>
+  <% when 'dias' %>
+    <% @resultados.each do |key, value| %>
+              {
+                name: '<%= key.present? ? Proceso.find(key).nombre : 'Auxiliar' %> ',
+                data: [
+      <% (1..days).each do |m| %>
+        <%  result = value.map { |k, c| Date.ordinal(fecha_ini.year, k).day == m ? c[0] : 0.to_s }  %>
+        <%= result[0].to_s + ','%>
+      <% end %>
+                ]
+              },
+    <% end %>
+  <% end %>
+        ]
+      });
+<% end %>
+  });
+</script>

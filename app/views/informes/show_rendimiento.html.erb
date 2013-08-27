@@ -1,0 +1,13 @@
+<section>
+  <div class="well">
+    <%= link_to icon_tag('Volver', :class => 'icon-arrow-left icon-white'), form_rendimiento_path, class: 'btn btn-primary' %>
+  </div>
+
+  <div class="page-header">
+    <h1>Informes <small> Rendimiento del personal</small></h1>
+  </div>
+  <%= render 'graph_rendimiento' %>
+
+  <div id="chart" style="width: 560px; height: 300px;"></div>
+
+</section>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>    
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type' />
+    <title>Gexip :: Iniciar Sesi&oacute;n </title>
+    <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    
+    <![endif]-->
+    <%= stylesheet_link_tag "login", :media => "screen" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+
+    <!--[if IE]>
+    <meta content='IE=7' http-equiv='X-UA-Compatible' />
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link href="ie-login.css" media="screen" rel="stylesheet" type="text/css" />
+    <![endif]-->
+
+    <style type="text/css">
+      .alert-message {
+        width: 439px;
+        margin: 20px auto;
+      }
+    </style>
+
+  </head>
+  <body>
+    <div id='login'>
+      <% if notice %>
+        <div class="alert-message success">
+          <p><%= notice %></p>
+        </div>
+      <% end %>
+
+      <% if alert  %>
+        <div class="alert-message error">
+          <p><%= alert %></p>
+        </div>
+      <% end %>
+
+      <div id='logo'>
+        <!--<a href="http://www.fleetio.com" title="Fleetio - Fleet maintenance management software"><img alt="Fleetio Logo" height="56" src="fleetio-logo-drk-clrarrow-trans-218x56-bbb277b8a7a2bc43d8dc23b1e36b8234.png" width="218" /></a>-->
+        <%= link_to 'GexIP', '#' %>
+      </div>
+
+      <div class='block small center login'>
+        <div class='block_head'>
+          <div class='bheadl'></div>
+          <div class='bheadr'></div>
+          <h2>Consulta de Expedientes</h2>
+        </div>
+
+        <div class='block_content'>
+          <%= yield %>
+        </div>
+        <div class='bendl'></div>
+        <div class='bendr'></div>
+      </div>
+
+    </div>
+  </body>
+</html>

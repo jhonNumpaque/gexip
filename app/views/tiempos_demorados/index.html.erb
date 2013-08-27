@@ -1,0 +1,67 @@
+<section>
+  <div class="page-header">
+    <h1>Demora de Expendientes <small>control de tiempo</small></h1>
+  </div>
+
+    <%= simple_form_for :tiempos_demorados, :url => listar_path, :method => :get do |f| %>
+
+      <%= f.input 'fecha1', :label => "Fecha Registro Inicial", :input_html => {:class => "datepicker", :autocomplete => 'off'} %>
+      <%= f.input 'fecha2', :label => "Fecha Registro Final", :input_html => {:class => "datepicker", :autocomplete => 'off'} %>
+      
+      <%= f.input :expediente, 
+                  :collection => [["1", "Finalizado"], ["2", "No Finalizado"]], 
+                  :label_method => :last, 
+                  :value_method => :first, 
+                  :as => :radio
+                  %>
+
+      <%= f.input :filtro, 
+                  :collection => [["1", "Procedimiento"], ["2", "Cargo"], ["3", "Funcionario"]], 
+                  :label_method => :last, 
+                  :value_method => :first, 
+                  :as => :radio,
+                  :input_html => { :onclick => "cambiarFiltro(this.value)" }
+                  %>
+      <div id="procedimineto_idx">
+      <%= f.input 'procedimineto_id', :collection => Procedimiento.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Procedimiento" %>
+      </div>
+      <div id="cargo_idx">
+      <%= f.input 'cargo_id', :collection => get_cargos_estructuras, :prompt => '-- Seleccione --', :label => "Cargo"  %>
+      <%#= f.input 'cargo_id', :label => "Cargo" %>
+      </div>
+      <div id="funcionario_idx">
+      <%= f.input 'funcionario_id', :collection => Funcionario.all, :label_method => :nombre_completo, :prompt => '-- Seleccione --', :label => "Funcionario" %>
+      </div>
+
+      <div class="form-actions">
+        <%= f.button :submit, 'Buscar', class: 'btn btn-success' %>
+      </div>
+
+    <% end %>
+
+      <script type="text/javascript">
+        $("#procedimineto_idx").css( "display", "none");
+        $("#cargo_idx").css( "display", "none");
+        $("#funcionario_idx").css( "display", "none");
+        function cambiarFiltro(p_filtro)
+        {
+          $("#procedimineto_idx").css( "display", "none");
+          $("#cargo_idx").css( "display", "none");
+          $("#funcionario_idx").css( "display", "none");
+          //alert(p_filtro);
+          switch(p_filtro)
+          {
+            case "1":
+            $("#procedimineto_idx").css( "display", "block");
+            break;
+            case "2":
+            $("#cargo_idx").css( "display", "block");
+            break;
+            case "3":
+            $("#funcionario_idx").css( "display", "block");
+            break;
+          }
+        }
+      </script>
+
+</section>

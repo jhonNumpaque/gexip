@@ -1,0 +1,100 @@
+<script type="text/javascript">
+$(function() {
+  <% fecha_ini = fecha_formato_en_a_es(@fecha_inicio) %>
+  <% fecha_fin = fecha_formato_en_a_es(@fecha_fin) %>
+  <% if fecha_ini.month == fecha_fin.month %>
+  <% days = Time.days_in_month(fecha_ini.month, fecha_ini.year) %>
+  <% weeks = fecha_ini.total_weeks %>
+  <% end %>
+  <% months = { 1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 =>'Abril', 5 =>'Mayo', 6 =>'Junio', 7 =>'Julio', 8 =>'Agosto', 9 =>'Septiembre', 10 =>'Octubre', 11 =>'Noviembre', 12 => 'Diciembre'} %>
+
+  $('#chart').highcharts({
+    title: {
+      text: "Rendimiento del Personal"
+    },
+    xAxis: {
+      <% case @formato %>
+      <% when 'meses' %>
+      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      <% when 'semanas' %>
+      title: { text: 'Mes de <%= months[fecha_ini.month] %>'},
+      categories: [
+      <% (1..weeks).each do |m| %>     
+      <%= m.to_s + "," %>
+      <% end %>
+      ]
+      <% when 'dias' %>
+      title: { text: 'Mes de <%= months[fecha_ini.month] %>'},
+      categories: [
+      <% (1..days).each do |m| %>     
+      <%= m.to_s + "," %>
+      <% end %>
+      ]
+      <%  else %>
+      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      <% end %>
+    },
+    yAxis: {
+      title: {
+        text: 'Cantidad de expedientes'
+      },
+      plotLines: [{
+        value: 0,
+        width: 1,
+        color: '#808080'
+      }]
+    },
+    legend: {
+      layout: 'vertical',
+      align: 'right',
+      verticalAlign: 'middle',
+      borderWidth: 0
+    },
+    series: [
+    <% case @formato %>
+    <% when 'meses' %>
+    <% @resultados.each do |key, value| %>
+    <% meses = {} %>
+    {
+      name: "<%= Usuario.find(key).funcionario.nombre_completo %>",
+      data: [
+      <% (1..12).each do |m|%>
+      <% cant = value[m].present? ? value[m][0] : 0 %>
+      <%= cant.to_s + ',' %>
+      <% end %>
+      ]
+    },
+    <% end %>
+    <% when 'semanas' %>
+    <% @resultados.each do |key, value| %>
+    {
+      name: "<%= Usuario.find(key).funcionario.nombre_completo %>",
+      data: [
+      <% (1..weeks).each do |m| %>
+      <% if value[m].present?  %>
+      <%  result = @resultados[key].map { |key, c| key == m ? c[0] : 0.to_s }  %>
+      <%= result[0].to_s + ","   %>
+      <% else %>
+      <%= 0.to_s + ","  %>
+      <% end %>
+      <% end %>
+      ]
+    },
+    <% end %>
+    <% when 'dias' %>
+    <% @resultados.each do |key, value| %>
+    {
+      name: "<%= Usuario.find(key).funcionario.nombre_completo %>",
+      data: [
+      <% (1..days).each do |m| %>
+      <%  result = value.map { |k, c| Date.ordinal(fecha_ini.year, k).day == m ? c[0] : 0.to_s }  %>
+      <%= result[0].to_s + ','%>
+      <% end %>
+      ]
+    },
+    <% end %>
+    <% end %>
+    ]
+  });
+});
+</script>

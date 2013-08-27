@@ -20,8 +20,8 @@
         <hr />
         <%= label_tag 'Ciudad' %>
         <%= select_tag :filtro_ciudad, options_from_collection_for_select(Ciudad.all, "id", "nombre", params[:filtro_ciudad]), :prompt => '-- Seleccione --', :class => 'input-medium' %>
-        <%= label_tag 'Cargo' %>
-        <%= select_tag :filtro_cargo, options_from_collection_for_select(Cargo.all, "id", "nombre", params[:filtro_cargo]), :prompt => '-- Seleccione --', :class => 'input-medium' %>
+        <%# label_tag 'Cargo' %>
+        <%# select_tag :filtro_cargo, options_from_collection_for_select(Cargo.all, "id", "nombre", params[:filtro_cargo]), :prompt => '-- Seleccione --', :class => 'input-medium' %>
         <%= submit_tag 'Filtrar',  :class => 'btn btn-primary'%>
 
 
@@ -40,8 +40,6 @@
         <th>Direccion</th>
         <th>Telefono</th>
         <th>Territorio</th>
-        <th>Cargo</th>
-
         <th></th>
       </tr>
       <% @personas_juridicas.each do |persona_juridica| %>
@@ -51,7 +49,6 @@
           <td><%= persona_juridica.direccion %></td>
           <td><%= persona_juridica.telefono %></td>
           <td><%= persona_juridica.ciudad.nombre %></td>
-          <td><%= persona_juridica.cargo.nombre %></td>
           <td>
 
             <div class="btn-group">              
