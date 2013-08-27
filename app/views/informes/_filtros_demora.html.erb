@@ -31,6 +31,7 @@
 
       <% end %>
     <% else %>
+      <%= @fecha_inicio %>
       <script type="text/javascript">
         $(function() {
           new Highcharts.Chart({
@@ -64,7 +65,8 @@
       </script> 
 
       <div id="chart" style="width: 560px; height: 300px;"></div>
-
+      
+      
 
       <% @resultados.each do |key, value| %>
         <% expediente = Expediente.find(key)   %>

@@ -1,29 +1,52 @@
+<style>
+    .inline { display:inline; }
+</style>
+
 <section>
   <div class="well">
     <%= link_to icon_tag('Volver', :class => 'icon-arrow-left icon-white'), informes_path, class: 'btn btn-primary' %>
-    </div>
+  </div>
 
-    <div class="page-header">
-      <h1>Informes <small> Demanda de procesos</small></h1>
-    </div>
+  <div class="page-header">
+    <h1>Informes
+      <small> Demanda de procesos</small>
+    </h1>
+  </div>
 
-    <%= simple_form_for controller_name, :url => show_demanda_path, :method => :post do |f| %>
+  <%= simple_form_for controller_name, :url => show_demanda_path, :method => :post do |f| %>
 
-      <%= f.input 'fecha_inicio', :input_html => {:class => "datepicker" }, :autocomplete => 'off' %>
-      <%= f.input 'fecha_fin', :input_html => {:class => "datepicker" }, :autocomplete => 'off' %>
+      <%= f.input 'fecha_inicio', :input_html => {:class => "datepicker"}, :autocomplete => 'off' %>
+      <%= f.input 'fecha_fin', :input_html => {:class => "datepicker"}, :autocomplete => 'off' %>
       <%= f.input 'formato', :collection => {'Dias' => 'dias', 'Semanas' => 'semanas', 'Meses' => 'meses'}, :prompt => '-- Seleccione --', :label => "Formato" %>
-      <%= f.input 'cantidad', :label => "Cantidad", :input_html => {:class => 'input-small'} %>	
-      <%= f.input 'demanda', :collection => {'Mayor Demana' => 'mayor', 'Menor Demanda' => 'menor'}, :prompt => '-- Seleccione --', :label => "Tipo Demanda" %>	
+      <%= f.input 'cantidad', :label => "Cantidad", :input_html => {:class => 'input-small'} %>
+      <%= f.input 'demanda', :collection => {'Mayor Demana' => 'mayor', 'Menor Demanda' => 'menor'}, :prompt => '-- Seleccione --', :label => "Tipo Demanda" %>
 
-      <%= f.input 'proceso', :collection => Macroproceso.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Macroproceso" , input_html:  {id: 'macroproceso_id'} %>	
-      <%= f.input 'proceso', :collection => Proceso.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Proceso", :input_html => { :onchange => "desactivarCampos()" } , input_html:  {id: 'proceso_id'} %>	
-      <%= linked_combo 'proceso_id', :linked => 'macroproceso_id', :param => 'macroproceso_id', :url => '/procesos.json' %>
+      <%#= f.input 'proceso', :collection => Macroproceso.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Macroproceso", input_html: {id: 'macroproceso_id'} %>
+      <%#= f.input 'proceso', :collection => Proceso.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Proceso", :input_html => {:onchange => "desactivarCampos()"}, input_html: {id: 'proceso_id'} %>
+      <%#= linked_combo 'proceso_id', :linked => 'macroproceso_id', :param => 'macroproceso_id', :url => '/procesos.json' %>
 
-      <%= f.hidden_field 'filtro', :value => 'demanda'%>
+      <%= f.input 'duracion', :collection => {'Mayor' => 'mayor', 'Igual' => 'igual', 'Menor' => 'menor'}, :prompt => '-- Seleccione --' %>
+
+      <%= f.input 'cant_duracion', :item_wrapper_class => 'inline' %>
+
+      <%= f.input 'modo_duracion', :collection => {'Minutos' => 'minutos', 'Horas' => 'horas', 'Dias' => 'dias' ,'Semanas' => 'semanas', 'Meses' => 'Meses'}, :item_wrapper_class => 'inline', :prompt => '-- Seleccione --' %>
+
+      <%= f.input 'procedimiento', :as => :grouped_select, :collection => get_procedimientos_group, :group_method => :last, :input_html => {:id => 'procedimiento_id'} %>
+
+      <%= f.hidden_field 'filtro', :value => 'demanda' %>
 
       <div class="form-actions">
         <%= f.button :submit, 'Buscar', class: 'btn btn-success' %>
-        </div>
+      </div>
 
-      <% end %>
-    </section>
+  <% end %>
+</section>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#procedimiento_id').select2({
+            allowClear: true,
+            width: '250px'
+        });
+    })
+</script>
