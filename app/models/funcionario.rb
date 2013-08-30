@@ -1,7 +1,7 @@
 class Funcionario < ActiveRecord::Base
 	validates :nombres, :presence => true
 	validates :apellidos, :presence => true
-	validates :documento, :presence => true
+	validates :documento, :presence => true, :uniqueness => true
 	validates :tipo_documento_id, :presence => true
   validates :territorio_id, :presence => true
 	

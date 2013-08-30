@@ -34,6 +34,7 @@ class ProcesosController < ApplicationController
   def show
     @proceso = Proceso.find(params[:id])
     @subprocesos = @proceso.subprocesos
+    @procedimientos = @proceso.procedimientos
 
     respond_to do |format|
       format.html # show.html.erb

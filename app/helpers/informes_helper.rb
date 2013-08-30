@@ -43,4 +43,15 @@ module InformesHelper
 
   end
 
+def get_cargos_estructuras
+	result = {}
+	cargo_estructura = CargoEstructura.all
+
+	cargo_estructura.each do |r|
+		result[Estructura.find(r.estructura_id).nombre.to_s + " - " + Cargo.find(r.cargo_id).nombre.to_s] = r.id
+	end
+
+	return result
+end
+
 end

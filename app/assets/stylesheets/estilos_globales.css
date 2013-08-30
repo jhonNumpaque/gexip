@@ -5,3 +5,8 @@
 label abbr {
 	color: red;
 }
+
+em.required {
+	color: red;
+	font-weight: bold;
+}

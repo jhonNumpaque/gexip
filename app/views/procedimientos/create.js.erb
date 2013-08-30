@@ -1,5 +1,8 @@
 <% if @procedimiento.errors.empty? %>
 	$('#pso-body').append('<tr id="pso-<%= @procedimiento.id %>"><%= escape_javascript(render("subprocesos/procedimiento", :procedimiento => @procedimiento)) %></tr>')
+
+	$("#main").jstree("create",$('#<%= "#{@procedimiento.serieproceso.class.to_s.downcase }_#{@procedimiento.serieproceso_id}" %>'), "inside", { attr: { id: "procedimiento_<%= @procedimiento.id %>", rel: '<%= @procedimiento.class.to_s.downcase %>', type: '<%= @procedimiento.class.to_s.downcase %>'  }, data: '<%= @procedimiento.nombre %>', state: '<%= @procedimiento.tree_state %>' }, false, true);
+
 	$('#modal-wrapper .modal-header h3').html("&iexcl;&Eacute;xito!");
 	$('#modal-wrapper .modal-body').html("&iexcl;Guardado correctamente!");
 	$('#modal-wrapper .modal-footer').hide();	

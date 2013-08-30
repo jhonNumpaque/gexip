@@ -1,0 +1,41 @@
+<div class='adjuntos_datos tab-pane' id="tab4">
+  <div class='well' style='padding-bottom: 5px;margin-bottom: 2px;'>
+    <div class="control-group">
+      <%= label_tag :descripcion, required_label('Nombre'), class: 'control-label' %>
+      <div class="controls">
+        <%= text_field_tag :descripcion, nil, name: '' %>  ¿Requerido? <%= check_box_tag :requerido %>
+      </div>
+    </div>
+
+    <div class="control-group" style='margin-bottom: 5px;'>
+      <%= label_tag :cargo_estructura_adjunto_id, 'Visible a', class: 'control-label' %>
+      <div class='controls'>
+        <div class="input-append">
+          <%= collection_select :cargo_estructura, :adjunto_id, CargoEstructura.all, :id, :descripcion, {},
+                                { class: 'select2 span5', multiple: true, name: '' } %>
+          <button class="btn" type="button" data-select2-open="multi-append">
+            <i class="icon-search"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="control-group" style='margin-bottom: 5px;'>
+      <div class='controls'>
+        <%= link_to icon_tag(' Agregar', :class => 'icon-plus-sign'), '#', :class => 'btn', id: 'add-adjunto' %>
+      </div>
+    </div>
+  </div>
+
+  <div class='adjuntos-cont'>
+    <table class='table table-stripped table-condensed'>
+      <tbody id='adjuntos-list'>
+      <% if !@tarea.new_record? %>
+        <%= f.fields_for :adjuntos do |b| %>
+            <%= render 'campos_adjunto', f: b %>
+        <% end %>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

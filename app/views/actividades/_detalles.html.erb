@@ -1,0 +1,58 @@
+<h2 style="text-align:center;background-color:#ccc">Actividad</h2>
+<div class='well' style='padding: 5px;'>
+	<div class="span8 pull-left">
+		<%= image_tag 'icons/actividad.png' %> <%= @actividad.nombre %>
+	</div>
+	<div class="span2 pull-right">
+		<%= link_to icon_tag('Editar', :class => 'icon-pencil'), 
+		edit_actividad_path(id: @actividad, from: 'tree'), remote: true %>
+
+		<%= link_to icon_tag('Eliminar', :class => 'icon-trash'), actividad_path(@actividad), 
+		:title => 'Eliminar actividad', :method => :delete, :remote => true,
+		:confirm => "¿Está seguro de eliminar esta actividad?.\nEsta acción no se puede revertir" %> 
+	</div>
+</div>
+<table class="table">
+	<tbody>		
+		<tr>
+			<th>Orden</th>
+			<td><%= @actividad.orden %></td>
+		</tr>		
+		<tr>
+			<th>Nombre</th>
+			<td><%= @actividad.descripcion %></td>
+		</tr>
+	</tbody>
+</table>
+
+<div id="tareas">
+	<table class="table">
+		<thead>
+			<tr style="background-color:#ccc">
+				<th colspan="3" style="text-align:center;">
+					<h3>Tareas</h3>					
+				</th>
+				<td class="add-place"><%= link_to icon_tag('Agregar', :class => 'icon-plus-sign'), new_tarea_path(:from => 'tree', :actividad_id => @actividad.id), :id => 'add-tarea', :class => 'btn pull-right', :remote => true %></td>
+			</tr>
+			<tr style='<%= @tareas.blank? ? 'display:none' : '' %>'>
+				<th>Orden</th>
+				<th>Nombre</th>
+				<th>Fecha</th>
+				<th>&nbsp;</th>
+			</tr>
+		</thead>
+		<tbody id="pso-body">
+			<% if @tareas.present? %>
+				<% for tarea in @tareas -%>
+					<tr id="pso-<%= tarea.id %>">
+						<%= render '/tareas/tarea', :tarea => tarea %>
+					</tr>
+				<% end -%>
+			<% else -%>
+				<tr>
+					<td colspan="4" class='alert alert-warning'>No hay registros</td>
+				</tr>
+			<% end -%>
+		</tbody>
+	</table>
+</div>

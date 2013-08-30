@@ -1,0 +1,15 @@
+<div class='estructura_datos tab-pane' id="tab3">
+  <div class="control-group">
+    <%= label_tag :estructura_id, required_label('Dependencia'), class: 'control-label' %>
+    <div class="controls">
+      <%= collection_select :estructura, :id, Estructura.all, :id, :nombre, { :prompt => true }, { name: '' } %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= label_tag :cargo_estructura_id, required_label('Cargo Responsable'), class: 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select :cargo_estructura_id, CargoEstructura.all, :id, :descripcion, :prompt => true %>
+    </div>
+  </div>
+</div>

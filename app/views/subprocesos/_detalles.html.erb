@@ -1,4 +1,17 @@
 <h2 style="text-align:center;background-color:#ccc">Sub Proceso</h2>
+<div class='well' style='padding: 5px;'>
+	<div class="span8 pull-left">
+		<%= image_tag 'icons/subproceso.png' %> <%= @subproceso.nombre %>
+	</div>
+	<div class="span2 pull-right">
+		<%= link_to icon_tag('Editar', :class => 'icon-pencil'), 
+		edit_subproceso_path(id: @subproceso, from: 'tree'), remote: true %>
+
+		<%= link_to icon_tag('Eliminar', :class => 'icon-trash'), subproceso_path(@subproceso), 
+		:title => 'Eliminar subproceso', :method => :delete, :remote => true,
+		:confirm => "¿Está seguro de eliminar este subproceso?.\nEsta acción no se puede revertir" %> 
+	</div>
+</div>
 <table class="table">
 	<tbody>
 		<tr>
@@ -32,16 +45,24 @@
 			</th>
 			<td class="add-place"><%= link_to icon_tag('Agregar', :class => 'icon-plus-sign'), new_procedimiento_path(:from => 'tree', :subproceso_id => @subproceso.id), :id => 'add-proceso', :class => 'btn pull-right', :remote => true %></td>
 		</tr>
-		<tr>
-			<th>Nombre</th>
-			<th>Fecha</th>
-			<th>&nbsp;</th>
-		</tr>
+		<% if @procedimientos.present? %>
+			<tr>
+				<th>Nombre</th>
+				<th>Fecha</th>
+				<th>&nbsp;</th>
+			</tr>
+		<% end -%>
 	</thead>
-	<tbody>
-		<% for procedimiento in @procedimientos -%>
-			<tr id="pso-<%= procedimiento.id %>">
-				<%= render 'subprocesos/procedimiento', :procedimiento => procedimiento %>
+	<tbody id='pso-body'>
+		<% if @procedimientos.present? %>
+			<% for procedimiento in @procedimientos -%>
+				<tr id="pso-<%= procedimiento.id %>">
+					<%= render 'subprocesos/procedimiento', :procedimiento => procedimiento %>
+				</tr>
+			<% end -%>
+		<% else -%>
+			<tr>
+				<td colspan="3" class='alert alert-warning'>No hay registros</td>
 			</tr>
 		<% end -%>
 	</tbody>

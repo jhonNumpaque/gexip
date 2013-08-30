@@ -1,14 +1,46 @@
-<%= simple_form_for @macroproceso, :html => { :class => 'form-horizontal' } do |f| %>
-  <%= f.error_notification %>
-  
-    <%= f.input :nombre %>
-    <%= f.input :clasificacion, :collection => Macroproceso::CLASIFICACIONES.map{|c| [c,c]}, :prompt => "-- Seleccione --" %>
-    <%= f.input :objetivo, :as => :text, :input_html => { :style => 'width:80%;', :rows => 7, :cols => 20  } %>
-    <%= f.input :codigo %>
-    <%#= f.input :cargo_id, :label => "Cargo Responsable", :collection => Cargo.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+<%= form_for @macroproceso, remote: true, html: { class: 'form-horizontal form_remote' } do |f| %>
+  <% if @macroproceso.errors.present? %>
+    <div class="alert alert-block alert-error">
+      <h4>No se ha podido guardar el registro, verifique lo siguiente:</h4>
+      <ul>
+        <% @macroproceso.errors.full_messages.each do |error| %>
+          <li><%= error %></li>
+        <% end %>
+      </ul>
+    </div>   
+  <% end %>
+  <div class="control-group">
+    <%= f.label :nombre, required_label('Nombre'), class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :nombre %>      
+    </div>
+  </div>
 
-  <div class="form-actions">
-    <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
-    <%= link_to 'Cancelar', macroprocesos_path, :class => "btn" %>
+  <div class="control-group">
+    <%= f.label :clasificacion, required_label('Clasificación'), class: 'control-label' %>
+    <div class="controls">
+      <%= f.select :clasificacion, Macroproceso::CLASIFICACIONES.map{|c| [c,c]}, :prompt => "-- Seleccione --" %>      
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :codigo, required_label('Código'), class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :codigo %>      
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :cargo_estructura_id, required_label('Cargo Responsable'), class: 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select :cargo_estructura_id, CargoEstructura.all, :id, :descripcion, :prompt => "-- Seleccione --" %>      
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :objetivo, required_label('Objetivo'), class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :objetivo, rows: 5, class: 'input-xlarge' %>      
+    </div>
   </div>
 <% end %>

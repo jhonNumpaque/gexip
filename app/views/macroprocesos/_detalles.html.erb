@@ -1,4 +1,18 @@
 <h2 style="text-align:center;background-color:#ccc">Macroproceso</h2>
+<div class="well" style="padding: 5px;">
+	<div class="span7 pull-left">
+		<%= image_tag 'icons/macroproceso.png' %> <%= @macroproceso.codigo %> - <%= @macroproceso.nombre %>
+	</div>
+	<div class="span3 pull-right">
+		<%= link_to icon_tag('Agregar', :class => 'icon-plus-sign'), new_macroproceso_path, :remote => true %>
+		<%= link_to icon_tag('Editar', :class => 'icon-pencil'), 
+		edit_macroproceso_path(id: @macroproceso, from: 'tree'), remote: true %>
+
+		<%= link_to icon_tag('Eliminar', :class => 'icon-trash'), macroproceso_path(@macroproceso), 
+		:title => 'Eliminar Proceso', :method => :delete, :remote => true,
+		:confirm => "¿Está seguro de eliminar este proceso?.\nEsta acción no se puede revertir" %> 
+	</div>
+</div>
 <table class="table">
 	<tbody>
 		<tr>
@@ -37,16 +51,24 @@
 				</th>
 				<td class="add-place"><%= link_to icon_tag('Agregar', :class => 'icon-plus-sign'), new_proceso_path(:from => 'tree', :macroproceso_id => @macroproceso.id), :id => 'add-proceso', :class => 'btn pull-right', :remote => true %></td>
 			</tr>
-			<tr>
-				<th colspan="2">Nombre</th>
-				<th>Fecha</th>
-				<th>&nbsp;</th>
-			</tr>
+			<% if @procesos.present? %>
+				<tr>
+					<th colspan="2">Nombre</th>
+					<th>Fecha</th>
+					<th>&nbsp;</th>
+				</tr>
+			<% end %>
 		</thead>
 		<tbody id="pso-body">
-			<% for proceso in @procesos -%>
-				<tr id="pso-<%= proceso.id %>">
-					<%= render 'proceso', :proceso => proceso %>
+			<% if @procesos.present? %>
+				<% for proceso in @procesos -%>
+					<tr id="pso-<%= proceso.id %>">
+						<%= render 'proceso', :proceso => proceso %>
+					</tr>
+				<% end -%>
+			<% else -%>
+				<tr>
+					<td colspan="4" class='alert alert-warning'>No hay registros</td>
 				</tr>
 			<% end -%>
 		</tbody>

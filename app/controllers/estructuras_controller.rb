@@ -69,6 +69,7 @@ class EstructurasController < ApplicationController
     @estructura = Estructura.new(params[:estructura])
 
     cargos = Cargo.where(:id => params[:cargos])
+    @estructura.save
     @estructura.cargos = cargos
 
     respond_to do |format|
@@ -89,6 +90,7 @@ class EstructurasController < ApplicationController
   # PUT /estructuras/1.json
   def update
     @estructura = Estructura.find(params[:id])
+    @estructura.cargos = Cargo.where(:id => params[:cargos])
 
     respond_to do |format|
       if @estructura.update_attributes(params[:estructura])

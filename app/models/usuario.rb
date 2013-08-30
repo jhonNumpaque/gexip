@@ -5,18 +5,14 @@ class Usuario < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable  
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :funcionario_id, :rol_id, :login
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :rol_id, :login, :funcionario_id
 
   # validaciones
-  validates :login, :presence => true
-  #validates :nombres, :presence => true
-  #validates :apellidos, :presence => true
-  #validates :documento, :presence => true
+  validates :login, :presence => true, :uniqueness => true
   validates :funcionario_id, :presence => true, :uniqueness => true
   validates :rol_id, :presence => true
-  validates :email, :presence => true
+  validates :email, :presence => true, :uniqueness => true
   
-  #validates_uniqueness_of :documento
   validates_uniqueness_of :login
   validates_uniqueness_of :email
   
@@ -37,5 +33,14 @@ class Usuario < ActiveRecord::Base
   end
   
   # CONSTANTE
-  TIPO_BUSQUEDA = %w{TODOS USUARIO FUNCIONARIO}
+  TIPO_BUSQUEDA = %w{TODOS USUARIO NOMBRE APELLIDO DOCUMENTO}
+  
+  #Concatena nombre y apellido
+  def nombre_completo
+    "#{self.funcionario.nombres} #{self.funcionario.apellidos}".strip
+  end
+  #Concatena apellido y nombre
+  def apellido_nombre
+    "#{self.funcionario.apellidos}, #{self.funcionario.nombres}".strip
+  end
 end

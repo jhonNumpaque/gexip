@@ -1,4 +1,5 @@
-$('#modal-body').html("<%= escape_javascript( render( :partial => 'form', :locals => { :tarea => @tarea })) %>")
-$('#add-tarea-modal').css('width' , '500px')
-$('#add-tarea-modal').css('height' , '100%')
+$('#tarea-modal-wrapper .modal-header h3').html('Agregar Tarea');
+$('#tarea-modal-wrapper .modal-body').html("<%= escape_javascript( render( :partial => 'form', :locals => { :tarea => @tarea })) %>");
+//$('#tarea-modal-wrapper .modal-footer').show();
+$('#tarea-modal-wrapper').modal();
 

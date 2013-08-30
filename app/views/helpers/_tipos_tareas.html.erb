@@ -1,0 +1,25 @@
+<% if @tipos_mostrar.blank? -%>
+    <h2 style="text-align: center;margin-top: 70px;color: red;"> Por favor agregue una tarea de inicio en la primera actividad</h2>
+<% else -%>
+<ul>
+	<% if @tipos_mostrar.include?('inicio') %>
+  <li><button class='tipo_tarea' rel='inicio' type='button' style='width:198px;height:100px' class='process-type'><%= image_tag 'procesos/inicio.png' %></button></li>
+  <% end %>
+  <% if @tipos_mostrar.include?('fin') %>
+  <li><button class='tipo_tarea' rel='fin' type='button' style='width:198px;height:100px' class='process-type'><%= image_tag 'procesos/fin.png' %></button></li>
+  <% end %>
+  <% if @tipos_mostrar.include?('almacenamiento') %>
+  <li><button class='tipo_tarea' rel='almacenamiento' type='button' style='width:198px;height:100px' class='process-type'><%= image_tag 'procesos/almacenamiento.png' %></button></li>
+  <% end %>
+  <% if @tipos_mostrar.include?('logica') %>
+  <li><button class='tipo_tarea' rel='logica' type='button' style='width:198px;height:100px' class='process-type'><%= image_tag 'procesos/logica.png' %></button></li>
+  <% end %>
+  <% if @tipos_mostrar.include?('proceso') %>
+  <li><button class='tipo_tarea' rel='proceso' type='button' style='width:198px;height:100px' class='process-type'><%= image_tag 'procesos/proceso.png' %></button></li>
+  <% end %>
+  <% if @tipos_mostrar.include?('traslado') %>
+  <li><button class='tipo_tarea' rel='traslado' type='button' style='width:198px;height:100px' class='process-type'><%= image_tag 'procesos/traslado.png' %></button></li>
+  <% end %>
+</ul>
+<% end -%>
+<div style='clear:both'></div>

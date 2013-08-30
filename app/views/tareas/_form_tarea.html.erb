@@ -1,0 +1,28 @@
+<%= form_tag '#', remote: true, class: 'form-horizontal form_remote' do %>  
+  <div class="control-group">
+    <%= label_tag :descripcion, required_label('Nombre'), class: 'control-label' %>
+    <div class="controls">
+      <%= text_field_tag :descripcion %>      
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= label_tag :requerido, required_label('¿Requerido?'), class: 'control-label' %>
+    <div class="controls">
+      <%= check_box_tag :requerido %>      
+    </div>
+  </div>
+
+  <table class='table'>
+    <thead>
+      <tr>
+        <th>Cargo</th>
+        <th>Agregar</th>
+      </tr>
+    </thead>
+    <tbody id='cargo_adjuntos'>
+      
+    </tbody>
+  </table>
+
+<% end %>

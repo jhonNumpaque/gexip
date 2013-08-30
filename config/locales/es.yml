@@ -126,7 +126,7 @@ es:
       last_word_connector: " y "
 
     select:
-      prompt: "Por favor selecciona"
+      prompt: "-- Selecciona --"
 
   datetime:
     distance_in_words:
@@ -174,7 +174,7 @@ es:
 
   helpers:
     select:
-      prompt: "Por favor selecciona"
+      prompt: "-- Selecciona --"
 
     submit:
       create: 'Crear %{model}'

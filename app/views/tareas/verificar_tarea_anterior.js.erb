@@ -1,0 +1,31 @@
+<% if @tarea_anterior.present? %>
+    $('#tarea_anterior_desc').parent().hide();
+    <% unless (params[:logica_id].to_i == @tarea_anterior.id) -%>
+        $('#tarea_anterior_desc').html('<%= truncate(@tarea_anterior.nombre, :length => 30) %>');
+        $('#tarea_anterior_desc').parent().show();
+    <% end -%>
+    $('#tarea_tarea_ant_id').val(<%= @tarea_anterior.id %>);
+    $('#tarea_tipo_logica').val('<%= @tarea_anterior.tipo_logica_sup.downcase %>');
+    $('#tarea_logica').parent().hide();
+<% else -%>
+    $('#tarea_anterior_desc').parent().hide();
+    $('#tarea_tarea_ant_id').val('');
+    <%  if @tareas_anteriores.present? &&  @tareas_anteriores['si'].present? -%>
+        opcion_si = <%= @tareas_anteriores['si'].to_json.html_safe %>;
+<%  end -%>
+<%  if @tareas_anteriores.present? &&  @tareas_anteriores['no'].present? -%>
+        opcion_no = <%= @tareas_anteriores['no'].to_json.html_safe %>;
+<%  end -%>
+<% end -%>
+$('#logica_relacionada_id').val(<%= params[:logica_id] %>);
+<% if @respuestas_pendientes.present? -%>
+    var options = "";
+    <% if @respuestas_pendientes.length > 1 -%>
+        options = "<option value=''>-- Seleccione --</option>";
+        $('#tarea_logica').parent().show();
+    <% end -%>
+    <% @respuestas_pendientes.each do |pendiente| -%>
+        options = options + '<option value="<%= pendiente %>"><%= pendiente.upcase %></option>';
+    <% end -%>
+    $('#tarea_logica select').html(options);
+<% end -%>
