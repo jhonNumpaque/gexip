@@ -213,11 +213,16 @@ class InformesController < ApplicationController
     @formato = params[:informes][:formato]
     cantidad = params[:informes][:cantidad]
     demanda = params[:informes][:demanda]
-    proceso = params[:informes][:proceso]
+    #proceso = params[:informes][:proceso]
+    procedimiento = params[:informes][:procedimiento]
+    modo_duracion = params[:informes][:modo_duracion]
+    cant_duracion = params[:informes][:cant_duracion]
+    unidad_duracion = params[:informes][:unidad_duracion]
     #   resultado = VistaProcesoDemandado
-    vista = VistaExpedienteProceso
+    vista_expediente_proceso = VistaExpedienteProceso
+    vista_procedimiento_tiempo = VistaProcedimientoTiempo
     @resultados = {}
-
+    duracion = 0
 
     if @formato.present?
       case @formato
@@ -227,36 +232,72 @@ class InformesController < ApplicationController
           format = 'W'
         when 'dias'
           #formato para los dias del anho, no dias del mes
-          format = 'DDD'
+          format = 'DD'
       end
     else
       format = 'DD-MM-YYYY'
     end
 
     #realiza el selec con el formato de fecha seleccionado
-    vista = vista.select("DISTINCT expediente_id, TO_CHAR(expediente_created_at::timestamp, '#{format}') as created_at, expediente_created_at, proceso_id")
+    vista = vista_expediente_proceso.select("DISTINCT expediente_id, TO_CHAR(expediente_created_at::timestamp, '#{format}') as created_at, expediente_created_at, procedimiento_id")
     if @fecha_inicio.present? && @fecha_fin.present?
       vista = vista.where(:expediente_created_at => @fecha_inicio .. @fecha_fin)
     end
 
+    #verifica por tiempo de duracion
+    if cant_duracion.present? && unidad_duracion.present?
+      #normalizar a minutos la duracion
+      case unidad_duracion
+        when 'minutos'
+          duracion = cant_duracion.to_i
+        when 'horas'
+          duracion = cant_duracion.to_i / 60
+        when 'dias'
+          duracion = cant_duracion.to_i / Estructura::Minutos_Dias
+        when 'semanas'
+          duracion = cant_duracion.to_i / Estructura::Minutos_Semana
+        when 'meses'
+          duracion = cant_duracion.to_i / Estructura::Minutos_Mes
+      end
+
+
+      if modo_duracion.present?
+        case modo_duracion
+          when 'mayor'
+            vista_procedimiento_tiempo = vista_procedimiento_tiempo.where('tiempo > ?', duracion)
+          when 'menor'
+            vista_procedimiento_tiempo = vista_procedimiento_tiempo.where('tiempo < ?', duracion)
+          when 'igual'
+            vista_procedimiento_tiempo = vista_procedimiento_tiempo.where(:tiempo => duracion)
+        end
+      else
+        vista_procedimiento_tiempo = vista_procedimiento_tiempo.where(:tiempo => duracion).all
+      end
+      procedimiento_array = vista_procedimiento_tiempo.map{ |t| t.id}
+    end
+
     #verifica si es que el proceso se encuentra
-    if proceso.present?
-      vista = vista.where('proceso_id = ?', proceso)
+    if procedimiento.present?
+      vista = vista.where('procedimiento_id = ?', procedimiento)
+      @procedimiento = Procedimiento.find(procedimiento)
+
+    elsif procedimiento_array.present?
+      vista = vista.where(:procedimiento_id => procedimiento_array)
     end
 
     #suman la cantidad de expedientes agrupados por la fecha de creacion
     p = {}
     vista.each do |r|
-      p[r.proceso_id] ||= {}
-      p[r.proceso_id][r.created_at.to_i] ||= [0, 0]
-      p[r.proceso_id][r.created_at.to_i][0] += 1
-      p[r.proceso_id][r.created_at.to_i][1] = r.expediente_created_at.to_s
+      p[r.procedimiento_id] ||= {}
+      p[r.procedimiento_id][r.created_at.to_i] ||= [0, 0]
+      p[r.procedimiento_id][r.created_at.to_i][0] += 1
+      p[r.procedimiento_id][r.created_at.to_i][1] = r.expediente_created_at.to_s
     end
 
     #busca el objeto Proceso
-    if proceso.present?
-      @proceso = Proceso.find(proceso)
-    end
+    #if proceso.present?
+      #@proceso = Proceso.find(proceso)
+    #end
 
     if demanda.present?
       #sumar la cantidad total de expedientes
@@ -306,6 +347,7 @@ class InformesController < ApplicationController
         @resultados = p
       end
     end
+
 
     respond_to do |format|
       format.html # show.html.erb     
@@ -381,7 +423,7 @@ class InformesController < ApplicationController
     resultado = VistaExpedienteProceso
 
     #agrupar por meses de entrada
-    resultado = resultado.select("DISTINCT expediente_id, TO_CHAR(expediente_created_at::timestamp, 'MM') as created_at, TO_CHAR(expediente_fecha_finalizo::timestamp, 'MM') as fecha_finalizo, expediente_estado")
+    resultado = resultado.select("DISTINCT expediente_id, TO_CHAR(expediente_created_at::timestamp, 'MM') as created_at, TO_CHAR(expediente_fecha_finalizo::timestamp, 'MM') as fecha_finalizo, expediente_created_at, expediente_fecha_finalizo, expediente_estado")
 
     if @anho.present?
       resultado = resultado.where("TO_CHAR(expediente_created_at::timestamp, 'YYYY') = '#{@anho}'")
@@ -392,13 +434,25 @@ class InformesController < ApplicationController
     end
 
     #agrupar la cantidad de epxedientes que se dieron por mesa de entrada en el mes
-    p = {}
+    p = {
+        1 => [0, 0, 0, 0, 0],
+        2 => [0, 0, 0, 0, 0],
+        3 => [0, 0, 0, 0, 0],
+        4 => [0, 0, 0, 0, 0],
+        5 => [0, 0, 0, 0, 0],
+        6 => [0, 0, 0, 0, 0],
+        7 => [0, 0, 0, 0, 0],
+        8 => [0, 0, 0, 0, 0],
+        9 => [0, 0, 0, 0, 0],
+        10 => [0, 0, 0, 0, 0],
+        11 => [0, 0, 0, 0, 0],
+        12 => [0, 0, 0, 0, 0]
+    }
     anulados = {}
     finalizados = {}
     resultado.each do |r|
-      p[r.created_at.to_i] ||= [0, 0, 0, 0, 0] #[creados, finalizados, anulados, otros, porcentaje finalizados]
       p[r.created_at.to_i][0] ||= 0
-                                               #sumar la cantidad de expedientes que pasaron por mesa de entrada
+      #sumar la cantidad de expedientes que pasaron por mesa de entrada
       p[r.created_at.to_i][0] += 1
 
       case r.expediente_estado
@@ -422,7 +476,9 @@ class InformesController < ApplicationController
 
     #realizar el porcentaje de documentos radicados. formula: (expedientes finalizado / expedientes recepcionados) * 100
     p.each do |k, v|
-      p[k][4] = (p[k][1].to_i / p[k][0].to_i) * 100
+      if p[k][0].to_i > 0 && p[k][1].to_i > 0
+        p[k][4] = (p[k][1].to_i / p[k][0].to_i) * 100
+      end
     end
 
 
@@ -436,7 +492,9 @@ class InformesController < ApplicationController
     end
     #comprar el total de minutos que tomo el expediente con el estimado
     finalizados.each do |k, v|
+      #puts vista_procedimiento_tiempo.tiempo
       finalizados[k][3] = v[2] - vista_procedimiento_tiempo.tiempo
+      #finalizados[k][3] = v[2]
     end
 
     #asignar al mes de creacion los que terminaron en tiempo y los que tuvieron retrasos
@@ -460,7 +518,6 @@ class InformesController < ApplicationController
 
     #datos para mostrar
     @finalizados
-    puts @anulados
     @resultados = p
 
     respond_to do |format|
@@ -490,7 +547,7 @@ class InformesController < ApplicationController
     p = {}
     resultado.each do |r|
       p[r.created_at.to_i] ||= {} #[cantidad, tarea_expediente_id]
-      #sumar la cantidad de expedientes que se anularon en la dependencia
+                                  #sumar la cantidad de expedientes que se anularon en la dependencia
       @estructuras.each do |e|
         p[r.created_at.to_i][e.id] ||= 0
       end

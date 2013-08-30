@@ -25,11 +25,11 @@
       <%#= f.input 'proceso', :collection => Proceso.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Proceso", :input_html => {:onchange => "desactivarCampos()"}, input_html: {id: 'proceso_id'} %>
       <%#= linked_combo 'proceso_id', :linked => 'macroproceso_id', :param => 'macroproceso_id', :url => '/procesos.json' %>
 
-      <%= f.input 'duracion', :collection => {'Mayor' => 'mayor', 'Igual' => 'igual', 'Menor' => 'menor'}, :prompt => '-- Seleccione --' %>
+      <%= f.input 'modo_duracion', :collection => {'Mayor' => 'mayor', 'Igual' => 'igual', 'Menor' => 'menor'}, :prompt => '-- Seleccione --' %>
 
-      <%= f.input 'cant_duracion', :item_wrapper_class => 'inline' %>
+      <%= f.input 'cant_duracion'%>
 
-      <%= f.input 'modo_duracion', :collection => {'Minutos' => 'minutos', 'Horas' => 'horas', 'Dias' => 'dias' ,'Semanas' => 'semanas', 'Meses' => 'Meses'}, :item_wrapper_class => 'inline', :prompt => '-- Seleccione --' %>
+      <%= f.input 'unidad_duracion', :collection => {'Minutos' => 'minutos', 'Horas' => 'horas', 'Dias' => 'dias' ,'Semanas' => 'semanas', 'Meses' => 'Meses'}, :prompt => '-- Seleccione --'%>
 
       <%= f.input 'procedimiento', :as => :grouped_select, :collection => get_procedimientos_group, :group_method => :last, :input_html => {:id => 'procedimiento_id'} %>
 
