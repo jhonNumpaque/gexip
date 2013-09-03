@@ -29,6 +29,8 @@ GEM
       i18n (~> 0.6)
       multi_json (~> 1.0)
     arel (3.0.2)
+    awesome_nested_set (2.1.6)
+      activerecord (>= 3.0.0)
     bcrypt-ruby (3.0.1)
     builder (3.0.4)
     capybara (1.1.2)
@@ -80,6 +82,7 @@ GEM
     gherkin (2.7.4)
       json (>= 1.4.6)
     hike (1.2.1)
+    hirb (0.7.1)
     i18n (0.6.1)
     journey (1.0.4)
     jquery-rails (2.1.4)
@@ -99,6 +102,9 @@ GEM
     multi_json (1.0.4)
     nokogiri (1.5.0)
     orm_adapter (0.0.5)
+    paper_trail (2.7.2)
+      activerecord (~> 3.0)
+      railties (~> 3.0)
     pg (0.12.2)
     polyglot (0.3.3)
     rack (1.4.4)
@@ -147,6 +153,9 @@ GEM
       railties (~> 3.2.0.beta)
       sass (>= 3.1.10)
       tilt (~> 1.3)
+    select2-rails (3.4.8)
+      sass-rails
+      thor (~> 0.14)
     selenium-webdriver (2.17.0)
       childprocess (>= 0.2.5)
       ffi (~> 1.0.9)
@@ -181,6 +190,7 @@ GEM
       multi_json (>= 1.0.2)
     warden (1.1.0)
       rack (>= 1.0)
+    week_of_month (1.2.2.1)
     xpath (0.1.4)
       nokogiri (~> 1.3)
 
@@ -188,6 +198,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  awesome_nested_set (~> 2.0)
   capybara
   carrierwave
   coffee-rails (~> 3.2.1)
@@ -195,15 +206,19 @@ DEPENDENCIES
   database_cleaner
   devise
   factory_girl_rails
-  jquery-rails
+  hirb
+  jquery-rails (= 2.1.4)
   kaminari
+  paper_trail (~> 2.7.2)
   pg
   rails (= 3.2.11)
   rails3-generators
   rspec-rails
   sass-rails (~> 3.2.3)
+  select2-rails
   simple_form (~> 2.0.0.rc)
   therubyracer
   thin
   time_diff
   uglifier (>= 1.0.3)
+  week_of_month
