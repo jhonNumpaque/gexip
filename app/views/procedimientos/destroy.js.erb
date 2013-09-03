@@ -1,0 +1,6 @@
+<% if @error.blank? %>
+$('#pso-<%= @procedimiento.id %>').remove();
+$("#main").jstree("remove","#procedimiento_<%= @procedimiento.id %>");
+<% else %>
+alert('<%= @error %>');
+<% end %>

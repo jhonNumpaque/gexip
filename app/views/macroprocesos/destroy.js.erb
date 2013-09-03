@@ -1,0 +1,5 @@
+<% if @error.nil? %>
+  $("#main").jstree("remove","#macroproceso_<%= @macroproceso.id %>");
+<% else %>
+  alert('<%= @error %>');
+<% end %>

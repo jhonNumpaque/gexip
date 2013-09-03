@@ -65,7 +65,6 @@ class ExpedientesController < ApplicationController
   # GET /expedientes/new.json
   def new
     @expediente = Expediente.new
-    @expediente.adjuntos.build
 
     respond_to do |format|
       format.html # new.html.erb
@@ -82,11 +81,8 @@ class ExpedientesController < ApplicationController
   # POST /expedientes.json
   def create
     @expediente = Expediente.new(params[:expediente])    
-    
     @expediente.usuario_id = current_usuario.id
-    @expediente.usuario_ingreso_id = current_usuario.id
-    @expediente.fecha_ingreso = Time.now
-      
+
     respond_to do |format|
       if @expediente.save
         format.html { redirect_to @expediente, notice: 'Expediente Creado Correctamete.' }

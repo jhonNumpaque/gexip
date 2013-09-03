@@ -1,0 +1,8 @@
+<% if params[:type].present? && @entes.present? -%>
+  $("#expediente_ente_id").val(<%= @entes.first.id %>);
+  $("#nombre-ente").val('<%= @entes.first.nombre_completo %>');
+  $("#expediente_numero_documento").val(<%= @entes.first.documento %>);
+<% else -%>
+  $('#buscar-modal').html('<%= escape_javascript render 'expedientes/buscar_persona' %>');
+  $('#buscar-modal').modal('show');
+<% end -%>

@@ -44,6 +44,31 @@ class EntesController < ApplicationController
     end
   end
 
+	def buscar
+		cond = []
+		query_str = []
+		query_val = {}
+
+		if params[:search].present?
+			query_str << 'documento = :documento or nombre ilike :search or apellido ilike :search'
+			query_val[:search] = "%#{params[:search]}%"
+			query_val[:documento] = params[:search]
+		end
+
+		if query_str.present?
+			cond[0] = query_str.join('and')
+			cond[1] = query_val
+		end
+
+		cond = ['documento = ?', params[:documento]] if params[:type].present? && params[:documento].present?
+
+		@entes = Ente.where(cond).page(params[:page]).per(10)
+
+		respond_to do |format|
+			format.js
+		end
+	end
+
   # GET /entes/new
   # GET /entes/new.json
   def new

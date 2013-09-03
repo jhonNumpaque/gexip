@@ -1,39 +1,38 @@
 # encoding: utf-8
 class Expediente < ActiveRecord::Base
   #validaciones
-  validates :procedimiento_id, :presence => true
+  #validates :procedimiento_id, :presence => true
   validates :ente_id, :presence => true
-  validates :usuario_id, :presence => true
+  #validates :usuario_id, :presence => true
   validates :descripcion, :presence => true
   validates :estado, :presence => true
-  validates :usuario_ingreso_id, :presence => true
-  validates :fecha_ingreso, :presence => true
+  #validates :usuario_ingreso_id, :presence => true
+  #validates :fecha_ingreso, :presence => true
   validates :numero, :presence => true, :uniqueness => true
   #validates :numero_documento, :presence => true
       
   #Relaciones
-  belongs_to :procedimiento, :foreign_key => :procedimiento_id
-  belongs_to :tarea_actual, :foreign_key => :tarea_actual_id, :class_name => 'Tarea'
+  #belongs_to :procedimiento, :foreign_key => :procedimiento_id
+  #belongs_to :tarea_actual, :foreign_key => :tarea_actual_id, :class_name => 'Tarea'
   belongs_to :tarea_anterior, :foreign_key => :tarea_anterior_id, :class_name => 'Tarea'
   belongs_to :tarea_expediente_actual, :foreign_key => :tarea_expediente_actual_id, :class_name => 'TareaExpediente'
   belongs_to :ente, :foreign_key => :ente_id
   belongs_to :usuario
-  belongs_to :usuario_ingreso, :foreign_key => :usuario_ingreso_id, :class_name => 'Usuario'
-  belongs_to :usuario_finalizado, :foreign_key => :usuario_finalizo_id, :class_name => 'Usuario'
+  has_many :tareas_expedientes
+  #belongs_to :usuario_ingreso, :foreign_key => :usuario_ingreso_id, :class_name => 'Usuario'
+  #belongs_to :usuario_finalizado, :foreign_key => :usuario_finalizo_id, :class_name => 'Usuario'
   
   #has_many :tareas_expedientes, :dependent => :destroy
 
-  has_many :adjuntos, :as => :adjuntable
-
-  accepts_nested_attributes_for :adjuntos, :reject_if => lambda { |a| a[:data].blank? }, :allow_destroy => true
+  #accepts_nested_attributes_for :adjuntos, :reject_if => lambda { |a| a[:data].blank? }, :allow_destroy => true
   
   # CONSTANTE, si se modifica orden o se agrega cambiar métodos relacionados
   ESTADO = %w{NUEVO RECIBIDO TRANSITO RECHAZADO FINALIZADO ANULADO PROCESANDO}
   
-  attr_accessor :numero_documento
+  attr_accessor :procedimiento_id, :usuario_id
   
   # callbacks
-  before_validation :generar_numero, :establecer_estado
+  before_validation :generar_numero, :establecer_estado, :asignar_clave
   after_create :iniciar_proceso
   
   def generar_numero
@@ -52,6 +51,10 @@ class Expediente < ActiveRecord::Base
     
     self.numero = numero
   end
+
+  def asignar_clave
+		self.clave = rand(10000..99999) if self.new_record?
+  end
   
   def anyo_ingreso
     self.numero.to_s[0..3]
@@ -65,9 +68,21 @@ class Expediente < ActiveRecord::Base
     n = self.numero.to_s
     n[4..n.length].next
   end
+
+  def tarea_actual
+		self.tarea_expediente_actual.tarea
+  end
+
+  def procedimiento
+		self.tareas_expedientes.first.tarea.actividad.procedimiento
+  end
+
+  def usuario
+		self.tareas_expedientes.first.usuario_inicio
+  end
   
   def tarea_siguiente
-    tarea = self.tarea_actual
+    tarea = self.tarea_expediente_actual.tarea
     actividad = tarea.actividad
     cond_query = '((orden > :orden and actividad_id = :actividad) '
     cond_vals = { :orden => tarea.orden, :actividad => actividad.id, 
@@ -106,7 +121,7 @@ class Expediente < ActiveRecord::Base
   
   def iniciar_proceso
     Expediente.transaction do
-      procedimiento = self.procedimiento
+      procedimiento = Procedimiento.find(self.procedimiento_id)
       actividad = procedimiento.actividades.order('orden').first
       tarea = actividad.tareas.order('orden').first()
     
@@ -126,8 +141,7 @@ class Expediente < ActiveRecord::Base
                'Inicio del procedimiento (automático)'
             )
 
-      self.update_attributes(:tarea_actual_id => tarea.id,
-      :tarea_expediente_actual_id => tarea_expediente.id) if fin      
+      self.update_attributes(:tarea_expediente_actual_id => tarea_expediente.id) if fin
     end
   end
 

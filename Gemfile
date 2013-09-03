@@ -13,6 +13,7 @@ gem 'time_diff'
 gem 'carrierwave'
 gem 'awesome_nested_set', "~> 2.0"
 gem 'hirb'
+gem 'paper_trail', '~> 2.7.2'
 
 group :development do 
   gem 'thin'

@@ -12,9 +12,11 @@ class Tarea < ActiveRecord::Base
   belongs_to :unidad_tiempo, :foreign_key => :unidad_tiempo_id
   belongs_to :tarea_siguiente, :foreign_key => :tarea_sgt_id, :class_name => 'Tarea'
   belongs_to :tarea_alternativa, :foreign_key => :tarea_alt_id, :class_name => 'Tarea'
+  belongs_to :tarea_anterior, :foreign_key => :tarea_ant_id, :class_name => 'Tarea'
+  has_one :version_aprobada, :foreign_key => :item_id, :conditions => { tipo_item: 'Tarea' }
 
   has_many :tareas_dependientes, :foreign_key => :logica_relacionada_id, :class_name => 'Tarea'
-  has_many :adjuntos
+  has_many :adjuntos, :dependent => :destroy
 
   # CONSTANTE
   TIPO_TAREA = %w{INICIO PROCESO PROCESO_SI PROCESO_NO TRANSLADO ALMACENAMIENTO LOGICA FIN FIN_ALTERNANTIVO}
@@ -23,6 +25,7 @@ class Tarea < ActiveRecord::Base
 
   #Gems
   acts_as_nested_set
+  has_paper_trail
   
   attr_accessor :tarea_anterior_id, :respuesta_logica
   
@@ -30,12 +33,17 @@ class Tarea < ActiveRecord::Base
   before_create :verificar_orden
   after_save :actualizar_tarea_siguiente
   before_validation :complete_data
+  before_destroy :unlink_foreigns
 
   accepts_nested_attributes_for :adjuntos, :reject_if => lambda { |a| a[:descripcion].blank? }, :allow_destroy => true
   
 #  def tarea_anterior_id=(value)
 #    @anterior_id = value
 #  end
+
+	def aprobado
+		self.version_aprobada.version.reify if self.version_aprobada.present?
+	end
 
   def actualizar_tarea_siguiente
     if self.tarea_ant_id
@@ -51,6 +59,15 @@ class Tarea < ActiveRecord::Base
       end
     end
   end
+
+	def aprobar!
+		version_aprobada = VersionAprobada.where(item_id: self.id, tipo_item: self.class).first
+		if version_aprobada
+			version_aprobada.update_attribute(:version_id, self.versions.last.id)
+		else
+			VersionAprobada.create(item_id: self.id, tipo_item: self.class.to_s, version_id: self.versions.last.id)
+		end
+	end
 
   def arbol(tipo=:tarea_siguiente)
     tareas = []
@@ -71,14 +88,14 @@ class Tarea < ActiveRecord::Base
   end
 
   def otras_tareas
-    otras = self.actividad.tareas.where('tipo not in (?)', ['logica', 'inicio']).order('orden').all
+    otras = self.actividad.procedimiento.tareas.where('tipo not in (?)', ['logica', 'inicio']).order('orden').all
     otras.compact!
     otras.delete(self)
     otras
   end
 
   def anterior
-    Tarea.where(actividad_id: self.actividad_id).order('orden').last    
+    self.actividad.procedimiento.tareas.order('orden').last
   end
 
   def tree_state
@@ -102,7 +119,7 @@ class Tarea < ActiveRecord::Base
   end
 
   def logicos_pendientes
-    @logicos ||= self.actividad.tareas.where(tipo: 'logica', :estado => ['abierto', 'nuevo']).order('orden')
+    @logicos ||= self.actividad.procedimiento.tareas.where(tipo: 'logica', :estado => ['abierto', 'nuevo']).order('orden')
   end
 
   def logica_abierta
@@ -145,8 +162,8 @@ class Tarea < ActiveRecord::Base
   end
 
 	def respuestas_logicas_pendientes(tipos_logica=['si','no'])
-		@pendientes ||= self.class.where('tipo <> ? and tarea_sgt_id is ? and tipo_logica in (?) and actividad_id = ?',
-		                 'logica', nil, tipos_logica, self.actividad_id).order('id desc').all
+		@pendientes ||= self.actividad.procedimiento.tareas.where('tipo <> ? and tarea_sgt_id is ? and tipo_logica in (?)',
+		                 'logica', nil, tipos_logica).order('id desc').all
 		@pendientes ||= []
 		@pendientes
 	end
@@ -227,13 +244,14 @@ class Tarea < ActiveRecord::Base
 
 	def logicas_abiertas
 		pendientes = []
-		@logicas_actividad ||= self.class.where('tipo = ? and actividad_id = ?', 'logica', self.actividad_id).all
+		@logicas_actividad ||= self.actividad.procedimiento.tareas.where('tipo = ?', 'logica').all
 		@logicas_actividad.each do |logica|
 			if logica.rutas_pendientes?
 				pendientes << logica
 			elsif logica.hijos_pendientes.present?
 				pendientes << logica
 			end
+			pendientes
 		end
 
 	end
@@ -287,7 +305,7 @@ class Tarea < ActiveRecord::Base
   end
 
   def complete_data
-    last_task = self.actividad.tareas.last
+    last_task = self.actividad.procedimiento.tareas.order('orden').last
     #self.tarea_alt_id ||= last_task.id if last_task && !self.es_logica?
     case self.tipo.downcase
     when 'logica'      
@@ -298,12 +316,23 @@ class Tarea < ActiveRecord::Base
     when 'proceso'
 
     end
-    if self.tipo_logica
-      self.tarea_ant_id = self.logica_abierta.id
-      self.tipo_logica.downcase!
-    end
+    #if self.tipo_logica
+    #  self.tarea_ant_id = self.logica_abierta.id
+    #  self.tipo_logica.downcase!
+    #end
     puts "------------------+"
     puts self.tarea_ant_id
     puts "------------------++"
   end
+
+	def unlink_foreigns
+		if self.tarea_ant_id?
+			tarea_anterior = self.tarea_anterior
+			fields = {}
+			fields[:tarea_sgt_id] = nil if tarea_anterior.tarea_sgt_id == self.id
+			fields[:tarea_alt_id] = nil if tarea_anterior.tarea_alt_id == self.id
+			fields[:estado] = 'abierto' if tarea_anterior.es_logica?
+			tarea_anterior.update_attributes(fields) if tarea_anterior.tarea_sgt_id == self.id
+		end
+	end
 end

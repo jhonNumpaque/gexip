@@ -45,30 +45,33 @@
 <div>
   <fieldset>
     <legend>Resultados</legend>
-    <table id="tabla-resultados" class="table table-striped table-bordered table-condensed">
-      <thead>
-        <tr>
-          <th>C&eacute;dula</th>
-          <th>Apellido y Nombre</th>
-          <th>Tel&eacute;fono</th>
-          <th>Direcci&oacute;n</th>
-          <th>Acci&oacute;n</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% entes = Ente.all %>
-        <% entes.take(10).each do |ente|  %>
+    <% if @entes.present? -%>
+      <table id="tabla-resultados" class="table table-striped table-bordered table-condensed">
+        <thead>
           <tr>
-            <td><%= link_to ente.documento, '#', :onclick =>  "seleccionarEnte('#{ente.id}', '#{ente.apellido + " " + ente.nombre}', '#{ente.documento}')" %></td>
-            <td><%= link_to ente.apellido + " " + ente.nombre, '#', :onclick =>  "seleccionarEnte('#{ente.id}', '#{ente.apellido + " " + ente.nombre}', '#{ente.documento}')" %></td>
-            <td><%= ente.telefono %></td>
-            <td><%= ente.direccion %></td>
-            <td><%= link_to icon_tag('Seleccionar', :class => 'icon-plus'), '#', :onclick => "seleccionarEnte('#{ente.id}', '#{ente.apellido + " " + ente.nombre}', '#{ente.documento}')" %></td>
+            <th>C&eacute;dula</th>
+            <th>Apellido y Nombre</th>
+            <th>Tel&eacute;fono</th>
+            <th>Direcci&oacute;n</th>
+            <th>Acci&oacute;n</th>
           </tr>
-        <% end %>
+        </thead>
+        <tbody>
+          <% @entes.each do |ente|  %>
+            <tr>
+              <td><%= link_to ente.documento, '#', :onclick =>  "seleccionarEnte('#{ente.id}', '#{ente.apellido + " " + ente.nombre}', '#{ente.documento}')" %></td>
+              <td><%= link_to ente.apellido + " " + ente.nombre, '#', :onclick =>  "seleccionarEnte('#{ente.id}', '#{ente.apellido + " " + ente.nombre}', '#{ente.documento}')" %></td>
+              <td><%= ente.telefono %></td>
+              <td><%= ente.direccion %></td>
+              <td><%= link_to icon_tag('Seleccionar', :class => 'icon-plus'), '#', :onclick => "seleccionarEnte('#{ente.id}', '#{ente.apellido + " " + ente.nombre}', '#{ente.documento}')" %></td>
+            </tr>
+          <% end %>
 
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    <% else -%>
+      <p class='alert alert-warning'>No hay registros</p>
+    <% end -%>
   </fieldset>
 </div>
 

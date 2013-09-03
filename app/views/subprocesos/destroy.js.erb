@@ -1,1 +1,6 @@
+<% if @error.blank? %>
 $('#pso-<%= @subproceso.id %>').remove();
+$("#main").jstree("remove","#subproceso<%= @subproceso.id %>");
+<% else %>
+alert('<%= @error %>');
+<% end %>

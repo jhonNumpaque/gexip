@@ -1,22 +1,32 @@
+function buscar_ente(type,documento) {
+	$.get('/entes/buscar', { type: type, documento: documento }, null, 'script');
+}
 $(function(){
+	$('#expediente_numero_documento').change(function(){
+		buscar_ente('documento',$(this).val());
+	});
+
     $('.tab a').click(function(){
         $('.tab').attr('class', 'tab');
         switch ($(this).attr('class')) {
             case 'pf':
                 $('#expediente_ente_id').parent().parent().find('label').html('* Cédula/Nombre y Apellido');
+				$('.cajaexp').css('background-color','#F5FFC0');
                 break;
             case 'pji':
                 $('#expediente_ente_id').parent().parent().find('label').html('* Código/Nombre');
+				$('.cajaexp').css('background-color','#F3E6DA');
                 break;
-            case 'pje':
+			case 'pje':
                 $('#expediente_ente_id').parent().parent().find('label').html('* Código/Nombre');
+				$('.cajaexp').css('background-color','#DAE8F3');
                 break;
         }
         $(this).parent().attr('class', 'tab active');
         return false;
     });
-  
-    $('#iniciar_tarea').click(function(){    
+
+    $('#iniciar_tarea').click(function(){
         var url = $(this).attr('href'); 
         var ids = $('.alert-info').attr('rel').split('-');
         var eid = ids[0]; // expediente id

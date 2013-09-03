@@ -1,3 +1,2 @@
-$('#modal-body').html("<%= escape_javascript( render( :partial => 'actividades/listar_tareas', :locals => { :tareas => @tareas })) %>")
-$('#add-tarea-modal').css('width' , '800px')
-$('#add-tarea-modal').css('height' , '600px')
+$('#pso-<%= @tarea_actual.id %>').remove();
+$("#main").jstree("remove","#tarea_<%= @tarea_actual.id %>");

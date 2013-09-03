@@ -64,6 +64,10 @@
       <% end %>
   <% end %>
 
+  <% if !@tarea.respuestas_pendientes? && !@tarea.logicas_pendientes? %>
+    <%= f.hidden_field :tarea_ant_id %>
+  <% end %>
+
   <div class="control-group name">
     <%= f.label :nombre, required_label('Nombre'), class: 'control-label' %>
     <div class="controls">
