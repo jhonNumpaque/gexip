@@ -72,4 +72,13 @@ class TareaExpediente < ActiveRecord::Base
     
     Time.diff(self.created_at, tiempo_final)
   end
+
+  def tiempo_ejecucion_normalizado
+    tiempo_ejecucion = self.tiempo_ejecucion
+    minutos_anho = tiempo_ejecucion[:year] * Estructura::Minutos_Anho
+    minutos_mes = tiempo_ejecucion[:month] * Estructura::Minutos_Mes
+    minutos_dias = tiempo_ejecucion[:month] * Estructura::Minutos_Dias
+    minutos = tiempo_ejecucion[:minute]
+    minutos += minutos_anho + minutos_mes + minutos_dias
+  end
 end

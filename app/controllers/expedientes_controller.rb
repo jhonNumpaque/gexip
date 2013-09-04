@@ -19,10 +19,10 @@ class ExpedientesController < ApplicationController
     @tarea_expediente_actual = @expediente.tarea_expediente_actual
     @tarea_actual = @expediente.tarea_actual
     @tarea_siguiente = @expediente.tarea_siguiente
-    
+
     if @tarea_siguiente
       tarea_anterior = @expediente.tarea_anterior
-      actividad = @tarea_actual.actividad      
+      actividad = @tarea_actual.actividad
       orden = @tarea_expediente_actual.finalizado? ? @tarea_siguiente.orden : @tarea_actual.orden
 
       query_string = '('    
