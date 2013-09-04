@@ -89,6 +89,7 @@
         ]
       });
 <% else %>
+      <% puts @formato %>
   <% fecha_ini = fecha_formato_en_a_es(@fecha_inicio) %>
   <% fecha_fin = fecha_formato_en_a_es(@fecha_fin) %>
   <% if fecha_ini.month == fecha_fin.month %>

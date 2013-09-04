@@ -95,7 +95,6 @@ Gexip::Application.routes.draw do
   resources :uploads
 
   #informes
-  match 'mostrar_formulario/:tipo_informe' => 'informes#mostrar_formulario', :as => :mostrar_formulario
   match 'form_demora' => 'informes#form_demora', :as => :form_demora
   match 'form_demanda' => 'informes#form_demanda', :as => :form_demanda
   match 'form_rendimiento' => 'informes#form_rendimiento', :as => :form_rendimiento
