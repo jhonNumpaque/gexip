@@ -1,14 +1,20 @@
 <div class="well">
   <%= link_to icon_tag('Volver', :class => 'icon-arrow-left icon-white'), informes_path, class: 'btn btn-primary' %>
   </div>
-  <h1>Informes: Resumen</h1>
+  <h1>Informes: Rendimiento del Personal</h1>
   <% if !@resultados.present? %>
     <%= simple_form_for controller_name, :method => :get do |f| %>
-
+      <!--Fechas -->
       <%= f.input 'fecha_inicio', :input_html => {:class => "datepicker", :autocomplete => 'off'} %>
       <%= f.input 'fecha_fin', :input_html => {:class => "datepicker" }, :autocomplete => 'off'%>
-
-      <%= f.input 'estado', :collection => {'Finalizado' => 'FINALIZADO', 'Entregados' => 'ENTREGADO', 'Archivados' => 'ARCHIVADOS', 'Cancelados' => 'CANCELADOS', 'En poceso' => 'PROCESO'}, :prompt => '-- Seleccione --', :label => 'Estado del expediente' %>
+      <!--Estructura y cargo -->
+      <%= f.input 'estructura', :collection => Estructura.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Estructura", input_html:  {id: 'estructura_id'}%>
+      <%= f.input 'cargo', :collection => Cargo.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Cargo", input_html:  {id: 'cargo_id'} %>
+      <%= linked_combo 'cargo_id', :linked => 'estructura_id', :param => 'estructura_id', :url => '/cargos.json' %>
+      
+      <!--Funcionario-->  
+      <%= f.input 'funcionario', :input_html => { :class => 'input-xlarge'} %>
+      
       <%= f.input 'tipo', :collection => {'Anhos' => 'YEAR', 'Meses' => 'MONTH', 'Dias' => 'DAY'}, :prompt => '-- Seleccione --', :label => 'Mostrar en Formato' %>
 
       <%= f.hidden_field 'filtro', :value => 'resumen'%>
@@ -83,20 +89,17 @@
 
       <div id="chart" style="width: 560px; height: 300px;"></div>
 
+      <table>
+        <tr>
+          <th>Cantidad</th>
+          <th>Fecha</th>
+        </tr>
 
-      <% if @proceso.present? %>
-        <table>
+        <% @resultados.each  do |f| %>
           <tr>
-            <th>Cantidad</th>
-            <th>Fecha</th>
+            <td><%= f.contador %> </td>
+            <td><%= f.fecha_finalizo %> </td>
           </tr>
-
-          <% @resultados.each  do |f| %>
-            <tr>
-              <td><%= f.contador %> </td>
-              <td><%= f.fecha_finalizo %> </td>
-            </tr>
-          <% end %>
-        </table>
-      <% end %>
+        <% end %>
+      </table>
     <% end %>

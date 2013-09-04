@@ -1,0 +1,36 @@
+<section>
+  <div class="well">
+    <%= link_to icon_tag('Volver', :class => 'icon-arrow-left icon-white'), informes_path, class: 'btn btn-primary' %>
+  </div>
+
+  <div class="page-header">
+    <h1>Informes
+      <small> Radicacion de Expedientes</small>
+    </h1>
+  </div>
+
+  <%= simple_form_for controller_name, :url => show_radicados_path, :method => :post do |f| %>
+
+      <%= f.input 'anho', :collection => (2010 .. 2020), :prompt => '-- Seleccione --' %>
+
+      <%#= f.input 'macro_proceso', :collection => Macroproceso.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Macroproceso", input_html: {id: 'macroproceso_id'} %>
+      <%#= f.input 'proceso', :collection => Proceso.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Proceso", :input_html => {:onchange => "desactivarCampos()"}, input_html: {id: 'proceso_id'} %>
+      <%#= linked_combo 'proceso_id', :linked => 'macroproceso_id', :param => 'macroproceso_id', :url => '/procesos.json' %>
+
+      <%= f.input 'procedimiento', :as => :grouped_select, :collection => get_procedimientos_group, :group_method => :last, :input_html => {:id => 'procedimiento_id'} %>
+
+      <div class="form-actions">
+        <%= f.button :submit, 'Buscar', class: 'btn btn-success' %>
+      </div>
+
+  <% end %>
+</section>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#procedimiento_id').select2({
+            allowClear: true,
+            width: '250px'
+        });
+    })
+</script>

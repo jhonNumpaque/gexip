@@ -13,16 +13,20 @@
         <th>Tiempo de Demora(+/-)</th>
         <th>Funcionario</th>
       </tr>
-      <% @tiempos_demorados.each do |tiempo_demorado| %>
+      <%
+       @tiempos_demorados.each do |tiempo_demorado| 
+        s_color = "#00FF00"
+        if(tiempo_demorado.cminutos.to_s.first=="+")
+          s_color = "#FF0000"
+        end
+        %>
         <tr>
-
           <td><%= tiempo_demorado.cnumero %> - <%= tiempo_demorado.cid %></td>
           <td><%= tiempo_demorado.cfecha_inicio %></td>
-          <td><%= tiempo_demorado.cminutos_demorados %></td>
-          <td><%= tiempo_demorado.cminutos_estimados %></td>
-          <td><%= tiempo_demorado.cminutos %></td>
+          <td><%= tiempo_letra tiempo_demorado.cminutos_demorados %></td>
+          <td><%= tiempo_letra tiempo_demorado.cminutos_estimados %></td>
+          <td style="color:<%=s_color.to_s%>;"><%= tiempo_demorado.cminutos.to_s.first %> <%= tiempo_letra tiempo_demorado.cminutos.to_s.from(1) %></td>
           <td><%= tiempo_demorado.cfuncionario %></td>
-
         </tr>
       <% end %>
     </table> 
