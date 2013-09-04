@@ -31,7 +31,7 @@ class TareasController < ApplicationController
   def new
     @tarea = Tarea.new
     @tarea.actividad_id = params[:actividad_id]
-    #@tarea.tarea_ant_id = @tarea.anterior.id if @tarea.anterior && !@tarea.anterior.es_logica?
+    @tarea.tarea_ant_id = @tarea.anterior.id if @tarea.anterior && !@tarea.anterior.es_logica?
     #@tarea.adjuntos.build
     #@tarea.adjuntos.first.cargos_estructuras_adjuntos.build
     @logicas_opciones = { :prompt => '-- Seleccione -- '}
@@ -114,7 +114,7 @@ class TareasController < ApplicationController
       Expediente.transaction do
         @expediente = Expediente.find(params[:eid])
         @tarea_actual = Tarea.find(params[:tid])
-        tarea_anterior_id = @expediente.tarea_actual_id
+        tarea_anterior_id = @expediente.tarea_actual.id
       
         actividad = @tarea_actual.actividad
         procedimiento = actividad.procedimiento
@@ -122,14 +122,12 @@ class TareasController < ApplicationController
         @tarea_expediente_actual = TareaExpediente.crear!(
           :procedimiento_id => procedimiento.id,
           :expediente_id => @expediente.id,
-          :tarea_id => current_usuario.id,
-          :usuario_inicio_id => @expediente.usuario_id   
+          :tarea_id => @tarea_actual.id,
+          :usuario_inicio_id => current_usuario.id
         )         
         
         @expediente.update_attributes(
-          :tarea_expediente_actual => @tarea_expediente_actual, 
-          :tarea_actual => @tarea_actual,
-          :tarea_anterior_id => tarea_anterior_id,
+          :tarea_expediente_actual_id => @tarea_expediente_actual.id,
           :estado => Expediente.estado_procesando
         )
         @tarea_siguiente = @expediente.tarea_siguiente                

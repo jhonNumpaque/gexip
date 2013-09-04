@@ -2,7 +2,8 @@ class TareaExpediente < ActiveRecord::Base
   belongs_to :procedimiento
   belongs_to :expediente
   belongs_to :tarea
-  
+  belongs_to :usuario_inicio, class_name: 'Usuario'
+
   validates :procedimiento_id, :presence => true
   validates :expediente_id, :presence => true
   validates :tarea_id, :presence => true

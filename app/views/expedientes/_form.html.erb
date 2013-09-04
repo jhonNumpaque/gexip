@@ -19,7 +19,7 @@
   <% end %>  
 
   <div class="rows">
-    <div class="span10 well cajaexp">
+    <div class="span10 well cajaexp" style="background-color:#F5FFC0">
       <h4>Datos Básicos</h4>
       <hr />
       <div class="control-group select required">
@@ -31,12 +31,12 @@
         <%= f.label :ente_id, 'Cédula/Nombre y Apellido', :class => 'control-label' %>
         <div class="controls">          
           <div class="input-append">            
-            <%= f.text_field :numero_documento, :style => 'width: 80px'  %>
-            <%= f.text_field :ente_id, :style => 'width: 288px', :readonly => true, :id => 'nombre-ente' %>          
-            <button class="btn" type="button" onclick="mostrarPopup()"><i class="icon-search"></i></button>            
+            <%= text_field_tag :expediente_numero_documento, nil, :style => 'width: 80px'  %>
+            <%= f.hidden_field :ente_id %>
+            <%= text_field_tag :ente_nombre, nil, :class => 'span9', :readonly => true, :id => 'nombre-ente' %>
+            <button class="btn" type="button" onclick="mostrarPopup()"><i class="icon-search"></i></button>
             <button class="btn btn-limpiar" type="button" rel="ente" title="Limpiar campo"><i class="icon-remove-sign"></i></button>            
           </div>
-          <%= f.hidden_field :ente_id %>
         </div>
       </div>       
 
@@ -44,15 +44,14 @@
         <%= f.label :procedimiento_id, 'Procedimiento', :class => 'control-label' %>
         <div class="controls">
           <div class="input-append">
-            <%= text_field_tag :procedimiento_nombre, nil, :style => 'width: 180px', :id => 'nombre-procedimiento'  %>            
+            <%= text_field_tag :procedimiento_nombre, nil, :class => 'span10', :id => 'nombre-procedimiento', :readonly => true  %>
+            <%= f.hidden_field :procedimiento_id %>
             <button class="btn" type="button" onclick="mostrarPopupProcedimientos()"><i class="icon-search"></i></button>
             <button class="btn btn-limpiar" type="button" rel="procedimiento" title="Limpiar campo"><i class="icon-remove-sign"></i></button>            
           </div>
-          <%= f.hidden_field :procedimiento_id %>
         </div>
       </div>
 
-      <%= f.input :copia, :label => 'Es Copia' %>
     </div>
     
   </div>
@@ -62,12 +61,12 @@
       <h4>Documentos Requeridos</h4>
       <hr />
       <div id="cont_adjunto">
-        <%= f.fields_for :adjuntos do |build| %>
-          <%= render 'campos_adjunto', :f => build %>
-        <% end %>
+        <%#= f.fields_for :adjuntos do |build| %>
+          <%#= render 'campos_adjunto', :f => build %>
+        <%# end %>
       </div>
 
-      <%= link_to_add_fields("Agregar", f, :adjuntos) %>
+      <%#= link_to_add_fields("Agregar", f, :adjuntos) %>
     </div>
 
     <div class="span10 well">
@@ -86,23 +85,24 @@
 
 <div class="modal" id="buscar-modal" style="display: none; width: 660px; padding: 10px">
   <a class="close" data-dismiss="modal">x</a>
-  <%= render 'buscar_persona' %>
 </div>
 
 <div class="modal" id="buscar-procedimiento-modal" style="display: none; width: 660px; padding: 10px">
   <a class="close" data-dismiss="modal">x</a>
-  <%= render 'buscar_procedimiento' %>
+  <%#= render 'buscar_procedimiento' %>
 </div>
 <%= javascript_include_tag 'plupload', 'formularios_anidados' %>
 <%= stylesheet_link_tag 'jquery.plupload.queue' %>
 <script type="text/javascript">
   function mostrarPopup(){
-    $('#buscar-modal').modal('toggle');
-    $('#search').focus();
+    $.get('<%= buscar_entes_path %>', {}, null, 'script');
+//      $('#buscar-modal').modal('toggle');
+//      $('#search').focus();
   }
   function mostrarPopupProcedimientos(){
-    $('#buscar-procedimiento-modal').modal('toggle');
-    $('#search').focus();
+    $.get('<%= buscar_procedimientos_path %>', {}, null, 'script');
+    //$('#buscar-procedimiento-modal').modal('toggle');
+    //$('#search').focus();
   }
   
   function seleccionarEnte(id, nombre, documento){
@@ -111,11 +111,12 @@
     $("#expediente_numero_documento").val(documento);
     $('#buscar-modal').modal('hide');
   }
-  
+
   function seleccionarProcedimiento(id, nombre){
     $("#expediente_procedimiento_id").val(id);
     $("#nombre-procedimiento").val(nombre);
     $('#buscar-procedimiento-modal').modal('hide');
+    $.get('<%= comprobar_adjuntos_path %>', { procedimiento_id: id }, 'null', 'script');
   }
   
   $(function(){

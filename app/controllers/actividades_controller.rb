@@ -64,7 +64,11 @@ class ActividadesController < ApplicationController
 
   def destroy
     @actividad = Actividad.find(params[:id])
-    @actividad.destroy
+    begin
+      @actividad.destroy
+	  rescue ActiveRecord::DeleteRestrictionError
+		  @error = "El procedimiento no puede ser eliminado!"
+	  end
 
     respond_to do |format|
       format.js

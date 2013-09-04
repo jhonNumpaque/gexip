@@ -27,15 +27,14 @@ class CreateVistasTareas < ActiveRecord::Migration
               t.tiempo_ejecucion,
               t.unidad_tiempo_id,
               t.tipo,
-              t.procedimiento_asoc_id,
-              t.cargo_id,
+              t.cargo_estructura_id,
               t.tarea_sgt_id,
               t.tarea_alt_id,
               t.created_at
 
-            from tareas t join actividades a 
-              on a.id = t.actividad_id join procedimientos p 
-              on p.id = a.procedimiento_id 
+            from tareas t join actividades a
+              on a.id = t.actividad_id join procedimientos p
+              on p.id = a.procedimiento_id
             order by p.id, a.orden, t.orden;'
     execute(sql)
   end

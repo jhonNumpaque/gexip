@@ -47,6 +47,39 @@ class ProcedimientosController < ApplicationController
     end
   end
 
+  def buscar
+		cond = []
+		query_str = []
+		query_val = {}
+		if params[:nombre].present?
+			query_str << 'nombre ilike :nombre'
+			query_val[:nombre] = "%#{params[:nombre]}%"
+		end
+		if query_str.present?
+			cond[0] = query_str.join('and')
+			cond[1] = query_val
+		end
+
+		@procedimientos = Procedimiento.aprobados.where(cond).page(params[:page]).per(10)
+
+		respond_to do |format|
+			format.js
+		end
+  end
+
+  def comprobar_adjuntos
+		@procedimiento = Procedimiento.find(params[:procedimiento_id])
+
+		@adjuntos = @procedimiento.actividades.order('orden').first.tareas.order('orden').first.adjuntos if @procedimiento
+
+		puts "---------------------------"
+		puts @adjuntos.inspect
+
+		respond_to do |format|
+			format.js
+		end
+  end
+
   # GET /procedimientos/1/edit
   def edit
     @from_tree = params[:from].present?
@@ -105,31 +138,48 @@ class ProcedimientosController < ApplicationController
     begin
       @procedimiento.destroy
       flash[:notice] = "Procedimiento Eliminado!"
-    rescue ActiveRedord::DeleteRestrictionError
-      flash[:alert] = "El procedimiento no puede ser eliminado!"
+    rescue ActiveRecord::DeleteRestrictionError
+      @error = "El procedimiento no puede ser eliminado!"
     end
 
     respond_to do |format|
       format.html { redirect_to procedimientos_url }
-      format.json { head :no_content }
+      format.js
     end
   end
 
   def aprobables
     @a_aprobar = Procedimiento.a_aprobar
-    @aprobados = Procedimiento.aprobados
+    aprobados = Procedimiento.aprobados.includes(:version_aprobada => :version)
+    @aprobados = []
+    aprobados.each do |ap|
+	    if ap.versions.length > 1
+		    @aprobados << ap.version_aprobada.version.reify
+	    else
+		    @aprobados << ap
+			end
+    end
     @borradores = Procedimiento.borradores
   end
 
   def aprobar
 		procedimiento = Procedimiento.find(params[:id])
-		procedimiento.aprobar!
+		case params[:tipo]
+			when 'aprobar' then
+				procedimiento.aprobar!
+				flash[:notice] = 'Procedimiento aprobado!'
+			when 'desaprobar' then
+				procedimiento.desaprobar!
+				flash[:notice] = 'Procedimiento desaprobado!'
+		end
 
 		redirect_to :aprobables
   end
 
   def bloquear
 		procedimiento = Procedimiento.find(params[:id])
+		puts params[:tipo]
+		puts params[:tipo].class
 		params[:tipo] == "true" ? procedimiento.desbloquear! : procedimiento.bloquear!
 
 		redirect_to :aprobables

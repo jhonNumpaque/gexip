@@ -1,20 +1,26 @@
 class Procedimiento < ActiveRecord::Base
+	has_paper_trail :ignore => [:bloqueado,:estado]
+
 	validates :nombre, :presence => true	
 	validates :objetivo, :presence => true	
 	validates :elabora_usuario, :presence => true		
 	validates :serieproceso_id, :presence => true		
 	
 	has_many :actividades, :dependent => :restrict
+	has_many :tareas, :through => :actividades
 	belongs_to :elaborador, :class_name => 'Usuario', :foreign_key => 'elabora_usuario'
 	belongs_to :revisador, :class_name => 'Usuario', :foreign_key => 'revisado_usuario'
 	belongs_to :aprobador, :class_name => 'Usuario', :foreign_key => 'aprobado_usuario'
 	belongs_to :subproceso, :foreign_key => 'serieproceso_id', :counter_cache => true, :conditions => "serieprocesos.type = 'Subproceso'"
 	belongs_to :proceso, :foreign_key => 'serieproceso_id', :counter_cache => true, :conditions => "serieprocesos.type = 'Proceso'"
 	belongs_to :serieproceso, :foreign_key => 'serieproceso_id'
+	has_one :version_aprobada, :foreign_key => :item_id, :conditions => { tipo_item: 'Procedimiento' }
 
 	scope :a_aprobar, where(estado: 'aprobable')
 	scope :aprobados, where(estado: 'aprobado')
 	scope :borradores, where(estado: 'pendiente')
+
+	before_update :marcar_como_borrador
 	
 	
 	accepts_nested_attributes_for :actividades, :reject_if => lambda { |a| a[:descripcion].blank? }, :allow_destroy => true
@@ -24,15 +30,35 @@ class Procedimiento < ActiveRecord::Base
 	end
 
 	def total_tareas
-		Tarea.where('actividad_id in (?)', self.actividades.select('id').map(&:id)).count
+		tareas.count
+	end
+
+	def aprobado
+		self.version_aprobada.version.reify if self.version_aprobada.present?
 	end
 
 	def por_autorizar?
-		self.estado == 'autorizar'
+		self.estado == 'aprobable'
 	end
 
 	def aprobar!
 		self.update_attribute(:estado, 'aprobado')
+		version_ap = VersionAprobada.where(item_id: self.id, tipo_item: self.class.to_s).first
+		if version_ap
+			version_ap.update_attribute(:version_id, self.versions.last.id)
+		else
+			VersionAprobada.create(item_id: self.id, tipo_item: self.class.to_s, version_id: self.versions.last.id)
+		end
+		self.bloquear!
+		self.aprobar_actividades!
+	end
+
+	def aprobar_actividades!
+		self.actividades.map(&:aprobar!)
+	end
+
+	def desaprobar!
+		self.update_attribute(:estado, 'aprobable')
 	end
 
 	def bloquear!
@@ -53,7 +79,7 @@ class Procedimiento < ActiveRecord::Base
 	end
 
 	def solicitar_autorizacion
-		self.update_attribute(:estado, 'autorizar')
+		self.update_attribute(:estado, 'aprobable')
 	end
 
 	def actividades_completas?
@@ -122,4 +148,11 @@ class Procedimiento < ActiveRecord::Base
       return false
     end
   end
+
+	def marcar_como_borrador
+		campos_cambios = ['nombre', 'objetivo', 'definiciones']
+		if (campos_cambios - self.changes.keys).length < 3
+			self.estado = 'pendiente'
+		end
+	end
 end

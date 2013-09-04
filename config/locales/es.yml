@@ -106,6 +106,7 @@ es:
       - noviembre
       - diciembre
     formats:
+      fechahora: "%d-%b-%Y"
       short: "%d de %b"
       default: "%d/%m/%Y"
       long: "%A, %d de %B de %Y"

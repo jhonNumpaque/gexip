@@ -1,0 +1,3 @@
+<% if @adjuntos.present? %>
+  $('#cont_adjunto').html('<%= escape_javascript(render '/tareas/adjuntos') %>');
+<% end %>

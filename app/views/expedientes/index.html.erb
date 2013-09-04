@@ -11,13 +11,10 @@
   <% if @expedientes.present? %>
     <table class="table table-striped table-bordered table-condensed">
       <tr>
-        <th>Numero</th>
+        <th>N&uacute;mero</th>
         <th>Procedimiento</th>
-        <th>Ente</th>
-        <!-- <th>Usuario</th> -->
-        <th>Descripcion</th>
-                
-
+        <th>Solicitante</th>
+        <th>Descripci&oacute;n</th>
         <th></th>
       </tr>
       <% @expedientes.each do |expediente| %>
@@ -28,8 +25,7 @@
             <%#= link_to expediente.procedimiento.nombre, expediente %>
           </td>
           <td><%= expediente.ente.nombre_completo %></td>
-          <!-- <td><%#= expediente.usuario_ingreso.funcionario.nombre_completo %></td> -->
-          <td><%= truncate(expediente.descripcion, :length => 80) %></td>          
+          <td><%= truncate(expediente.descripcion, :length => 80) %></td>
           
           <td>
 

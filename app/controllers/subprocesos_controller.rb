@@ -102,7 +102,7 @@ class SubprocesosController < ApplicationController
       @subproceso.destroy
       flash[:notice] = "Subproceso eliminado!"
     rescue ActiveRecord::DeleteRestrictionError
-      flash[:alert] = "No se puede eliminar el Subproceso"
+      @error = "No se puede eliminar el Subproceso"
     end
 
     respond_to do |format|

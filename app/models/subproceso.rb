@@ -1,8 +1,11 @@
 class Subproceso < Serieproceso
+	has_paper_trail
+
   # relacion
   belongs_to :proceso, :foreign_key => :serieproceso_id
   belongs_to :cargo, :foreign_key => :cargo_id
-  has_many :procedimientos,  :foreign_key => :serieproceso_id, :dependent => :restrict	
+  has_many :procedimientos,  :foreign_key => :serieproceso_id, :dependent => :restrict
+	has_one :version_aprobada, :foreign_key => :item_id, :conditions => { tipo_item: 'Subroproceso' }
 
   
   #constantes
@@ -12,4 +15,8 @@ class Subproceso < Serieproceso
   def codigo_nombre
     "#{codigo} #{nombre}"
   end
+
+	def aprobado
+		self.version_aprobada.version.reify if self.version_aprobada.present?
+	end
 end

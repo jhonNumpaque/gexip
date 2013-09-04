@@ -68,7 +68,7 @@
 	<tbody id='pso-body'>
 		<% if @actividades.present? -%>
 			<% for actividad in @actividades -%>
-				<tr>
+				<tr id="pso-<%= actividad.id %>">
 					<%= render 'actividad', actividad: actividad %>
 				</tr>
 			<% end -%>

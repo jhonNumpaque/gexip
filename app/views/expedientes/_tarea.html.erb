@@ -16,7 +16,7 @@
     <%= vista_tarea.nombre %><br />        
       <small><%= vista_tarea.actividad_descripcion %></small>      
   </td>                        
-  <td>
+  <td style="width: 100px;">
     <% if tarea_actual.id == vista_tarea.id %>
       <%= "#{content_tag(:i, '', :class => 'icon-time')} #{tarea_expediente_actual.tiempo_ejecucion[:diff]}".html_safe  %> <br />
       <small>Inicio: <%= l(tarea_expediente_actual.created_at, :format => :fechahora)  %> </small>

@@ -19,16 +19,16 @@
 		  		<thead>
 		  			<tr>
 		  			  <th>Nombre</th>
-		  				<th>Última modificación</th>
-              <th></th>
+		  				<th class='span2'>Última modificación</th>
+              <th class='span1'></th>
 		  			</tr>
 		  		</thead>
 		  		<tbody>
 						<% @a_aprobar.each do |a_aprobar| %>
 							<tr>
-								<td><%= a_aprobar.nombre %></td>
+								<td><%= link_to a_aprobar.nombre, procedimiento_path(a_aprobar) %></td>
 								<td><%= l(a_aprobar.updated_at) %></td>
-                <td><%= link_to 'Aprobar', aprobar_procedimiento_path(id: a_aprobar.id, tipo: aprobado.bloqueado?), :class => 'btn btn-primary' %></td>
+                <td><%= link_to 'Aprobar', aprobar_procedimiento_path(id: a_aprobar.id, tipo: 'aprobar'), :class => 'btn btn-primary' %></td>
 							</tr>
 		  			<% end %>
 		  		</tbody>
@@ -44,23 +44,18 @@
 		  		<thead>
 		  			<tr>
 		  				<th>Nombre</th>
-              <th>Bloqueado</th>
-              <th>Última modificación</th>
-              <th></th>
+              <th class='span2'>Última modificación</th>
+              <th class='span1'></th>
             </tr>
 		  		</thead>
 		  		<tbody>
 						<% @aprobados.each do |aprobado| %>
 							<tr>
-								<td><%= aprobado.nombre %></td>
-                <td><%= si_no(aprobado.bloqueado) %></td>
+								<td><%= link_to aprobado.nombre, procedimiento_path(aprobado) %></td>
 								<td><%= l(aprobado.updated_at) %></td>
                 <td>
-                  <%= link_to 'Desbloquear', lock_procedimiento_path(id: aprobado.id, tipo: aprobado.bloqueado?), :class => 'btn btn-info' if aprobado.bloqueado? %>
-                  <%= link_to 'Bloquear', "#", :class => 'btn btn-info',
-                              confirm: '¿Está seguro?' unless aprobado.bloqueado? %>
-                  <%= link_to 'Desaprobar', aprobar_procedimiento_path(id: aprobado.id, tipo: 'a'),
-                              :class => 'btn btn-primary', confirm: '¿Está seguro?' %>
+                  <%= link_to 'Desaprobar', aprobar_procedimiento_path(id: aprobado.id, tipo: 'desaprobar'),
+                              :class => 'btn btn-primary', confirm: '¿Está seguro de desaprobar?' %>
                 </td>
 							</tr>
 		  			<% end %>
@@ -83,7 +78,7 @@
           <tbody>
           <% @borradores.each do |borrador| %>
             <tr>
-              <td><%= borrador.nombre %></td>
+              <td><%= link_to borrador.nombre, procedimiento_path(borrador) %></td>
               <td><%= l(borrador.updated_at) %></td>
             </tr>
           <% end %>

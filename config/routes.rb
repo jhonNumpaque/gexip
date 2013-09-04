@@ -12,70 +12,74 @@ Gexip::Application.routes.draw do
 	match 'procedimientos/:procedimiento_id/comprobar' => 'procedimientos#comprobar', :as => :comprobar_procedimiento
 	match 'procedimientos/aprobar/lista' => 'procedimientos#aprobables', :as => :aprobables
 	match 'procedimientos/:id/:tipo/aprobar' => 'procedimientos#aprobar', :as => :aprobar_procedimiento
-	match 'procedimientos/:id/bloquear/:tipo' => 'procedimientos#bloquear', :as => :lock_procedimiento
+	match 'procedimientos/:id/bloquear/:tipo' => 'procedimientos#bloquear', :as => :bloquear_procedimiento
+	match 'procedimientos/buscar' => 'procedimientos#buscar', :as => :buscar_procedimientos
+	match 'procedimientos/comprobar_adjuntos' => 'procedimientos#comprobar_adjuntos', :as => :comprobar_adjuntos
+
+	match 'entes/buscar' => 'entes#buscar', :as => :buscar_entes
 
 	get "consultas/index"
 
-    # tree procedimientos y cia
+	# tree procedimientos y cia
 	match 'obtener/arbol' => 'procedimientos#jstree', :as => :procedimientos_jstree
-    match 'procedimientos/ni' => 'procedimientos#new_index', :as => :new_procedimientos_index
+	match 'procedimientos/ni' => 'procedimientos#new_index', :as => :new_procedimientos_index
 
-  resources :organismos_internos
+	resources :organismos_internos
 
-  resources :personas_juridicas
+	resources :personas_juridicas
 
-  resources :personas_fisicas
+	resources :personas_fisicas
 
-  resources :funcionarios
+	resources :funcionarios
 
-  resources :estructuras
+	resources :estructuras
 
-  resources :expedientes
-  
-  resources :unidades_tiempos
-  resources :actividades
-  resources :tareas
+	resources :expedientes
 
-  resources :subprocesos
-  match 'subprocesos/imprimir/reporte_formato_39' => 'subprocesos#reporte_formato_39', :as => :reporte_formato_39
+	resources :unidades_tiempos
+	resources :actividades
+	resources :tareas
 
-  resources :procesos
-  match 'procesos/imprimir/reporte_formato_38' => 'procesos#reporte_formato_38', :as => :reporte_formato_38
-    
-  resources :macroprocesos
-  match 'macroprocesos/imprimir/reporte_formato_37/' => 'macroprocesos#reporte_formato_37', :as => :reporte_formato_37
+	resources :subprocesos
+	match 'subprocesos/imprimir/reporte_formato_39' => 'subprocesos#reporte_formato_39', :as => :reporte_formato_39
 
-  resources :procedimientos
+	resources :procesos
+	match 'procesos/imprimir/reporte_formato_38' => 'procesos#reporte_formato_38', :as => :reporte_formato_38
 
-  match 'denegado' => 'usuarios#denegado', :as => 'denegado'
-  
-  resources :barrios
+	resources :macroprocesos
+	match 'macroprocesos/imprimir/reporte_formato_37/' => 'macroprocesos#reporte_formato_37', :as => :reporte_formato_37
 
-  resources :paises
+	resources :procedimientos
 
-  resources :ciudades
+	match 'denegado' => 'usuarios#denegado', :as => 'denegado'
 
-  resources :tipos_documentos
+	resources :barrios
 
-  resources :cargos
+	resources :paises
 
-  resources :entes
+	resources :ciudades
 
-  resources :roles
-  
-  resources :informes
+	resources :tipos_documentos
 
-  resources :consultas
-  
-  resources :tiempos_demorados
-  match 'tiempos_demorados/reporte/listar/' => 'tiempos_demorados#listar', :as => :listar
-  devise_for :usuarios, :controllers => { :registrations => "usuarios", :sessions => 'sesiones' } do 
-    get "/login" => "sesiones#new"
-    get "/logout" => "sesiones#destroy"
-  end
+	resources :cargos
+
+	resources :entes
+
+	resources :roles
+
+	resources :informes
+
+	resources :consultas
+
+	resources :tiempos_demorados
+	match 'tiempos_demorados/reporte/listar/' => 'tiempos_demorados#listar', :as => :listar
+	devise_for :usuarios, :controllers => { :registrations => "usuarios", :sessions => 'sesiones' } do
+		get "/login" => "sesiones#new"
+		get "/logout" => "sesiones#destroy"
+	end
 
 #usuarios
-  resources :usuarios
+	resources :usuarios
 	match '/usuarios/datos/cambiar_clave/' => 'usuarios#cambiar_clave', :as => :cambiar_clave
   match '/usuarios/datos/modificar_datos/:id' => 'usuarios#modificar_datos', :as => :modificar_datos
   match '/usuarios/datos/cambiar_clave_grabar/' => 'usuarios#cambiar_clave_grabar', :as => :cambiar_clave_grabar

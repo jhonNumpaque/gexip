@@ -42,8 +42,8 @@
                 <td><%= @expediente.usuario.login %></td>
               </tr>
               <tr>
-                <th>&iquest;Es copia?:</th>
-                <td><%= si_no(@expediente.copia) %></td>
+                <th>Método:</th>
+                <td><%= @tarea_actual.present? ? @tarea_actual.metodo : @tarea_siguiente.metodo %></td>
               </tr>
             </table>
           </fieldset>
@@ -53,6 +53,7 @@
                 :tarea_expediente_actual => @tarea_expediente_actual,
                 :expediente => @expediente,
                 :vista_tarea => @vista_tareas.first if @tarea_siguiente && @tarea_siguiente.es_logica? %>
+
         </div>
 
         <div id="tareas">          
@@ -80,7 +81,7 @@
             <div class="span11">
               <div id="tabContent" class="tab-content">                
                 <%= render 'registros_aplicables' %>                
-                <%= render 'documentos', :expediente => @expediente %>                
+                <%#= render 'documentos', :expediente => @expediente %>
                 <%= render 'observaciones' %>                                
                 <%= render 'seguimiento' %>                                
               </div>              

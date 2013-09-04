@@ -1,0 +1,13 @@
+<table class='table table-condensed'>
+  <tbody>
+    <% @adjuntos.each do |adjunto| %>
+      <tr>
+        <td><%= file_field_tag "adjunto_#{adjunto.id}" %></td>
+        <td><span class="pull-right"><%= adjunto.descripcion %></span></td>
+        <td><span class="pull-right">
+          <%= adjunto.requerido? ? content_tag(:span, 'Requerido', class: 'label label-important') : content_tag(:span, 'Opcional', class: 'label label-success') %>
+        </span></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

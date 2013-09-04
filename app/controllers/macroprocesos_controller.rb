@@ -105,12 +105,12 @@ class MacroprocesosController < ApplicationController
       @macroproceso.destroy
       flash[:notice] = "Macroproceso Eliminado!"
     rescue ActiveRecord::DeleteRestrictionError
-      flash[:alert] = "No se puede eliminar el macroproceso"
+      @error = "No se puede eliminar el macroproceso"
     end
 
     respond_to do |format|
       format.html { redirect_to macroprocesos_url}
-      format.json { head :no_content }
+      format.js
     end
   end
   

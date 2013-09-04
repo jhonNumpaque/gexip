@@ -5,7 +5,7 @@
 
     <h3>Buscar Procedimiento</h3>
     <div id="busqueda-procedimientos">
-      <%= form_tag procedimientos_path, :remote => true, :method => :get do%>
+      <%= form_tag buscar_procedimientos_path, :remote => true, :method => :get do%>
         <%= label_tag 'Nombre' %>
         <%= text_field_tag 'nombre', params[:nombre] %>
         <%= label_tag 'Subproceso' %>
@@ -20,23 +20,26 @@
 <div>
   <fieldset>
     <legend>Resultados</legend>
-    <table id="tabla-resultados-procedimientos" class="table table-striped table-bordered table-condensed">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Acci&oacute;n</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% procedimientos = Procedimiento.all %>
-        <% procedimientos.take(10).each do |procedimiento|  %>
+    <% if  @procedimientos.present? -%>
+      <table id="tabla-resultados-procedimientos" class="table table-striped table-bordered table-condensed">
+        <thead>
           <tr>
-            <td><%= link_to procedimiento.nombre, '#', :onclick =>  "seleccionarProcedimiento('#{procedimiento.id}', '#{procedimiento.nombre}')" %></td>
-            <td><%= link_to icon_tag('Seleccionar', :class => 'icon-plus'), '#', :onclick => "seleccionarProcedimiento('#{procedimiento.id}', '#{procedimiento.nombre}')" %></td>
+            <th>Nombre</th>
+            <th>Acci&oacute;n</th>
           </tr>
-        <% end %>
-
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <% @procedimientos.each do |procedimiento|  %>
+            <tr>
+              <td><%= link_to procedimiento.nombre, '#', :onclick =>  "seleccionarProcedimiento('#{procedimiento.id}', '#{procedimiento.nombre}')" %></td>
+              <td><%= link_to icon_tag('Seleccionar', :class => 'icon-plus'), '#', :onclick => "seleccionarProcedimiento('#{procedimiento.id}', '#{procedimiento.nombre}')" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= paginate @procedimientos, :remote => true %>
+    <% else -%>
+      <p class="alert alert-warning">No hay registros</p>
+    <% end -%>
   </fieldset>
 </div>
