@@ -19,10 +19,10 @@
       </tr>
       <% @expedientes.each do |expediente| %>
         <tr>
-          <td><%= expediente.numero %></td>          
+          <td><%= link_to expediente.numero, expediente %></td>
           <td>
             <span class="label label-info"><%= expediente.estado %></span>
-            <%= link_to expediente.procedimiento.nombre, expediente %>
+            <%#= link_to expediente.procedimiento.nombre, expediente %>
           </td>
           <td><%= expediente.ente.nombre_completo %></td>
           <td><%= truncate(expediente.descripcion, :length => 80) %></td>

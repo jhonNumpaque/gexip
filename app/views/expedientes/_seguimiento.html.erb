@@ -1,3 +1,44 @@
+<style>
+  .pendiente{ background-color: #fcf8e3; color: #c09853;}
+  .realizado{ background-color: #F0F0F0; color: #8B8B8B;}
+  .actual{ background-color: #468847; color: #dff0d8;}
+</style>
+
 <div id="tab-seguimiento" class="tab-pane">
-  seguimiento
+  <table class="table table-condensed">
+    <thead>
+    <tr>
+      <th>Tarea</th>
+      <th>Tipo</th>
+      <th>Fecha Inicio</th>
+      <th>Fecha Fin</th>
+      <th>Actividad</th>
+      <th>Procedimiento</th>
+      <th>Dependencia</th>
+      <th>Funcionario</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% if @seguimiento_tareas.present? %>
+        <% @seguimiento_tareas.each do |tarea| %>
+            <tr class="<%= definir_clase_seguimiento(tarea, @vista_expediente_proceso, @expediente.tarea_expediente_actual) %>">
+              <td><%= tarea.nombre %></td>
+              <td><%= tarea.tipo %></td>
+              <td><%= mostrar_fecha_inicio(tarea, @vista_expediente_proceso) %></td>
+              <td><%= mostrar_fecha_fin(tarea, @vista_expediente_proceso) %></td>
+              <td><%= tarea.actividad_descripcion %></td>
+              <td><%= tarea.procedimiento_nombre %></td>
+              <td><%= tarea.cargo_estructura.estructura.nombre %></td>
+              <td><%= mostrar_funcionario(tarea, @vista_expediente_proceso) %> </td>
+            </tr>
+        <% end %>
+
+    <% else %>
+        <tr>
+          <td></td>
+        </tr>
+    <% end %>
+
+    </tbody>
+  </table>
 </div>

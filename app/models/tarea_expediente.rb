@@ -3,6 +3,8 @@ class TareaExpediente < ActiveRecord::Base
   belongs_to :expediente
   belongs_to :tarea
   belongs_to :usuario_inicio, class_name: 'Usuario'
+  has_many :adjuntos_tareas_expedientes
+  has_many :adjuntos, :through => :adjuntos_tareas_expedientes, :source => :adjunto
 
   validates :procedimiento_id, :presence => true
   validates :expediente_id, :presence => true
@@ -72,5 +74,14 @@ class TareaExpediente < ActiveRecord::Base
     tiempo_final = self.fecha_fin if self.fecha_fin.present?    
     
     Time.diff(self.created_at, tiempo_final)
+  end
+
+  def tiempo_ejecucion_normalizado
+    tiempo_ejecucion = self.tiempo_ejecucion
+    minutos_anho = tiempo_ejecucion[:year] * Estructura::Minutos_Anho
+    minutos_mes = tiempo_ejecucion[:month] * Estructura::Minutos_Mes
+    minutos_dias = tiempo_ejecucion[:month] * Estructura::Minutos_Dias
+    minutos = tiempo_ejecucion[:minute]
+    minutos += minutos_anho + minutos_mes + minutos_dias
   end
 end

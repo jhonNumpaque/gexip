@@ -17,6 +17,7 @@ class Tarea < ActiveRecord::Base
   has_one :version_aprobada, :foreign_key => :item_id, :conditions => { tipo_item: 'Tarea' }
 
   has_many :tareas_dependientes, :foreign_key => :logica_relacionada_id, :class_name => 'Tarea'
+  has_many :tareas_expedientes
   has_many :adjuntos, :dependent => :destroy
 
   # CONSTANTE

@@ -1,4 +1,5 @@
 class CiudadesController < ApplicationController
+  before_filter :authenticate_usuario!
   # GET /ciudades
   # GET /ciudades.json
   def index

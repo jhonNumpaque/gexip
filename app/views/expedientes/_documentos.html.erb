@@ -1,33 +1,62 @@
-<div id="tab-documentos" class="tab-pane">
+<div id="tab-documentos" class="tab-pane active">
+  <div class="clear"></div>
+  <tbody>
+  <% if expediente.tarea.adjuntos.present? %>
+      <%#= render 'adjuntos_tareas_expedientes/form' %>
 
-  <ul class="nav nav-tabs" id="tabDocs">
-    <li class="active">
-      <%= link_to 'Aportados por el ciudadano', '#tab-docs-ciudadano' %>                
-    </li>
-    <li><%= link_to 'Todos los documentos', '#tab-docs-all', 'data-togle' => 'tab' %></li>                    
-  </ul>                  
+      <%= form_tag('/subir_documento', multipart: true, :class => 'form-horizontal') %>
+      <%#= form_for @adjunto_tarea_expediente, html: {class: 'form-horizontal'} do |f| %>
+      <% expediente.tarea.adjuntos.each do |a| %>
+          <div class="control-group">
+            <%= label_tag a.id, a.descripcion, class: 'control-label' %>
+            <div class="controls">
+              <% if verificar_documento(a, expediente.adjuntos_tareas_expedientes) %>
+                  <%= icon_tag('', :class => 'icon-ok') %>
+              <% else %>
+                  <%= file_field_tag 'adjunto', :id => a.id, :name => "adjunto[#{a.id}]" %>
+              <% end %>
 
-  <div id="tabDocContent" class="tab-content">
-    <div id="tab-docs-ciudadano" class="tab-pane active well">
-      <div class="btn-group">
-        <%= link_to icon_tag('Nuevo documento', :class => 'icon-play icon-white'), '#', :class => 'btn btn-primary' %>
-        <%= link_to icon_tag('Descargar en zip', :class => 'icon-ok-sign icon-white'), '#', class: 'btn btn-primary' %>                        
+            </div>
+          </div>
+          <%# end %>
+      <% end %>
+      <%= hidden_field_tag 'tarea_expediente', expediente.tarea_expediente_actual_id %>
+      <%= hidden_field_tag 'expediente', expediente.id %>
+      <div class="control-group">
+        <div class="controls">
+          <%= submit_tag 'Subir', :class => 'btn btn-primary' %>
         </div>
-
-        <table class="table table-condensed table-striped">                        
-          <tbody>
-            <% expediente.adjuntos.each do |adjunto| %>            
-              <tr>                      
-                <td><%= adjunto.data %></td>                              
-                <td><button class="btn btn-primary">Acciones</button></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
       </div>
+  <% end %>
 
-      <div id="tab-docs-all" class="tab-pane">
-        all docs
-      </div>
-    </div>                                      
-  </div>
+  <table class="table table-condensed table-striped">
+    <thead>
+    <tr>
+      <th>Documento</th>
+      <th>Tarea</th>
+      <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% if expediente.adjuntos_tareas_expedientes.present? %>
+        <% expediente.adjuntos_tareas_expedientes.each do |a| %>
+            <tr>
+              <td><%= a.adjunto.descripcion %></td>
+              <td><%= a.adjunto.tarea.nombre %></td>
+              <td>
+                <%= link_to icon_tag('Descargar', :class => 'icon-download-alt'), descargar_documento_path(a.id) %>
+                <%= link_to icon_tag('Eliminar', :class => 'icon-trash'), a, confirm: '¿Está seguro de eliminar este registro?. Esta acción no se puede deshacer', method: :delete %>
+              </td>
+            </tr>
+
+        <% end %>
+    <% else %>
+        <tr>
+          <td>No se registran documentos</td>
+          <td></td>
+          <td></td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
