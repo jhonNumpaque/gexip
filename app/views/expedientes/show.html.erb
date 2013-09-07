@@ -50,35 +50,30 @@
                 :tarea_siguiente => @tarea_siguiente,
                 :tarea_expediente_actual => @tarea_expediente_actual,
                 :expediente => @expediente,
-                :vista_tarea => @vista_tareas.first if @expediente.en_proceso? && @tarea_actual && @tarea_siguiente.es_logica? %>
+                :vista_tarea => @vista_tareas.first if @expediente.procesable? && @tarea_actual && @tarea_siguiente.es_logica? %>
 
           <%= render 'traslado_toolbar',
                      :tarea_siguiente => @tarea_siguiente,
                      :tarea_expediente_actual => @tarea_expediente_actual,
                      :expediente => @expediente,
-                     :vista_tarea => @vista_tareas.first if @expediente.en_proceso? && @tarea_actual && @tarea_siguiente.es_traslado? %>
+                     :vista_tarea => @vista_tareas.first if @expediente.procesable? && @tarea_actual && @tarea_siguiente.es_traslado? %>
 
           <%= render 'archivado_toolbar',
                      :tarea_siguiente => @tarea_siguiente,
                      :tarea_expediente_actual => @tarea_expediente_actual,
                      :expediente => @expediente,
-                     :vista_tarea => @vista_tareas.first if @expediente.en_proceso? && @tarea_actual && @tarea_siguiente.es_traslado? %>
+                     :vista_tarea => @vista_tareas.first if @expediente.procesable? && @tarea_actual && @tarea_siguiente.es_archivado? %>
 
       <%= render 'logica_toolbar',
                  :tarea_siguiente => @tarea_siguiente,
                  :tarea_expediente_actual => @tarea_expediente_actual,
                  :expediente => @expediente,
                  :vista_tarea => @vista_tareas.first if @tarea_siguiente && @tarea_siguiente.es_logica? %>
-
-        <div id="tareas">          
-          <%#= @vista_tareas.blank? %>
-          <%= render 'tareas', :vista_tareas => @vista_tareas unless (!@expediente.en_proceso? || @vista_tareas.blank?) || (@tarea_siguiente && @tarea_siguiente.es_logica?) %>
-        </div>
-    </div>
+      </div>
 
     <div id="tareas">
       <%#= @vista_tareas.blank? %>
-      <%= render 'tareas', :vista_tareas => @vista_tareas unless @vista_tareas.blank? || (@tarea_siguiente && @tarea_siguiente.es_logica?) %>
+      <%= render 'tareas', :vista_tareas => @vista_tareas unless (!@expediente.procesable? || @vista_tareas.blank?) || (@tarea_siguiente && @tarea_siguiente.es_logica? || @tarea_siguiente.es_archivado?) %>
     </div>
 
     <div class="span11 well-simple">

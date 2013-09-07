@@ -54,14 +54,16 @@ class ExpedientesController < ApplicationController
 
       # .del_cargo(current_usuario.ente.cargo_id)
 
-      @vista_tareas = VistaTarea.order('actividad_id,orden').limit(2).where(query_string,query_values).all
-      @vista_tareas = VistaTarea.order('actividad_id,orden').limit(2).where(query_string,query_values)
+      @vista_tareas = VistaTarea.del_cargo_estructura(current_usuario.funcionario.cargo_estructura_id).order('actividad_id,orden').limit(2).where(query_string,query_values).all
       #busca las tareas realizadas
-      @seguimiento_tareas = VistaTarea.order('actividad_id,orden').where(:procedimiento_id => actividad.procedimiento_id)
+
       #buscar todas las tareas
-      @vista_expediente_proceso = VistaExpedienteProceso.select('DISTINCT tarea_id, tarea_expediente_fecha_fin, tarea_expediente_fecha_inicio, , tarea_expediente_usuario_inicio, tarea_expediente_usuario_fin').where(:expediente_id => @expediente).group('tarea_id, tarea_expediente_fecha_fin, tarea_expediente_fecha_inicio, tarea_expediente_usuario_inicio, tarea_expediente_usuario_fin')
+
 
     end
+    @seguimiento_tareas = VistaTarea.order('actividad_id,orden').where(:procedimiento_id => @tarea_actual.actividad.procedimiento_id).all
+    @vista_expediente_proceso = VistaExpedienteProceso.select('DISTINCT tarea_id, tarea_expediente_fecha_fin, tarea_expediente_fecha_inicio, tarea_expediente_usuario_inicio, tarea_expediente_usuario_fin').where(:expediente_id => @expediente).group('tarea_id, tarea_expediente_fecha_fin, tarea_expediente_fecha_inicio, tarea_expediente_usuario_inicio, tarea_expediente_usuario_fin').all
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @expediente }

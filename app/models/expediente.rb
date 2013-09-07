@@ -40,6 +40,10 @@ class Expediente < ActiveRecord::Base
   # callbacks
   before_validation :generar_numero, :establecer_estado, :asignar_clave
   after_create :iniciar_proceso
+
+  def procesable?
+		self.estado == 'NUEVO' || self.estado == 'PROCESANDO'
+  end
   
   def generar_numero
     return true unless self.new_record?
