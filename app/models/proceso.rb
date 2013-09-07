@@ -15,4 +15,8 @@ class Proceso < Serieproceso
   def codigo_nombre
     "#{codigo} #{nombre}"
   end
+
+  def self.calcular_tiempo_total
+
+  end
 end

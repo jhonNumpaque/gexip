@@ -1,0 +1,8 @@
+<div class="well pull-right well-well">
+  <b><%= tarea_siguiente.nombre %></b><br />
+  <div class="pull-right">
+    <%= link_to 'Archivar', iniciar_archivado_path(eid: expediente.id, tid: tarea_siguiente.id), :class => 'btn btn-primary',
+                :id => 'tarea_archivar', :rel => "#{expediente.id}-#{tarea_siguiente.id}",
+                :confirm => '¿Está seguro de archivar este expediente?' %>
+  </div>
+</div>

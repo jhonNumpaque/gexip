@@ -9,19 +9,15 @@
   <br />
 
   <% if @expedientes.present? %>
-  
-<ul class="nav nav-tabs">
-  <li class="tab active"><%= link_to 'Expediente en Proceso', '#', :class => 'pf' %></a></li>
-  <li class="tab"><%= link_to 'Expediente a Recibir', '#', :class => 'pji'  %></li>
-  <li class="tab"><%= link_to 'Expedientes Nuevos', '#', :class => 'pje' %></li>
-</ul>
-
     <table class="table table-striped table-bordered table-condensed">
       <tr>
-        <th>N&uacute;mero</th>
+        <th>Numero</th>
         <th>Procedimiento</th>
-        <th>Solicitante</th>
-        <th>Descripci&oacute;n</th>
+        <th>Ente</th>
+        <th>Usuario</th>
+        <th>Descripcion</th>
+                
+
         <th></th>
       </tr>
       <% @expedientes.each do |expediente| %>
@@ -29,10 +25,11 @@
           <td><%= expediente.numero %></td>          
           <td>
             <span class="label label-info"><%= expediente.estado %></span>
-            <%# link_to expediente.procedimiento.nombre, expediente %>
+            <%= link_to expediente.procedimiento.nombre, expediente %>
           </td>
-          <td><%= expediente.ente_id %></td>
-          <td><%= truncate(expediente.descripcion, :length => 80) %></td>
+          <td><%= expediente.ente.nombre_completo %></td>
+          <td><%= expediente.usuario_ingreso.nombre_completo %></td>
+          <td><%= truncate(expediente.descripcion, :length => 80) %></td>          
           
           <td>
 
@@ -48,7 +45,6 @@
         </tr>
       <% end %>
     </table> 
-
   <% else %>
     <p class="alert-message warning">
       Todavía no hay expedientes, <%= link_to 'agregar', new_expediente_path %>.

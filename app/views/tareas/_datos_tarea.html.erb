@@ -1,7 +1,7 @@
 <div class='inicio_datos tab-pane' id="tab2">
-
   <% if @tarea.logicas_pendientes? %>
       <% if @tarea.una_sola_logica? %>
+          <%= f.hidden_field :logica_relacionada_id, :value => @tarea.logica_pendiente.id %>
           <% if @tarea.logica_pendiente.dos_rutas_pendientes? %>
               <div class="control-group logic-answer">
                 <%= f.label :tipo_logica, required_label('Rutas Lógicas'), class: 'control-label' %>
@@ -9,11 +9,17 @@
                   <%= f.select :tipo_logica, @tarea.logica_pendiente.logica_rutas_pendientes.map{ |t| [t,t.downcase] }, :prompt => true %>
                 </div>
               </div>
+          <% elsif @tarea.logica_pendiente.dos_rutas_posibles? %>
+            <div class="control-group logic-answer">
+              <%= f.label :tarea_ant_id, required_label('Rutas Lógicas'), class: 'control-label' %>
+              <div class="controls">
+                <%= f.collection_select :tarea_ant_id, @tarea.logica_pendiente.dos_rutas_posibles, :id, :tipo_logica_log, :prompt => true %>
+              </div>
+            </div>
           <% else %>
-              <%= f.hidden_field :logica_relacionada_id, :value => @tarea.logica_pendiente.id %>
               <%= f.hidden_field :tipo_logica, :value => @tarea.logica_pendiente.tipo_logica_pendiente %>
           <% end %>
-          <%= f.hidden_field :tarea_ant_id, :value => @tarea.logica_pendiente.id %>
+          <%= f.hidden_field :tarea_ant_id, :value => @tarea.logica_pendiente.id unless @tarea.logica_pendiente.dos_rutas_posibles? %>
       <% else %>
           <div class="control-group logic-answer">
             <%= f.label :tipo_logica, required_label('Lógicas Pendientes'), class: 'control-label' %>
@@ -54,7 +60,7 @@
               <% end %>
             </div>
           </div>
-      <% else %>
+      <% elsif !@tarea.logica_pendiente.dos_rutas_posibles? %>
           <%= f.hidden_field :tarea_ant_id, :value => @tarea.respuesta_pendiente.id %>
           <%= f.hidden_field :tipo_logica, :value => @tarea.respuesta_pendiente.tipo_logica %>
           <div class="control-group logic-answer">
@@ -97,9 +103,10 @@
   </div>
 
   <div class="control-group destiny">
-    <%= f.label :estructura_destino_id, required_label('Estructura Destino'), class: 'control-label' %>
+    <%= f.label :estructura_destino_id, required_label('Destino'), class: 'control-label' %>
     <div class="controls">
-      <%= f.collection_select :estructura_destino_id, Estructura.all, :id, :nombre, :prompt => true %>
+      <%= collection_select :estructura, :destino_id, Estructura.all, :id, :nombre, :prompt => true %>
+      <%= f.collection_select :cargo_estructura_destino_id, {}, :id, :nombre, :prompt => true %>
     </div>
   </div>
 
@@ -111,3 +118,6 @@
     </div>
   </div>
 </div>
+
+<%= linked_combo "tarea_cargo_estructura_destino_id", :linked => "estructura_destino_id",
+   :url => cargo_estructuras_path(format: 'json'), :param => "estructura_id", :display => 'descripcion' %>

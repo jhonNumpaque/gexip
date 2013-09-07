@@ -1,24 +1,28 @@
 function buscar_ente(type,documento) {
 	$.get('/entes/buscar', { type: type, documento: documento }, null, 'script');
 }
+var tab='pf';
 $(function(){
 	$('#expediente_numero_documento').change(function(){
-		buscar_ente('documento',$(this).val());
+		buscar_ente(tab,$(this).val());
 	});
 
     $('.tab a').click(function(){
         $('.tab').attr('class', 'tab');
         switch ($(this).attr('class')) {
             case 'pf':
-                $('#expediente_ente_id').parent().parent().find('label').html('* Cédula/Nombre y Apellido');
+				tab = 'pf';
+                $('#ente_label').html('* Cédula/Nombre y Apellido');
 				$('.cajaexp').css('background-color','#F5FFC0');
                 break;
             case 'pji':
-                $('#expediente_ente_id').parent().parent().find('label').html('* Código/Nombre');
+				tab = 'pji';
+                $('#ente_label').html('* Código/Nombre');
 				$('.cajaexp').css('background-color','#F3E6DA');
                 break;
 			case 'pje':
-                $('#expediente_ente_id').parent().parent().find('label').html('* Código/Nombre');
+				tab = 'pje';
+                $('#ente_label').html('* Código/Nombre');
 				$('.cajaexp').css('background-color','#DAE8F3');
                 break;
         }

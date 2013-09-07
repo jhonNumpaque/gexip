@@ -14,17 +14,23 @@ class Expediente < ActiveRecord::Base
   #Relaciones
   #belongs_to :procedimiento, :foreign_key => :procedimiento_id
   #belongs_to :tarea_actual, :foreign_key => :tarea_actual_id, :class_name => 'Tarea'
-  belongs_to :tarea_anterior, :foreign_key => :tarea_anterior_id, :class_name => 'Tarea'
+  #belongs_to :tarea_anterior, :foreign_key => :tarea_anterior_id, :class_name => 'Tarea'
   belongs_to :tarea_expediente_actual, :foreign_key => :tarea_expediente_actual_id, :class_name => 'TareaExpediente'
   belongs_to :ente, :foreign_key => :ente_id
   belongs_to :usuario
   has_many :tareas_expedientes
+  has_many :tareas, :through => :tareas_expedientes
+  has_many :adjuntos, :through => :tareas, :source => :adjuntos
+  has_many :adjuntos_tareas_expedientes, :through => :tareas_expedientes
+  #para determinar una tarea
+  has_one :tarea, :through => :tarea_expediente_actual
+  #has_many :adjuntos, :through => :tarea, :source => :adjuntos
   #belongs_to :usuario_ingreso, :foreign_key => :usuario_ingreso_id, :class_name => 'Usuario'
   #belongs_to :usuario_finalizado, :foreign_key => :usuario_finalizo_id, :class_name => 'Usuario'
   
   #has_many :tareas_expedientes, :dependent => :destroy
 
-  #accepts_nested_attributes_for :adjuntos, :reject_if => lambda { |a| a[:data].blank? }, :allow_destroy => true
+  #accepts_nested_attributes_for :adjuntos_tareas_expedientes, :reject_if => lambda { |a| a[:data].blank? }, :allow_destroy => true
   
   # CONSTANTE, si se modifica orden o se agrega cambiar métodos relacionados
   ESTADO = %w{NUEVO RECIBIDO TRANSITO RECHAZADO FINALIZADO ANULADO PROCESANDO}
@@ -34,6 +40,10 @@ class Expediente < ActiveRecord::Base
   # callbacks
   before_validation :generar_numero, :establecer_estado, :asignar_clave
   after_create :iniciar_proceso
+
+  def procesable?
+		self.estado == 'NUEVO' || self.estado == 'PROCESANDO'
+  end
   
   def generar_numero
     return true unless self.new_record?
@@ -54,6 +64,14 @@ class Expediente < ActiveRecord::Base
 
   def asignar_clave
 		self.clave = rand(10000..99999) if self.new_record?
+  end
+
+  def en_transito?
+		self.estado == 'TRANSITO'
+  end
+
+  def en_proceso?
+	  self.estado == 'PROCESANDO'
   end
   
   def anyo_ingreso
@@ -80,6 +98,10 @@ class Expediente < ActiveRecord::Base
   def usuario
 		self.tareas_expedientes.first.usuario_inicio
   end
+
+  def tarea_anterior
+		self.tarea_expediente_actual.tarea.tarea_anterior
+  end
   
   def tarea_siguiente
     tarea = self.tarea_expediente_actual.tarea
@@ -88,15 +110,15 @@ class Expediente < ActiveRecord::Base
     cond_vals = { :orden => tarea.orden, :actividad => actividad.id, 
       :proced => actividad.procedimiento_id, :act_orden => actividad.orden }
       
-    if tarea.es_proceso_no? 
-      cond_query += ' and (id <> :tarea_not_id)) '
-      cond_vals[:tarea_not_id] = self.tarea_anterior.tarea_sgt_id
-    elsif tarea.es_proceso_si?
-      cond_query += ' and (id <> :tarea_not_id)) '
-      cond_vals[:tarea_not_id] = self.tarea_anterior.tarea_alt_id
-    else
-      cond_query += ') '
-    end
+    #if tarea.es_proceso_no?
+    #  cond_query += ' and (id <> :tarea_not_id)) '
+    #  cond_vals[:tarea_not_id] = self.tarea_anterior.tarea_sgt_id
+    #elsif tarea.es_proceso_si?
+    #  cond_query += ' and (id <> :tarea_not_id)) '
+    #  cond_vals[:tarea_not_id] = self.tarea_anterior.tarea_alt_id
+    #else
+    #end
+    cond_query += ') '
     cond_query += 'or (procedimiento_id = :proced and actividad_orden > :act_orden)'
     
         

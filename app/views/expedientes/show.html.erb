@@ -1,4 +1,4 @@
-<section>  
+<section>
   <div class="page-header">
     <h1>Expediente</h1>
   </div>
@@ -8,10 +8,9 @@
       <div class="btn-group">
         <%= link_to icon_tag('Editar', :class => 'icon-edit icon-white'), edit_expediente_path(@expediente), :class => 'btn btn-primary' %>
         <%= link_to icon_tag('Borrar', :class => 'icon-trash icon-white'), @expediente, confirm: 'Estás seguro?', method: :delete, class: 'btn btn-primary' %>
-          <%= link_to icon_tag('Ver Todos', :class => 'icon-arrow-left icon-white'), expedientes_path, class: 'btn btn-primary' %>
-          </div>
-        </div>
-
+        <%= link_to icon_tag('Ver Todos', :class => 'icon-arrow-left icon-white'), expedientes_path, class: 'btn btn-primary' %>
+      </div>
+    </div>
 
         <div class="span6 well-simple" id="data_wrapper">
           <fieldset>
@@ -47,58 +46,79 @@
               </tr>
             </table>
           </fieldset>
-          
-              <%= render 'logica_toolbar', 
-                :tarea_siguiente => @tarea_siguiente, 
+              <%= render 'logica_toolbar',
+                :tarea_siguiente => @tarea_siguiente,
                 :tarea_expediente_actual => @tarea_expediente_actual,
                 :expediente => @expediente,
-                :vista_tarea => @vista_tareas.first if @tarea_siguiente && @tarea_siguiente.es_logica? %>
+                :vista_tarea => @vista_tareas.first if @expediente.procesable? && @tarea_actual && @tarea_siguiente.es_logica? %>
 
-        </div>
+          <%= render 'traslado_toolbar',
+                     :tarea_siguiente => @tarea_siguiente,
+                     :tarea_expediente_actual => @tarea_expediente_actual,
+                     :expediente => @expediente,
+                     :vista_tarea => @vista_tareas.first if @expediente.procesable? && @tarea_actual && @tarea_siguiente.es_traslado? %>
 
-        <div id="tareas">          
-          <%#= @vista_tareas.blank? %>
-          <%= render 'tareas', :vista_tareas => @vista_tareas unless @vista_tareas.blank? || (@tarea_siguiente && @tarea_siguiente.es_logica?) %>
-        </div>
+          <%= render 'archivado_toolbar',
+                     :tarea_siguiente => @tarea_siguiente,
+                     :tarea_expediente_actual => @tarea_expediente_actual,
+                     :expediente => @expediente,
+                     :vista_tarea => @vista_tareas.first if @expediente.procesable? && @tarea_actual && @tarea_siguiente.es_archivado? %>
 
-            <div class="span11 well-simple">
-              <fieldset>
-                <legend>Descripción del Expediente</legend>
-                <%= simple_format(@expediente.descripcion) %>
-              </fieldset>
-            </div>
+      <%= render 'logica_toolbar',
+                 :tarea_siguiente => @tarea_siguiente,
+                 :tarea_expediente_actual => @tarea_expediente_actual,
+                 :expediente => @expediente,
+                 :vista_tarea => @vista_tareas.first if @tarea_siguiente && @tarea_siguiente.es_logica? %>
+      </div>
 
-            <div class="span11">
-              <ul class="nav nav-tabs" id="tab">
-                <li class="active">
-                  <%= link_to 'Registros Aplicables', '#tab-registros' %>                
-                </li>
-                <li><%= link_to 'Documentos', '#tab-documentos', 'data-togle' => 'tab' %></li>
-                <li><%= link_to 'Observaciones', '#tab-observaciones', 'data-togle' => 'tab' %></li>
-                <li><%= link_to 'Seguimiento', '#tab-seguimiento', 'data-togle' => 'tab' %></li>
-              </ul>
-            </div>
-            <div class="span11">
-              <div id="tabContent" class="tab-content">                
-                <%= render 'registros_aplicables' %>                
-                <%#= render 'documentos', :expediente => @expediente %>
-                <%= render 'observaciones' %>                                
-                <%= render 'seguimiento' %>                                
-              </div>              
-            </div>
-          </div>
-        </section>
+    <div id="tareas">
+      <%#= @vista_tareas.blank? %>
+      <%= render 'tareas', :vista_tareas => @vista_tareas unless (!@expediente.procesable? || @vista_tareas.blank?) || (@tarea_siguiente && @tarea_siguiente.es_logica? || @tarea_siguiente.es_archivado?) %>
+    </div>
 
-  <% content_for :javascripts do %>
+    <div class="span11 well-simple">
+      <fieldset>
+        <legend>Descripción del Expediente</legend>
+        <%= simple_format(@expediente.descripcion) %>
+      </fieldset>
+    </div>
+
+    <div class="span11">
+      <ul class="nav nav-tabs" id="tab">
+        <li class="active"><%= link_to 'Documentos', '#tab-documentos', 'data-togle' => 'tab' %></li>
+        <li><%#= link_to 'Observaciones', '#tab-observaciones', 'data-togle' => 'tab' %></li>
+        <li><%= link_to 'Seguimiento', '#tab-seguimiento', 'data-togle' => 'tab' %></li>
+      </ul>
+    </div>
+    <div class="span11">
+      <div id="tabContent" class="tab-content">
+        <%= render 'documentos', :expediente => @expediente %>
+        <%#= render 'observaciones' %>
+        <%= render 'seguimiento' %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<% content_for :javascripts do %>
     <script type="text/javascript">
-      $('#tab a').click(function (e) {
-        e.preventDefault();
-        $(this).tab('show');
-      });
+        $('#tab a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
 
-      $('#tabDocs a').click(function (e) {
-        e.preventDefault();
-        $(this).tab('show');
-      })
-    </script>  
-  <% end %>
+        $('#tabDocs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+    </script>
+<% end %>
+
+<div class="modal" id="modal-wrapper" style="display: none; width: 660px; padding: 10px">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3></h3>
+  </div>
+  <div class="modal-body"></div>
+  <div class="modal-footer"></div>
+</div>
