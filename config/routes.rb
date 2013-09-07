@@ -92,6 +92,8 @@ Gexip::Application.routes.draw do
   match 'finalizar_tarea' => 'tareas#finalizar_tarea', :as => 'finalizar_tarea'
   match 'cancelar_tarea' => 'tareas#cancelar_tarea', :as => 'cancelar_tarea'
   match 'iniciar_tarea_logica' => 'tareas#iniciar_tarea_logica', :as => 'iniciar_tarea_logica'
+  match 'iniciar_traslado' => 'tareas#iniciar_traslado', :as => 'iniciar_traslado'
+  match 'iniciar_archivado' => 'tareas#iniciar_archivado', :as => 'iniciar_archivado'
   #cargos
   match 'agregar_cargo' => 'cargos#agregar_cargo', :as => 'agregar_cargo'
   

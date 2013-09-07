@@ -14,7 +14,7 @@ class Expediente < ActiveRecord::Base
   #Relaciones
   #belongs_to :procedimiento, :foreign_key => :procedimiento_id
   #belongs_to :tarea_actual, :foreign_key => :tarea_actual_id, :class_name => 'Tarea'
-  belongs_to :tarea_anterior, :foreign_key => :tarea_anterior_id, :class_name => 'Tarea'
+  #belongs_to :tarea_anterior, :foreign_key => :tarea_anterior_id, :class_name => 'Tarea'
   belongs_to :tarea_expediente_actual, :foreign_key => :tarea_expediente_actual_id, :class_name => 'TareaExpediente'
   belongs_to :ente, :foreign_key => :ente_id
   belongs_to :usuario
@@ -55,6 +55,14 @@ class Expediente < ActiveRecord::Base
   def asignar_clave
 		self.clave = rand(10000..99999) if self.new_record?
   end
+
+  def en_transito?
+		self.estado == 'TRANSITO'
+  end
+
+  def en_proceso?
+	  self.estado == 'PROCESANDO'
+  end
   
   def anyo_ingreso
     self.numero.to_s[0..3]
@@ -80,6 +88,10 @@ class Expediente < ActiveRecord::Base
   def usuario
 		self.tareas_expedientes.first.usuario_inicio
   end
+
+  def tarea_anterior
+		self.tarea_expediente_actual.tarea.tarea_anterior
+  end
   
   def tarea_siguiente
     tarea = self.tarea_expediente_actual.tarea
@@ -88,15 +100,15 @@ class Expediente < ActiveRecord::Base
     cond_vals = { :orden => tarea.orden, :actividad => actividad.id, 
       :proced => actividad.procedimiento_id, :act_orden => actividad.orden }
       
-    if tarea.es_proceso_no? 
-      cond_query += ' and (id <> :tarea_not_id)) '
-      cond_vals[:tarea_not_id] = self.tarea_anterior.tarea_sgt_id
-    elsif tarea.es_proceso_si?
-      cond_query += ' and (id <> :tarea_not_id)) '
-      cond_vals[:tarea_not_id] = self.tarea_anterior.tarea_alt_id
-    else
-      cond_query += ') '
-    end
+    #if tarea.es_proceso_no?
+    #  cond_query += ' and (id <> :tarea_not_id)) '
+    #  cond_vals[:tarea_not_id] = self.tarea_anterior.tarea_sgt_id
+    #elsif tarea.es_proceso_si?
+    #  cond_query += ' and (id <> :tarea_not_id)) '
+    #  cond_vals[:tarea_not_id] = self.tarea_anterior.tarea_alt_id
+    #else
+    #end
+    cond_query += ') '
     cond_query += 'or (procedimiento_id = :proced and actividad_orden > :act_orden)'
     
         

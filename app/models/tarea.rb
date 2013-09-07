@@ -13,6 +13,7 @@ class Tarea < ActiveRecord::Base
   belongs_to :tarea_siguiente, :foreign_key => :tarea_sgt_id, :class_name => 'Tarea'
   belongs_to :tarea_alternativa, :foreign_key => :tarea_alt_id, :class_name => 'Tarea'
   belongs_to :tarea_anterior, :foreign_key => :tarea_ant_id, :class_name => 'Tarea'
+  belongs_to :cargo_destino, :foreign_key => :cargo_estructura_destino_id, :class_name => 'CargoEstructura'
   has_one :version_aprobada, :foreign_key => :item_id, :conditions => { tipo_item: 'Tarea' }
 
   has_many :tareas_dependientes, :foreign_key => :logica_relacionada_id, :class_name => 'Tarea'
@@ -43,6 +44,10 @@ class Tarea < ActiveRecord::Base
 
 	def aprobado
 		self.version_aprobada.version.reify if self.version_aprobada.present?
+	end
+
+	def es_traslado?
+		self.tipo.downcase == 'traslado'
 	end
 
   def actualizar_tarea_siguiente
@@ -170,6 +175,29 @@ class Tarea < ActiveRecord::Base
 
 	def dos_respuestas_pendientes?
 		respuestas_pendientes? && respuestas_logicas_pendientes.length == 2
+	end
+
+	def dos_rutas_posibles?
+		if self.tarea_sgt_id.blank? || self.tarea_alt_id.blank?
+			if self.tarea_sgt_id?
+				self.ultima_en_rama('si') && self.ultima_en_rama('si').abierto?
+			else
+				self.ultima_en_rama('no') && self.ultima_en_rama('no').abierto?
+			end
+		end
+	end
+
+	def dos_rutas_posibles
+		if self.tarea_sgt_id.blank?
+			[self,self.ultima_en_rama('no')]
+		elsif self.tarea_alt_id.blank?
+			[self.ultima_en_rama('si'),self]
+		end
+	end
+
+	def tipo_logica_log
+		return self.tipo_logica unless self.es_logica?
+		self.tarea_sgt_id? ? 'no' : 'si'
 	end
 
 	def dos_rutas_pendientes?
@@ -307,6 +335,7 @@ class Tarea < ActiveRecord::Base
   def complete_data
     last_task = self.actividad.procedimiento.tareas.order('orden').last
     #self.tarea_alt_id ||= last_task.id if last_task && !self.es_logica?
+    self.tipo_logica = self.tarea_anterior.tipo_logica_log if self.tarea_ant_id? && self.tipo_logica.blank?
     case self.tipo.downcase
     when 'logica'      
       self.unidad_tiempo_id = UnidadTiempo::MinutoId

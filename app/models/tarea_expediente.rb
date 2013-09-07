@@ -64,7 +64,7 @@ class TareaExpediente < ActiveRecord::Base
     self.update_attributes(
       :fecha_fin => Time.now,
       :estado => self.class.estado_fin_incorrecto,
-      :usuario_find_id => usuario_fin_id)    
+      :usuario_fin_id => usuario_fin_id)
   end
   
   def tiempo_ejecucion
