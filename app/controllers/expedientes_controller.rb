@@ -3,7 +3,14 @@ class ExpedientesController < ApplicationController
   # GET /expedientes
   # GET /expedientes.json
   def index
-    @expedientes = Expediente.all
+
+    #select b.expediente_id from vw_bandeja_usuarios b where b.usuario_id = 212;
+    #current_usuario.id
+    exp_filtro = Expediente.find_by_sql("select b.expediente_id from vw_bandeja_usuarios b where b.usuario_id = #{current_usuario.id}")
+    exp_arra = exp_filtro.map(&:expediente_id)
+    #Expediente.where(:id => exp.map(&:expediente_id))
+
+    @expedientes = Expediente.where(:id => exp_arra)
 
     respond_to do |format|
       format.html # index.html.erb
