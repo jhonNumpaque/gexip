@@ -4,7 +4,7 @@ Gexip::Application.routes.draw do
 	match 'obtener/arbol' => 'procedimientos#jstree', :as => :procedimientos_jstree
 	match 'procedimientos/ni' => 'procedimientos#new_index', :as => :new_procedimientos_index
 	match 'cargos/estructuras' => 'cargos#cargo_estructuras', :as => :cargo_estructuras
-	match 'adjuntos/agregar' => 'tareas#agregar_adjunto', :as => :agregar_adjunto
+	match 'adjuntos_tareas_expedientes/agregar' => 'tareas#agregar_adjunto', :as => :agregar_adjunto
 
 	match 'tareas/respuestas_logicas' => 'tareas#respuestas_logicas', :as => :respuestas_logicas
 	match 'tareas/verificar_tarea_anterior' => 'tareas#verificar_tarea_anterior', :as => :verificar_tarea_anterior
@@ -71,6 +71,8 @@ Gexip::Application.routes.draw do
 
 	resources :consultas
 
+	resources :adjuntos_tareas_expedientes
+
 	resources :tiempos_demorados
 	match 'tiempos_demorados/reporte/listar/' => 'tiempos_demorados#listar', :as => :listar
 	devise_for :usuarios, :controllers => { :registrations => "usuarios", :sessions => 'sesiones' } do
@@ -114,6 +116,10 @@ Gexip::Application.routes.draw do
   
   #entes
   match '/search' => 'entes#search', :as => 'search_ente'
+
+  #Adjuntos
+  match '/subir_documento' => 'adjuntos_tareas_expedientes#create', :as => 'subir_documento'
+  match '/descargar_documento/:id' => 'adjuntos_tareas_expedientes#download_file', :as => 'descargar_documento'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
