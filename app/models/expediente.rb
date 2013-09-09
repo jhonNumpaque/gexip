@@ -49,7 +49,7 @@ class Expediente < ActiveRecord::Base
   def a_recibir?(usuario)
 		cargo_estructura_id = usuario.funcionario.cargo_estructura_id
 		tarea =  self.tarea_expediente_actual.tarea
-		tarea.tarea_siguiente && tarea.tarea_siguiente.es_traslado? && tarea.tarea_siguiente.cargo_estructura_destino_id == cargo_estructura_id
+		!self.tarea_expediente_actual.finalizado? && tarea.es_traslado? && tarea.cargo_estructura_destino_id == cargo_estructura_id
   end
 
   def recibir!(usuario)
