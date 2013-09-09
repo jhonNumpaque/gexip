@@ -5,12 +5,21 @@ class ExpedientesController < ApplicationController
   def index
 
     #select b.expediente_id from vw_bandeja_usuarios b where b.usuario_id = 212;
+  #Expediente.where(:id => exp.map(&:expediente_id))
+    #vw_bandeja_usuario_nuevos 
     #current_usuario.id
-    exp_filtro = Expediente.find_by_sql("select b.expediente_id from vw_bandeja_usuarios b where b.usuario_id = #{current_usuario.id}")
-    exp_arra = exp_filtro.map(&:expediente_id)
-    #Expediente.where(:id => exp.map(&:expediente_id))
 
-    @expedientes = Expediente.where(:id => exp_arra)
+    # expedientes nuevos
+    exp2_filtro = Expediente.find_by_sql("select b.expediente_id from vw_bandeja_usuario_nuevos b where b.usuario_id = #{current_usuario.id}")
+    exp2_arra = exp2_filtro.map(&:expediente_id)
+    
+    @expedientes_nuevos = Expediente.where(:id => exp2_arra)
+
+    # expedientes en proceso
+    exp1_filtro = Expediente.find_by_sql("select b.expediente_id from vw_bandeja_usuario_procesos b where b.usuario_id = #{current_usuario.id}")
+    exp1_arra = exp1_filtro.map(&:expediente_id)
+
+    @expedientes_procesos = Expediente.where(:id => exp1_arra)
 
 
     respond_to do |format|
