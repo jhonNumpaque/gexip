@@ -7,6 +7,8 @@ class CargoEstructura < ActiveRecord::Base
   belongs_to :cargo
   belongs_to :estructura
   has_many :funcionarios
+  has_many :serieprocesos
+  has_many :procedimientos, :through => :serieprocesos
 
   def descripcion
   	"#{cargo.nombre} de #{estructura.nombre}"
