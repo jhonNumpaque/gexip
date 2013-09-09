@@ -1,6 +1,6 @@
 <section>
   <div class="page-header">
-    <h1>Expedientes <small>Disponibles</small></h1>
+    <h1>Expedientes <small>disponibles</small></h1>
   </div>
 
   <div class="well">
@@ -8,7 +8,19 @@
   </div>
   <br />
 
-  <% if @expedientes.present? %>
+  
+  
+    <ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#ccenproceso">En Proceso</a></li>
+    <li><a href="#ccnuevo">Nuevos</a></li>
+    <li><a href="#ccentransito">En transito</a></li>
+    </ul>
+     
+    <div class="tab-content">
+    <div class="tab-pane active" id="ccenproceso">
+
+    <h2>Expedientes en Proceso</h2>
+    <% if @expedientes_procesos.present? %>
     <table class="table table-striped table-bordered table-condensed">
       <tr>
         <th>N&uacute;mero</th>
@@ -17,14 +29,13 @@
         <th>Descripci&oacute;n</th>
         <th></th>
       </tr>
-      <% @expedientes.each do |expediente| %>
+      <% @expedientes_procesos.each do |expediente| %>
         <tr>
-          <td><%= link_to expediente.numero, expediente %></td>
+          <td><%= expediente.id %> <%= link_to expediente.numero, expediente %></td>
           <td>
             <span class="label label-info"><%= expediente.estado %></span>
-            <%#= link_to expediente.procedimiento.nombre, expediente %>
           </td>
-          <td><%= expediente.ente.nombre_completo %></td>
+          <td><%= expediente.ente_id %></td>
           <td><%= truncate(expediente.descripcion, :length => 80) %></td>
           
           <td>
@@ -41,10 +52,76 @@
         </tr>
       <% end %>
     </table> 
-  <% else %>
+
+    <% else %>
     <p class="alert-message warning">
       Todavía no hay expedientes, <%= link_to 'agregar', new_expediente_path %>.
     </p>
-  <% end %>
+    <% end %>
+
+    </div>
+
+    <div class="tab-pane" id="ccnuevo">
+      <h2>Expedientes Nuevos</h2>
+
+
+    <% if @expedientes_nuevos.present? %>
+    <table class="table table-striped table-bordered table-condensed">
+      <tr>
+        <th>N&uacute;mero</th>
+        <th>Procedimiento</th>
+        <th>Solicitante</th>
+        <th>Descripci&oacute;n</th>
+        <th></th>
+      </tr>
+      <% @expedientes_nuevos.each do |expediente| %>
+        <tr>
+          <td> <%= expediente.id %> <%= link_to expediente.numero, expediente %></td>
+          <td>
+            <span class="label label-info"><%= expediente.estado %></span>
+          </td>
+          <td><%= expediente.ente_id %></td>
+          <td><%= truncate(expediente.descripcion, :length => 80) %></td>
+          
+          <td>
+
+            <div class="btn-group">              
+              <%= link_to 'Acciones <b class="caret"></b>'.html_safe, '#', :class => 'btn btn-primary dropdown-toggle', 'data-toggle' => 'dropdown' %>
+              <ul id="menu1" class="dropdown-menu">
+                <li><%= link_to icon_tag('Editar', :class => 'icon-pencil'), edit_expediente_path(expediente) %></li>
+                <li><%= link_to icon_tag('Eliminar', :class => 'icon-trash'), expediente, confirm: '¿Está seguro de eliminar este registro?. Esta acción no se puede deshacer', method: :delete %></li>
+
+              </ul>              
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </table> 
+
+    <% else %>
+    <p class="alert-message warning">
+      Todavía no hay expedientes, <%= link_to 'agregar', new_expediente_path %>.
+    </p>
+    <% end %>
+
+
+    </div>
+
+
+    <div class="tab-pane" id="ccentransito">
+      <h2>Expedientes en Transito</h2>
+    </div>
+    </div>
+     
+    <script>
+    $('#myTab a').click(function (e) {
+    e.preventDefault();
+    $(this).tab('show');
+    })
+
+    $(function () {
+    $('#myTab a:first').tab('show');
+    })
+    </script>
 
 </section>

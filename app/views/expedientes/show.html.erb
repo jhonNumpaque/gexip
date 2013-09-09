@@ -13,53 +13,68 @@
       </div>
     </div>
 
+        <div class="span6 well-simple" id="data_wrapper">
+          <fieldset>
+            <legend>Datos del Expediente</legend>
+            <table>
+              <tr>
+                <th>Fecha de Ingreso: </th>
+                <td><%= l(@expediente.created_at) %></td>
+              </tr>
+              <tr>
+                <th>Número: </th>
+                <td><%= @expediente.numero_corto %>/<%= @expediente.anyo_ingreso %></td>
+              </tr>
+              <tr>
+                <th>Procedimiento:</th>
+                <td><%= @expediente.procedimiento.nombre %></td>
+              </tr>
+              <tr>
+                <th>Solicitante:</th>
+                <td>(<%= @expediente.ente.documento %>) <%= @expediente.ente.nombre_completo %></td>
+              </tr>
+              <tr>
+                <th>Estado:</th>
+                <td><%= @expediente.estado %></td>
+              </tr>
+              <tr>
+                <th>Ingresado por:</th>
+                <td><%= @expediente.usuario.login %></td>
+              </tr>
+              <tr>
+                <th>Método:</th>
+                <td><%= @tarea_actual.present? ? @tarea_actual.metodo : @tarea_siguiente.metodo %></td>
+              </tr>
+            </table>
+          </fieldset>
+              <%= render 'logica_toolbar',
+                :tarea_siguiente => @tarea_siguiente,
+                :tarea_expediente_actual => @tarea_expediente_actual,
+                :expediente => @expediente,
+                :vista_tarea => @vista_tareas.first if @expediente.procesable? && @tarea_actual && @tarea_siguiente.es_logica? %>
 
-    <div class="span6 well-simple" id="data_wrapper">
-      <fieldset>
-        <legend>Datos del Expediente</legend>
-        <table>
-          <tr>
-            <th>Fecha de Ingreso:</th>
-            <td><%= l(@expediente.created_at) %></td>
-          </tr>
-          <tr>
-            <th>Número:</th>
-            <td><%= @expediente.numero_corto %>/<%= @expediente.anyo_ingreso %></td>
-          </tr>
-          <tr>
-            <th>Procedimiento:</th>
-            <td><%= @expediente.procedimiento.nombre %></td>
-          </tr>
-          <tr>
-            <th>Solicitante:</th>
-            <td>(<%= @expediente.ente.documento %>) <%= @expediente.ente.nombre_completo %></td>
-          </tr>
-          <tr>
-            <th>Estado:</th>
-            <td><%= @expediente.estado %></td>
-          </tr>
-          <tr>
-            <th>Ingresado por:</th>
-            <td><%= @expediente.usuario.login %></td>
-          </tr>
-          <tr>
-            <th>Método:</th>
-            <td><%= @tarea_actual.present? ? @tarea_actual.metodo : @tarea_siguiente.metodo %></td>
-          </tr>
-        </table>
-      </fieldset>
+          <%= render 'traslado_toolbar',
+                     :tarea_siguiente => @tarea_siguiente,
+                     :tarea_expediente_actual => @tarea_expediente_actual,
+                     :expediente => @expediente,
+                     :vista_tarea => @vista_tareas.first if @expediente.procesable? && @tarea_actual && @tarea_siguiente.es_traslado? %>
+
+          <%= render 'archivado_toolbar',
+                     :tarea_siguiente => @tarea_siguiente,
+                     :tarea_expediente_actual => @tarea_expediente_actual,
+                     :expediente => @expediente,
+                     :vista_tarea => @vista_tareas.first if @expediente.procesable? && @tarea_actual && @tarea_siguiente.es_archivado? %>
 
       <%= render 'logica_toolbar',
                  :tarea_siguiente => @tarea_siguiente,
                  :tarea_expediente_actual => @tarea_expediente_actual,
                  :expediente => @expediente,
                  :vista_tarea => @vista_tareas.first if @tarea_siguiente && @tarea_siguiente.es_logica? %>
-
-    </div>
+      </div>
 
     <div id="tareas">
       <%#= @vista_tareas.blank? %>
-      <%= render 'tareas', :vista_tareas => @vista_tareas unless @vista_tareas.blank? || (@tarea_siguiente && @tarea_siguiente.es_logica?) %>
+      <%= render 'tareas', :vista_tareas => @vista_tareas unless (!@expediente.procesable? || @vista_tareas.blank?) || (@tarea_siguiente && @tarea_siguiente.es_logica? || @tarea_siguiente.es_archivado?) %>
     </div>
 
     <div class="span11 well-simple">

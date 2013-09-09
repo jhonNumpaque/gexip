@@ -169,5 +169,9 @@ class UsuariosController < ApplicationController
   def denegado
     
   end
-  
+
+  def log_out
+    
+  end
+
 end

@@ -10,3 +10,9 @@ em.required {
 	color: red;
 	font-weight: bold;
 }
+
+.well-well {
+    padding: 5px;
+    background-color: #C8E2F7;
+    margin-bottom: 0px;
+}

@@ -60,7 +60,10 @@ class EntesController < ApplicationController
 			cond[1] = query_val
 		end
 
-		cond = ['documento = ?', params[:documento]] if params[:type].present? && params[:documento].present?
+		if params[:type].present? && params[:documento].present?
+
+			cond = ['documento = ?', params[:documento]]
+		end
 
 		@entes = Ente.where(cond).page(params[:page]).per(10)
 

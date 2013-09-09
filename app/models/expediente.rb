@@ -14,7 +14,7 @@ class Expediente < ActiveRecord::Base
   #Relaciones
   #belongs_to :procedimiento, :foreign_key => :procedimiento_id
   #belongs_to :tarea_actual, :foreign_key => :tarea_actual_id, :class_name => 'Tarea'
-  belongs_to :tarea_anterior, :foreign_key => :tarea_anterior_id, :class_name => 'Tarea'
+  #belongs_to :tarea_anterior, :foreign_key => :tarea_anterior_id, :class_name => 'Tarea'
   belongs_to :tarea_expediente_actual, :foreign_key => :tarea_expediente_actual_id, :class_name => 'TareaExpediente'
   belongs_to :ente, :foreign_key => :ente_id
   belongs_to :usuario
@@ -42,6 +42,10 @@ class Expediente < ActiveRecord::Base
   before_save :validar_documentos
   after_create :iniciar_proceso
 
+  def procesable?
+		self.estado == 'NUEVO' || self.estado == 'PROCESANDO'
+  end
+  
   def generar_numero
     return true unless self.new_record?
 
@@ -63,6 +67,14 @@ class Expediente < ActiveRecord::Base
     self.clave = rand(10000..99999) if self.new_record?
   end
 
+  def en_transito?
+		self.estado == 'TRANSITO'
+  end
+
+  def en_proceso?
+	  self.estado == 'PROCESANDO'
+  end
+  
   def anyo_ingreso
     self.numero.to_s[0..3]
   end
@@ -88,22 +100,26 @@ class Expediente < ActiveRecord::Base
     self.tareas_expedientes.first.usuario_inicio
   end
 
+  def tarea_anterior
+		self.tarea_expediente_actual.tarea.tarea_anterior
+  end
+  
   def tarea_siguiente
     tarea = self.tarea_expediente_actual.tarea
     actividad = tarea.actividad
     cond_query = '((orden > :orden and actividad_id = :actividad) '
-    cond_vals = {:orden => tarea.orden, :actividad => actividad.id,
-                 :proced => actividad.procedimiento_id, :act_orden => actividad.orden}
-
-    if tarea.es_proceso_no?
-      cond_query += ' and (id <> :tarea_not_id)) '
-      cond_vals[:tarea_not_id] = self.tarea_anterior.tarea_sgt_id
-    elsif tarea.es_proceso_si?
-      cond_query += ' and (id <> :tarea_not_id)) '
-      cond_vals[:tarea_not_id] = self.tarea_anterior.tarea_alt_id
-    else
-      cond_query += ') '
-    end
+    cond_vals = { :orden => tarea.orden, :actividad => actividad.id, 
+      :proced => actividad.procedimiento_id, :act_orden => actividad.orden }
+      
+    #if tarea.es_proceso_no?
+    #  cond_query += ' and (id <> :tarea_not_id)) '
+    #  cond_vals[:tarea_not_id] = self.tarea_anterior.tarea_sgt_id
+    #elsif tarea.es_proceso_si?
+    #  cond_query += ' and (id <> :tarea_not_id)) '
+    #  cond_vals[:tarea_not_id] = self.tarea_anterior.tarea_alt_id
+    #else
+    #end
+    cond_query += ') '
     cond_query += 'or (procedimiento_id = :proced and actividad_orden > :act_orden)'
 
 
@@ -122,31 +138,31 @@ class Expediente < ActiveRecord::Base
   private
   def establecer_estado
     return true unless self.new_record?
-
+    
     self.estado = ESTADO[0]
   end
-
+  
   def iniciar_proceso
     Expediente.transaction do
       procedimiento = Procedimiento.find(self.procedimiento_id)
       actividad = procedimiento.actividades.order('orden').first
       tarea = actividad.tareas.order('orden').first()
-
+    
       # tarea_expediente_status contiene un array con true|false en 
       # el primer elemento (si se guardó o no el registro) y en el 
       # segundo elemento el objeto tarea_expediente
       tarea_expediente = TareaExpediente.crear!(
-          :procedimiento_id => procedimiento.id,
-          :expediente_id => self.id,
-          :tarea_id => tarea.id,
-          :usuario_inicio_id => self.usuario_id
+        :procedimiento_id => procedimiento.id,
+        :expediente_id => self.id,
+        :tarea_id => tarea.id,
+        :usuario_inicio_id => self.usuario_id        
       )
-
-
+      
+      
       fin = tarea_expediente.finalizar!(
-          self.usuario_id,
-          'Inicio del procedimiento (automático)'
-      )
+               self.usuario_id, 
+               'Inicio del procedimiento (automático)'
+            )
 
       self.update_attributes(:tarea_expediente_actual_id => tarea_expediente.id) if fin
     end

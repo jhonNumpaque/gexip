@@ -95,7 +95,7 @@ module ExpedientesHelper
     funcionario = ''
     tareas_realizadas.each do |t|
       if tarea.tarea_id == t.tarea_id
-        funcionario = t.usuario.funcionario.nombre_completo
+        funcionario = t.usuario_fin ? t.usuario_fin.funcionario.nombre_completo : t.usuario_inicio.funcionario.nombre_completo
         break
       else
         funcionario = ''

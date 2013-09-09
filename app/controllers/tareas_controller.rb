@@ -170,14 +170,14 @@ class TareasController < ApplicationController
             :expediente_id => @expediente.id,
             :tarea_id => @tarea_actual.id,
             :usuario_inicio_id => current_usuario.id
-          )          
+          )
 
-          @expediente.update_attributes(:tarea_expediente_actual => @tarea_expediente_actual, 
-            :tarea_actual => @tarea_actual, :tarea_anterior => tarea_logica)
+          @expediente.update_attributes(:tarea_expediente_actual => @tarea_expediente_actual,
+            :tarea_anterior => tarea_logica)
           tarea_not = tarea_logica.tarea_alt_id
         else
           @tarea_actual = tarea_logica.tarea_alternativa
-          
+
           @tarea_expediente_actual = TareaExpediente.crear!(
             :procedimiento_id => procedimiento.id,
             :expediente_id => @expediente.id,
@@ -185,10 +185,11 @@ class TareasController < ApplicationController
             :usuario_inicio_id => current_usuario.id
           )
 
-          @expediente.update_attributes(:tarea_expediente_actual => @tarea_expediente_actual, 
+          @expediente.update_attributes(:tarea_expediente_actual => @tarea_expediente_actual,
             :tarea_actual => @tarea_actual, :tarea_anterior => tarea_logica)
           tarea_not = tarea_logica.tarea_sgt_id
         end
+        #@tarea_expediente_actual = @expediente.tarea_expediente_actual
         
         @tarea_siguiente = @expediente.tarea_siguiente
         qs = 'tarea_id not in (:tarea_logica_id, :tarea_not_id) and ((orden >= :orden and actividad_id = :aid) or (procedimiento_id = :pid and actividad_id > :aid))'
@@ -201,6 +202,56 @@ class TareasController < ApplicationController
     respond_to do |format|
       format.js
     end
+  end
+
+  def iniciar_traslado
+		Expediente.transaction do
+			if params[:eid].present? && params[:tid].present?
+				expediente = Expediente.find(params[:eid])
+				tarea_logica = Tarea.find(params[:tid])
+				actividad = tarea_logica.actividad
+				procedimiento = actividad.procedimiento
+
+				tarea_expediente_actual = TareaExpediente.crear!(
+						:procedimiento_id => procedimiento.id,
+						:expediente_id => expediente.id,
+						:tarea_id => tarea_logica.id,
+						:usuario_inicio_id => current_usuario.id
+				)
+
+				expediente.update_attributes(:tarea_expediente_actual => tarea_expediente_actual, :estado => 'TRANSITO')
+				redirect_to expediente_path(params[:eid])
+			else
+				flash[:error] = "No se pudo trasladar el expediente, datos incompletos"
+				redirect_to params[:eid].present? ? expediente_path(params[:eid]) : expedientes_path
+			end
+		end
+  end
+
+  def iniciar_archivado
+	  Expediente.transaction do
+		  if params[:eid].present? && params[:tid].present?
+			  expediente = Expediente.find(params[:eid])
+			  tarea_logica = Tarea.find(params[:tid])
+			  actividad = tarea_logica.actividad
+			  procedimiento = actividad.procedimiento
+
+			  tarea_expediente_actual = TareaExpediente.crear!(
+					  :procedimiento_id => procedimiento.id,
+					  :expediente_id => expediente.id,
+					  :tarea_id => tarea_logica.id,
+					  :usuario_inicio_id => current_usuario.id
+			  )
+
+			  tarea_expediente_actual.finalizar!(current_usuario.id, 'Archivado')
+
+			  expediente.update_attributes(:tarea_expediente_actual => tarea_expediente_actual, :estado => 'FINALIZADO')
+			  redirect_to expediente_path(params[:eid])
+		  else
+			  flash[:error] = "No se pudo trasladar el expediente, datos incompletos"
+			  redirect_to params[:eid].present? ? expediente_path(params[:eid]) : expedientes_path
+		  end
+	  end
   end
   
   def finalizar_tarea        

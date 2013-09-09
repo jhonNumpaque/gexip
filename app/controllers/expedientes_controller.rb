@@ -3,7 +3,24 @@ class ExpedientesController < ApplicationController
   # GET /expedientes
   # GET /expedientes.json
   def index
-    @expedientes = Expediente.all
+
+    #select b.expediente_id from vw_bandeja_usuarios b where b.usuario_id = 212;
+  #Expediente.where(:id => exp.map(&:expediente_id))
+    #vw_bandeja_usuario_nuevos 
+    #current_usuario.id
+
+    # expedientes nuevos
+    exp2_filtro = Expediente.find_by_sql("select b.expediente_id from vw_bandeja_usuario_nuevos b where b.usuario_id = #{current_usuario.id}")
+    exp2_arra = exp2_filtro.map(&:expediente_id)
+    
+    @expedientes_nuevos = Expediente.where(:id => exp2_arra)
+
+    # expedientes en proceso
+    exp1_filtro = Expediente.find_by_sql("select b.expediente_id from vw_bandeja_usuario_procesos b where b.usuario_id = #{current_usuario.id}")
+    exp1_arra = exp1_filtro.map(&:expediente_id)
+
+    @expedientes_procesos = Expediente.where(:id => exp1_arra)
+
 
     respond_to do |format|
       format.html # index.html.erb
@@ -27,7 +44,7 @@ class ExpedientesController < ApplicationController
 
       query_string = '('    
       query_values = {}
-      if @tarea_expediente_actual.finalizado?
+      if @tarea_expediente_actual.finalizado? || @tarea_expediente_actual.tarea.es_traslado?
         query_string = '(id <> :id and '
         query_values[:id] = @tarea_actual.id
         actividad = @tarea_siguiente.actividad
@@ -41,25 +58,29 @@ class ExpedientesController < ApplicationController
         end
       end
 
-      if @tarea_actual.es_proceso_si?
-        query_string += 'id <> :id_not and '
-        query_values[:id_not] = tarea_anterior.tarea_alt_id
-      elsif @tarea_actual.es_proceso_no?
-        query_string += 'id <> :id_not and '
-        query_values[:id_not] = tarea_anterior.tarea_sig_id
-      end
+      #if @tarea_actual.es_proceso_si?
+      #  query_string += 'id <> :id_not and '
+      #  query_values[:id_not] = tarea_anterior.tarea_alt_id
+      #elsif @tarea_actual.es_proceso_no?
+      #  query_string += 'id <> :id_not and '
+      #  query_values[:id_not] = tarea_anterior.tarea_sig_id
+      #end
 
       query_values.merge!({ :orden => orden, :actividad_id => actividad.id, :procedimiento_id => actividad.procedimiento_id, :actividad_orden => actividad.orden })    
       query_string += 'orden >= :orden and actividad_id = :actividad_id) or (procedimiento_id = :procedimiento_id and actividad_orden > :actividad_orden)'        
 
       # .del_cargo(current_usuario.ente.cargo_id)
-      @vista_tareas = VistaTarea.order('actividad_id,orden').limit(2).where(query_string,query_values)
-      #vusca las tareas realizadas
+
+      @vista_tareas = VistaTarea.del_cargo_estructura(current_usuario.funcionario.cargo_estructura_id).order('actividad_id,orden').limit(2).where(query_string,query_values).all
+      #busca las tareas realizadas
       @seguimiento_tareas = VistaTarea.order('actividad_id,orden').where(:procedimiento_id => actividad.procedimiento_id)
       #buscar todas las tareas
       @vista_expediente_proceso = VistaExpedienteProceso.select('DISTINCT tarea_id, tarea_expediente_fecha_fin, tarea_expediente_fecha_inicio, tarea_expediente_usuario_inicio, tarea_expediente_usuario_fin').where(:expediente_id => @expediente).group('tarea_id, tarea_expediente_fecha_fin, tarea_expediente_fecha_inicio, tarea_expediente_usuario_inicio, tarea_expediente_usuario_fin')
 
     end
+    @seguimiento_tareas = VistaTarea.order('actividad_id,orden').where(:procedimiento_id => @tarea_actual.actividad.procedimiento_id).all
+    @vista_expediente_proceso = VistaExpedienteProceso.select('DISTINCT tarea_id, tarea_expediente_fecha_fin, tarea_expediente_fecha_inicio, tarea_expediente_usuario_inicio, tarea_expediente_usuario_fin').where(:expediente_id => @expediente).group('tarea_id, tarea_expediente_fecha_fin, tarea_expediente_fecha_inicio, tarea_expediente_usuario_inicio, tarea_expediente_usuario_fin').all
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @expediente }
