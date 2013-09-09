@@ -32,8 +32,8 @@ class TareasController < ApplicationController
     @tarea = Tarea.new
     @tarea.actividad_id = params[:actividad_id]
     @tarea.tarea_ant_id = @tarea.anterior.id if @tarea.anterior && !@tarea.anterior.es_logica?
-    #@tarea.adjuntos.build
-    #@tarea.adjuntos.first.cargos_estructuras_adjuntos.build
+    #@tarea.adjuntos_tareas_expedientes.build
+    #@tarea.adjuntos_tareas_expedientes.first.cargos_estructuras_adjuntos.build
     @logicas_opciones = { :prompt => '-- Seleccione -- '}
     @rutas_logicas = view_context.options_for_select(Tarea::RutasLogicas.map{ |r| [r,r] })
 
