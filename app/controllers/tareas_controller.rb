@@ -29,6 +29,8 @@ class TareasController < ApplicationController
   # GET /tareas/new.json
 	#se encuentra en actividades_controller#agregar_tarea
   def new
+		@estructuras_opt = { :prompt => true }
+	  @cargos_estructuras = []
     @tarea = Tarea.new
     @tarea.actividad_id = params[:actividad_id]
     @tarea.tarea_ant_id = @tarea.anterior.id if @tarea.anterior && !@tarea.anterior.es_logica?
@@ -48,7 +50,10 @@ class TareasController < ApplicationController
   def edit
     @tarea = Tarea.find(params[:id])
     @actividad_id = @tarea.actividad_id
-		respond_to do |format|
+    @cargos_estructuras = @tarea.cargo_estructura.estructura.cargos_estructuras
+    @estructuras_opt = { :selected => @tarea.cargo_estructura.estructura_id }
+
+    respond_to do |format|
 			#      format.html { render :layout => "popup_wf" } # new.html.erb
 			#      format.json { render json: @tarea_actual }
 			format.js 

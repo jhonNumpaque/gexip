@@ -2,14 +2,14 @@
   <div class="control-group">
     <%= label_tag :estructura_id, required_label('Dependencia'), class: 'control-label' %>
     <div class="controls">
-      <%= collection_select :estructura, :id, Estructura.all, :id, :nombre, { :prompt => true }, { name: '' } %>
+      <%= collection_select :estructura, :id, Estructura.all, :id, :nombre, @estructuras_opt, { name: '' } %>
     </div>
   </div>
 
   <div class="control-group">
     <%= label_tag :cargo_estructura_id, required_label('Cargo Responsable'), class: 'control-label' %>
     <div class="controls">
-      <%= f.collection_select :cargo_estructura_id, CargoEstructura.all, :id, :descripcion, :prompt => true %>
+      <%= f.collection_select :cargo_estructura_id, @cargos_estructuras, :id, :descripcion, :prompt => true %>
     </div>
   </div>
 </div>

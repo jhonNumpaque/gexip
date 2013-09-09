@@ -50,6 +50,8 @@ class ProcesosController < ApplicationController
   def new
     @proceso = Proceso.new
     @from_tree = params[:from].present? && params[:from] == 'tree'
+    @cargos_estructuras = []
+    @estructuras_opts = { :prompt => true }
 
     respond_to do |format|
       format.html # new.html.erb
@@ -61,6 +63,8 @@ class ProcesosController < ApplicationController
   def edit
     @proceso = Proceso.find(params[:id])
     @from_tree = params[:from].present? && params[:from] == 'tree'
+    @cargos_estructuras = @proceso.cargo_estructura.estructura.cargos_estructuras
+    @estructuras_opts = { :selected => @proceso.cargo_estructura.estructura_id }
 
     respond_to do |format|
       format.html

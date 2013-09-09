@@ -1,22 +1,59 @@
-<%= simple_form_for @subproceso, :remote => @from_tree, :html => { :class => 'form-horizontal form_remote' } do |f| %>
-  <%= f.error_notification %>
-
-  <%= f.input :nombre %>
-  <%= f.input :objetivo, :as => :text, :input_html => { :style => 'width:80%;', :rows => 7, :cols => 20  } %>
-  <%= f.input :codigo %>
-  <%#= f.input :cargo_id, :label => "Cargo", :collection => Cargo.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
-  <% if @from_tree %>
-    <%= f.hidden_field :serieproceso_id, :value => params[:proceso_id] %>
-  <% else %>
-    <%= f.input :serieproceso_id, :label => "Proceso", :collection => Proceso.all, :label_method => :codigo_nombre, :prompt => "-- Seleccione --" %>
-  <% end %>
-
-   <%= f.input :cargo_estructura_id, :label => "Cargo Responsable", :collection => CargoEstructura.all, :label_method => :descripcion, :prompt => "-- Seleccione --" %>
-
-  <% unless @from_tree %>
-    <div class="form-actions">
-      <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
-      <%= link_to 'Cancelar', subprocesos_path, :class => "btn" %>
+<%= form_for @subproceso, remote: true, html: { class: 'form-horizontal form_remote', :id => 'form_subproceso' } do |f| %>
+  <% if @subproceso.errors.present? %>
+    <div class="alert alert-block alert-error">
+      <h4>No se ha podido guardar el registro, verifique lo siguiente:</h4>
+      <ul>
+        <% @subproceso.errors.full_messages.each do |error| %>
+          <li><%= error %></li>
+        <% end %>
+      </ul>
     </div>
   <% end %>
+  <div class="control-group">
+    <%= f.label :nombre, required_label('Nombre'), class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :nombre, class: 'validate[required]' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :objetivo, required_label('Objetivo'), class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :nombre, :style => 'width:80%;', :rows => 7, :cols => 20, class: 'validate[required]' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :codigo, required_label('Código'), class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :codigo, class: 'validate[required]' %>
+    </div>
+  </div>
+
+  <%= f.hidden_field :serieproceso_id, :value => params[:proceso_id] %>
+
+  <div class="control-group">
+    <%= label_tag :estructura_id, required_label('Estructura'), class: 'control-label' %>
+    <div class="controls">
+      <%= collection_select :estructura, :id, Estructura.all, :id, :nombre, @estructuras_opts, { :name => 'estructura_id', class: 'validate[required]' } %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :cargo_estructura_id, required_label('Cargo Responsable'), class: 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select :cargo_estructura_id, @cargos_estructuras, :id, :descripcion, { :prompt => "-- Seleccione --" }, { class: 'validate[required]' } %>
+    </div>
+  </div>
+
 <% end %>
+
+<%= linked_combo "subproceso_cargo_estructura_id", :linked => "estructura_id",
+                 :url => cargo_estructuras_path(format: 'json'), :param => "estructura_id", :display => 'descripcion' %>
+
+
+<script>
+  $(function(){
+    $('.form_remote').validationEngine();
+  })
+</script>

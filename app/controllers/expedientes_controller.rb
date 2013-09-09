@@ -16,16 +16,44 @@ class ExpedientesController < ApplicationController
     @expedientes_nuevos = Expediente.where(:id => exp2_arra)
 
     # expedientes en proceso
-    exp1_filtro = Expediente.find_by_sql("select b.expediente_id from vw_bandeja_usuario_procesos b where b.usuario_id = #{current_usuario.id}")
+    #exp1_filtro = Expediente.find_by_sql("select b.expediente_id from vw_bandeja_usuario_procesos b where b.usuario_id = #{current_usuario.id}")
+    exp1_filtro = Expediente.find_by_sql("select b.expediente_id from vista_expedientes_procesando b where b.cargo_estructura_id = #{current_usuario.funcionario.cargo_estructura_id}")
     exp1_arra = exp1_filtro.map(&:expediente_id)
 
+    exp3_filtro = Expediente.find_by_sql("select b.expediente_id from vista_expedientes_procesando2 b where b.cargo_estructura_id = #{current_usuario.funcionario.cargo_estructura_id}")
+    exp3_arra = exp3_filtro.map(&:expediente_id) if exp3_filtro
+
+    exp1_arra ||= []
+    exp1_arra.concat(exp3_arra) if exp3_arra.present?
+
+    # transito (bandeja de entrada)
+    exp2_filtro = Expediente.find_by_sql("select b.expediente_id from vista_expedientes_transito b where b.cargo_estructura_destino_id = #{current_usuario.funcionario.cargo_estructura_id}")
+    exp2_arra = exp2_filtro.map(&:expediente_id)
+
+    exp4_filtro = Expediente.find_by_sql("select b.expediente_id from vista_expedientes_transito b where b.cargo_estructura_origen_id = #{current_usuario.funcionario.cargo_estructura_id}")
+    exp4_arra = exp4_filtro.map(&:expediente_id)
+
+    puts "----------------------------"
+    puts exp4_arra.inspect
+
     @expedientes_procesos = Expediente.where(:id => exp1_arra)
+
+    @expedientes_entradas = Expediente.where(:id => exp2_arra)
+    @expedientes_salidas = Expediente.where(:id => exp4_arra)
+
+
 
 
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @expedientes }
     end
+  end
+
+  def recibir
+		expediente = Expediente.find(params[:id])
+
+		expediente.recibir!(current_usuario)
   end
 
   # GET /expedientes/1

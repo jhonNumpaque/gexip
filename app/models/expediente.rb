@@ -45,7 +45,22 @@ class Expediente < ActiveRecord::Base
   def procesable?
 		self.estado == 'NUEVO' || self.estado == 'PROCESANDO'
   end
-  
+
+  def a_recibir?(usuario)
+		cargo_estructura_id = usuario.funcionario.cargo_estructura_id
+		tarea =  self.tarea_expediente_actual.tarea
+		tarea.tarea_siguiente && tarea.tarea_siguiente.es_traslado? && tarea.tarea_siguiente.cargo_estructura_destino_id == cargo_estructura_id
+  end
+
+  def recibir!(usuario)
+		TareaExpediente.transaction do
+			self.update_attributes(:estado => 'PROCESANDO')
+			self.tarea_expediente_actual.update_attributes(:estado => 'FINALIZADO',
+			                                               :usuario_fin_id => usuario.id,
+			                                               :fecha_fin => Time.now)
+    end
+  end
+
   def generar_numero
     return true unless self.new_record?
 

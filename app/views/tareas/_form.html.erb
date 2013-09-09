@@ -165,23 +165,34 @@
             $('#modal-wrapper').modal({ backdrop: false });
         })
 
-        $('#rootwizard').bootstrapWizard({'tabClass': 'nav nav-pills'},
-                { onNext: function (tab, navigation, index) {
-                    //console.debug(index)
-                    if (index == 2) {
-                        // Make sure we entered the name
-                        if (!$('#nombre').val()) {
-                            alert('Ingrese el nombre');
-                            $('#nombre').focus();
-                            return false;
-                        }
-                    }
+      $('#rootwizard').bootstrapWizard({
+        tabClass: 'nav nav-pills',
+        onNext: function (tab, navigation, index) {
+          console.debug(index)
+//          if (index == 2) {
+//            // Make sure we entered the name
+//            if (!$('#nombre').val()) {
+//              alert('Ingrese el nombre');
+//              $('#nombre').focus();
+//              return false;
+//            }
+//          }
 
-                }, onTabClick: function (tab, navigation, index) {
-                    alert('on tab click disabled');
-                    return false;
-                }});
+        },
+        onTabClick: function (tab, navigation, index) {
+//          alert('on tab click disabled');
+//          return false;
+        }});
     });
+
+    function validarTarea(idx) {
+      var tipo = $('#tarea_tipo').val();
+      switch (tipo) {
+        case 'inicio':
+
+          break;
+      }
+    }
 </script>
 
 <%= linked_combo "tarea_cargo_estructura_id", :linked => "estructura_id",

@@ -29,10 +29,12 @@
 			<th>Fecha de Elaboración</th>
 			<td><%= format_date(@procedimiento.elabora_fecha) if @procedimiento.elabora_fecha? %></td>
 		</tr>
+    <!--
 		<tr>
 			<th>Elaborado por</th>
-			<td><%= @procedimiento.elaborador.nombre_completo %></td>
+			<td><%#= @procedimiento.elaborador.nombre_completo %></td>
 		</tr>
+		-->
 		<% if @procedimiento.aprobado? -%>
 			<tr>
 				<th>Fecha de Aprobación</th>

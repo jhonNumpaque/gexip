@@ -24,6 +24,9 @@ Gexip::Application.routes.draw do
 	match 'obtener/arbol' => 'procedimientos#jstree', :as => :procedimientos_jstree
 	match 'procedimientos/ni' => 'procedimientos#new_index', :as => :new_procedimientos_index
 
+	# expedientes
+	match 'expedientes/:id/recibir' => 'expedientes#recibir', :as => :recibir_expediente
+
 	resources :organismos_internos
 
 	resources :personas_juridicas

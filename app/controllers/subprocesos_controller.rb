@@ -49,6 +49,8 @@ class SubprocesosController < ApplicationController
   def new
     @subproceso = Subproceso.new
     @from_tree = params[:from].present?
+    @cargos_estructuras = []
+    @estructuras_opts = { :prompt => true }
 
     respond_to do |format|
       format.html # new.html.erb
@@ -60,12 +62,16 @@ class SubprocesosController < ApplicationController
   def edit
     @from_tree = params[:from].present?
     @subproceso = Subproceso.find(params[:id])
+    @cargos_estructuras = @subproceso.cargo_estructura.estructura.cargos_estructuras
+    @estructuras_opts = { :selected => @subproceso.cargo_estructura.estructura_id }
   end
 
   # POST /subprocesos
   # POST /subprocesos.json
   def create
     @subproceso = Subproceso.new(params[:subproceso])
+    @cargos_estructuras = @subproceso.cargo_estructura.estructura.cargos_estructuras
+    @estructuras_opts = { :selected => @subproceso.cargo_estructura.estructura_id }
 
     respond_to do |format|
       if @subproceso.save
@@ -82,6 +88,8 @@ class SubprocesosController < ApplicationController
   # PUT /subprocesos/1.json
   def update
     @subproceso = Subproceso.find(params[:id])
+    @cargos_estructuras = @subproceso.cargo_estructura.estructura.cargos_estructuras
+    @estructuras_opts = { :selected => @subproceso.cargo_estructura.estructura_id }
 
     respond_to do |format|
       if @subproceso.update_attributes(params[:subproceso])

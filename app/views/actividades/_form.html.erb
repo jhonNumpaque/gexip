@@ -12,10 +12,17 @@
   <div class="control-group">
     <%= f.label :descripcion, required_label('Nombre'), class: 'control-label' %>
     <div class="controls">
-      <%= f.text_field :descripcion %>      
+      <%= f.text_field :descripcion, class: 'validate[required]' %>
     </div>
   </div>
 
   <%= f.hidden_field :orden %>
   <%= f.hidden_field :procedimiento_id %>
 <% end %>
+
+
+<script>
+  $(function(){
+    $('.form_remote').validationEngine();
+  })
+</script>
