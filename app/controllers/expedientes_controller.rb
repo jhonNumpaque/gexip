@@ -33,9 +33,6 @@ class ExpedientesController < ApplicationController
     exp4_filtro = Expediente.find_by_sql("select b.expediente_id from vista_expedientes_transito b where b.cargo_estructura_origen_id = #{current_usuario.funcionario.cargo_estructura_id}")
     exp4_arra = exp4_filtro.map(&:expediente_id)
 
-    puts "----------------------------"
-    puts exp4_arra.inspect
-
     @expedientes_procesos = Expediente.where(:id => exp1_arra)
 
     @expedientes_entradas = Expediente.where(:id => exp2_arra)
@@ -54,6 +51,8 @@ class ExpedientesController < ApplicationController
 		expediente = Expediente.find(params[:id])
 
 		expediente.recibir!(current_usuario)
+
+		redirect_to expediente_path(expediente)
   end
 
   # GET /expedientes/1
