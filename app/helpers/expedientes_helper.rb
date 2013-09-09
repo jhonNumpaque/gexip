@@ -114,4 +114,10 @@ module ExpedientesHelper
     end
     boolean
   end
+
+  def mostrar_comprobante_entrada(expediente)
+    if expediente.estado == 'NUEVO'
+      link_to icon_tag('Ver Comprobante de Entrada', :class => 'icon-eye-open icon-white'), '#', class: 'btn btn-primary', :onclick => "verComprobanteEntrada()"
+    end
+  end
 end

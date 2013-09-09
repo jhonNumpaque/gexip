@@ -3,30 +3,31 @@
   <tbody>
   <% if expediente.tarea.adjuntos.present? %>
       <%#= render 'adjuntos_tareas_expedientes/form' %>
+      <% if expediente.tarea_expediente_actual.estado == 'PROCESANDO' %>
+          <%= form_tag('/subir_documento', multipart: true, :class => 'form-horizontal') %>
+          <%#= form_for @adjunto_tarea_expediente, html: {class: 'form-horizontal'} do |f| %>
+          <% expediente.tarea.adjuntos.each do |a| %>
+              <div class="control-group">
+                <%= label_tag a.id, a.descripcion, class: 'control-label' %>
+                <div class="controls">
+                  <% if verificar_documento(a, expediente.adjuntos_tareas_expedientes) %>
+                      <%= icon_tag('', :class => 'icon-ok') %>
+                  <% else %>
+                      <%= file_field_tag 'adjunto', :id => a.id, :name => "adjunto[#{a.id}]" %>
+                  <% end %>
 
-      <%= form_tag('/subir_documento', multipart: true, :class => 'form-horizontal') %>
-      <%#= form_for @adjunto_tarea_expediente, html: {class: 'form-horizontal'} do |f| %>
-      <% expediente.tarea.adjuntos.each do |a| %>
+                </div>
+              </div>
+              <%# end %>
+          <% end %>
+          <%= hidden_field_tag 'tarea_expediente', expediente.tarea_expediente_actual_id %>
+          <%= hidden_field_tag 'expediente', expediente.id %>
           <div class="control-group">
-            <%= label_tag a.id, a.descripcion, class: 'control-label' %>
             <div class="controls">
-              <% if verificar_documento(a, expediente.adjuntos_tareas_expedientes) %>
-                  <%= icon_tag('', :class => 'icon-ok') %>
-              <% else %>
-                  <%= file_field_tag 'adjunto', :id => a.id, :name => "adjunto[#{a.id}]" %>
-              <% end %>
-
+              <%= submit_tag 'Subir', :class => 'btn btn-primary' %>
             </div>
           </div>
-          <%# end %>
       <% end %>
-      <%= hidden_field_tag 'tarea_expediente', expediente.tarea_expediente_actual_id %>
-      <%= hidden_field_tag 'expediente', expediente.id %>
-      <div class="control-group">
-        <div class="controls">
-          <%= submit_tag 'Subir', :class => 'btn btn-primary' %>
-        </div>
-      </div>
   <% end %>
 
   <table class="table table-condensed table-striped">

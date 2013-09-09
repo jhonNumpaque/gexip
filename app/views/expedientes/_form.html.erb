@@ -61,12 +61,12 @@
       <h4>Documentos Requeridos</h4>
       <hr />
       <div id="cont_adjunto">
-        <%#= f.fields_for :adjuntos do |build| %>
+        <%#= f.fields_for :adjuntos_tareas_expedientes do |build| %>
           <%#= render 'campos_adjunto', :f => build %>
         <%# end %>
       </div>
 
-      <%#= link_to_add_fields("Agregar", f, :adjuntos) %>
+      <%#= link_to_add_fields("Agregar", f, :adjuntos_tareas_expedientes) %>
     </div>
 
     <div class="span10 well">

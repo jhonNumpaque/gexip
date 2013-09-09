@@ -9,6 +9,7 @@
         <%= link_to icon_tag('Editar', :class => 'icon-edit icon-white'), edit_expediente_path(@expediente), :class => 'btn btn-primary' %>
         <%= link_to icon_tag('Borrar', :class => 'icon-trash icon-white'), @expediente, confirm: 'Estás seguro?', method: :delete, class: 'btn btn-primary' %>
         <%= link_to icon_tag('Ver Todos', :class => 'icon-arrow-left icon-white'), expedientes_path, class: 'btn btn-primary' %>
+        <%= mostrar_comprobante_entrada @expediente %>
       </div>
     </div>
 
@@ -107,3 +108,20 @@
   <div class="modal-body"></div>
   <div class="modal-footer"></div>
 </div>
+
+<div class="modal" id="modal-comprobante" style="display: none; width: 660px; padding: 10px">
+  <%= render 'comprobante_entrada' %>
+</div>
+
+<script type="text/javascript">
+    function verComprobanteEntrada(){
+        $('#modal-comprobante').modal('toggle');
+    }
+    function imprimirComprobanteEntrada(){
+        w=window.open();
+        w.document.write($('#print-area').html());
+        w.print();
+        w.close();
+
+    }
+</script>

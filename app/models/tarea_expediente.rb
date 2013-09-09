@@ -3,6 +3,7 @@ class TareaExpediente < ActiveRecord::Base
   belongs_to :expediente
   belongs_to :tarea
   belongs_to :usuario_inicio, class_name: 'Usuario'
+  belongs_to :usuario_fin, class_name: 'Usuario'
   has_many :adjuntos_tareas_expedientes
   has_many :adjuntos, :through => :adjuntos_tareas_expedientes, :source => :adjunto
 
