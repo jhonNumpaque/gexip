@@ -1,0 +1,241 @@
+<script type="text/javascript">
+    $(function () {
+
+        //Cantidad
+        new Highcharts.Chart({
+            chart: {
+                renderTo: 'chart-cantidad',
+                type: 'column'
+            },
+            title: {
+                text: 'Radicacion de Expedientes -  Año: <%= @anho %>'
+            }, subtitle: {
+                text: 'Sumatoria de Expedientes dados de Alta y Finalizados por Mes',
+                x: -20
+            },
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Cantidad de Expedientes'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y} </b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [
+                {
+                    name: 'Nuevos',
+                    data: [
+                        <% (1 .. 12).each do |m|%>
+                            <% val = @resultados[m].present? ? @resultados[m][0] : 0 %>
+                            <%= val %>,
+                        <% end%>
+                    ]
+
+                },
+                {
+                    name: 'Finalizados',
+                    data: [
+                        <% (1 .. 12).each do |m|%>
+                        <% val = @resultados[m].present? ? @resultados[m][1] : 0 %>
+                        <%= val %>,
+                        <% end%>
+                    ]
+
+                },
+                {
+                    name: 'Anulados',
+                    data: [
+                        <% (1 .. 12).each do |m|%>
+                        <% val = @resultados[m].present? ? @resultados[m][2] : 0 %>
+                        <%= val %>,
+                        <% end%>
+                    ]
+
+                },
+                {
+                    name: 'En Proceso',
+                    data: [
+                        <% (1 .. 12).each do |m|%>
+                        <% val = @resultados[m].present? ? @resultados[m][3] : 0 %>
+                        <%= val %>,
+                        <% end%>
+                    ]
+
+                }
+            ]
+        });
+        //Finalizados
+        new Highcharts.Chart({
+            chart: {
+                renderTo: 'chart-finalizados',
+                type: 'column'
+            },
+            title: {
+                text: 'Radicacion de Expedientes -  Año: <%= @anho %>'
+            }, subtitle: {
+                text: 'Porcentaje del Cumplimiento de los Objetivos por Mes de Creacion del Expediente',
+                x: -20
+            },
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Porcentaje'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y} %</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [
+                {
+                    name: 'Finalizados',
+                    data: [
+                        <% (1 .. 12).each do |m|%>
+                        <% val = @finalizados[m].present? ? (@finalizados[m].inject{ |sum,x| sum.to_f + x.to_f } / @resultados[m][0] ) * 100  : 0 %>
+                        <%= val %>,
+                        <% end%>
+                    ]
+
+                }
+            ]
+        });
+
+        //Procentaje
+        new Highcharts.Chart({
+            chart: {
+                renderTo: 'chart-porcentaje',
+                type: 'column'
+            },
+            title: {
+                text: 'Radicacion de Expedientes -  Año: <%= @anho %>'
+            }, subtitle: {
+                text: 'Porcentaje del Cumplimiento de los Objetivos por Mes de Creacion del Expediente',
+                x: -20
+            },
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Porcentaje'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y} %</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [
+                {
+                    name: 'Finalizados Fuera de Tiempo',
+                    data: [
+                        <% (1 .. 12).each do |m|%>
+                            <%# val = @finalizados[m].present? ? (@finalizados[m][0].to_f / @resultados[m][0].to_f) * 100 : 0 %>
+                            <% val = @finalizados[m].present? ? (@finalizados[m][0].to_f / @finalizados[m].inject{ |sum,x| sum.to_f + x.to_f }) * 100 : 0 %>
+                            <%= val %>,
+                        <% end%>
+                    ]
+
+                },
+                {
+                    name: 'Finalizados a Tiempo',
+                    data: [
+                        <% (1 .. 12).each do |m|%>
+                            <%# val = @finalizados[m].present? ? (@finalizados[m][1].to_f / @resultados[m][0].to_f) * 100 : 0 %>
+                            <% val = @finalizados[m].present? ? (@finalizados[m][1].to_f / @finalizados[m].inject{ |sum,x| sum.to_f + x.to_f }) * 100 : 0 %>
+                            <%= val %>,
+                        <% end%>
+                    ]
+
+                }
+            ]
+        });
+        //Procentaje de anulados
+        new Highcharts.Chart({
+            chart: {
+                renderTo: 'chart-porcentaje-anulado',
+                type: 'column'
+            },
+            title: {
+                text: 'Radicacion de Expedientes -  Año: <%= @anho %>'
+            }, subtitle: {
+                text: 'Porcentaje de Expedientes Anulados por Mes de Creacion del Expediente',
+                x: -20
+            },
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Porcentaje'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y} %</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [
+                {
+                    name: 'Anulados',
+                    data: [
+                        <% (1 .. 12).each do |m|%>
+                        <% val = @anulados[m].present? ? (@anulados[m].to_f / @resultados[m][0].to_f) * 100 : 0 %>
+                        <%= val %>,
+                        <% end%>
+                    ]
+
+                }
+            ]
+        });
+    });
+
+</script>
