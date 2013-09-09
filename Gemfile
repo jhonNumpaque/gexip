@@ -7,7 +7,7 @@ gem 'rails', '3.2.11'
 
 gem 'pg'
 gem "simple_form", "~> 2.0.0.rc"
-gem 'devise'
+gem 'devise', '2.1.3'
 gem 'kaminari'
 gem 'time_diff'
 gem 'carrierwave'

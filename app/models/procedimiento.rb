@@ -3,7 +3,7 @@ class Procedimiento < ActiveRecord::Base
 
 	validates :nombre, :presence => true	
 	validates :objetivo, :presence => true	
-	validates :elabora_usuario, :presence => true		
+	#validates :elabora_usuario, :presence => true
 	validates :serieproceso_id, :presence => true		
 	
 	has_many :actividades, :dependent => :restrict

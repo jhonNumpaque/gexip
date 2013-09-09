@@ -11,6 +11,6 @@
 
   <p><b>Fecha de Entrada: </b><%= @expediente.created_at %></p>
 
-  <p><b>Recibido por: </b><%= @expediente.tareas_expedientes.first.usuario_fin.login %></p>
+  <p><b>Recibido por: </b><%= @expediente.tareas_expedientes.first.usuario_fin.login if @expediente.tareas_expedientes.first.usuario_fin %></p>
 </div>
 <%= button_tag icon_tag('Imprimir', :class => 'icon-print icon-white'), class: 'btn btn-success', :onclick => 'imprimirComprobanteEntrada()'  %>

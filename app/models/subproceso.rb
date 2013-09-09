@@ -3,7 +3,7 @@ class Subproceso < Serieproceso
 
   # relacion
   belongs_to :proceso, :foreign_key => :serieproceso_id
-  belongs_to :cargo, :foreign_key => :cargo_id
+  belongs_to :cargo_estructura
   has_many :procedimientos,  :foreign_key => :serieproceso_id, :dependent => :restrict
 	has_one :version_aprobada, :foreign_key => :item_id, :conditions => { tipo_item: 'Subroproceso' }
 

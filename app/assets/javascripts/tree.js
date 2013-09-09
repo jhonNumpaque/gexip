@@ -9,3 +9,5 @@
 //= require bootstrap-modal
 //= require bootstrap-modalmanager
 //= require select2.min
+//= require jquery.validationEngine-es
+//= require jquery.validationEngine

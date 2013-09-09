@@ -47,6 +47,8 @@ class MacroprocesosController < ApplicationController
   # GET /macroprocesos/new.json
   def new
     @macroproceso = Macroproceso.new
+    @cargos_estructuras = []
+    @estructuras_opts = { :prompt => true }
 
     respond_to do |format|
       format.html # new.html.erb
@@ -58,6 +60,8 @@ class MacroprocesosController < ApplicationController
   # GET /macroprocesos/1/edit
   def edit
     @macroproceso = Macroproceso.find(params[:id])
+    @cargos_estructuras = @macroproceso.cargo_estructura.estructura.cargos_estructuras
+    @estructuras_opts = { :selected => @macroproceso.cargo_estructura.estructura_id }
 
     respond_to do |format|
       format.js      
@@ -68,6 +72,8 @@ class MacroprocesosController < ApplicationController
   # POST /macroprocesos.json
   def create
     @macroproceso = Macroproceso.new(params[:macroproceso])
+    @cargos_estructuras = @macroproceso.cargo_estructura.estructura.cargos_estructuras
+    @estructuras_opts = { :selected => @macroproceso.cargo_estructura.estructura_id }
 
     respond_to do |format|
       if @macroproceso.save
@@ -86,6 +92,9 @@ class MacroprocesosController < ApplicationController
   # PUT /macroprocesos/1.json
   def update
     @macroproceso = Macroproceso.find(params[:id])
+    @cargos_estructuras = @macroproceso.cargo_estructura.estructura.cargos_estructuras
+    @estructuras_opts = { :selected => @macroproceso.cargo_estructura.estructura_id }
+
     respond_to do |format|
       if @macroproceso.update_attributes(params[:macroproceso])
         format.html { redirect_to macroprocesos_path, notice: 'MacroProceso Modificado Correctamente.' }

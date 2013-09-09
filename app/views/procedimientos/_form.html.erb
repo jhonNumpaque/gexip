@@ -1,48 +1,48 @@
-<%= simple_form_for @procedimiento, :remote => @from_tree, :html => { :class => 'form-horizontal form_remote' } do |f| %>
-  <%= f.error_notification %>
-
-  <% if @from_tree %>
-    <%= f.hidden_field :serieproceso_id, :value => @subproceso_id %>
-  <% else %>
-    <%= f.input :serieproceso_id, :label => "SubProceso", :collection => Subproceso.all, :label_method => :codigo_nombre, :prompt => "-- Seleccione --" %>
-  <% end %>
-  <%= f.input :nombre %>
-  <%= f.input :objetivo %>
-  <%= f.input :definiciones %>
-  <%= f.input :elabora_fecha, :as => :string, :input_html => { :class => 'date_picker' }%>
-  <%#= f.input :elabora_usuario %>
-  <%= f.input :elabora_usuario, :collection =>  Usuario.all, :label_method => :nombre_completo, :prompt => '-- Seleccione --' %>
-  <%#= f.input :revisado_fecha, :as => :string, :input_html => { :class => 'date_picker' } %>
-  <%#= f.input :revisado_usuario %>
-  <%#= f.input :revisado_usuario, :collection =>  Usuario.all, :label_method => :nombres, :prompt => '-- Seleccione --' %>
-  <%#= f.input :aprobado_fecha, :as => :string, :input_html => { :class => 'date_picker' } %>
-  <%#= f.input :aprobado_usuario %>
-  <%#= f.input :aprobado_usuario, :collection =>  Usuario.all, :label_method => :nombres, :prompt => '-- Seleccione --' %>
-
-  
-
-  <% unless @from_tree %>
-    <fieldset>
-      <legend>Actividades</legend>
-      <table>
-        <thead style="margin-bottom: 20px;">
-          <tr>
-            <th>Nombre</th>
-            <th>Orden</th>
-          </tr>
-
-        </thead>
-        <tbody id="actividades">
-          <%= f.fields_for :actividades do |builder| %>
-            <%= render "campos_actividad", :f => builder %>
-          <% end %>
-        </tbody>
-      </table>
-      <%= link_to_add_fields icon_tag("Agregar Actividad", :class => 'icon-plus-sign'), f, :actividades, :container => 'actividades' %>
-    </fieldset>
-    <div class="form-actions">
-      <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
-      <%= link_to 'Cancelar', procedimientos_path, :class => "btn" %>
+<%= form_for @procedimiento, remote: true, html: { class: 'form-horizontal form_remote', :id => 'form_procedimiento' } do |f| %>
+  <% if @procedimiento.errors.present? %>
+    <div class="alert alert-block alert-error">
+      <h4>No se ha podido guardar el registro, verifique lo siguiente:</h4>
+      <ul>
+        <% @procedimiento.errors.full_messages.each do |error| %>
+          <li><%= error %></li>
+        <% end %>
+      </ul>
     </div>
   <% end %>
+  <div class="control-group">
+    <%= f.label :nombre, required_label('Nombre'), class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :nombre, class: 'validate[required]' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :objetivo, required_label('Objetivo'), class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :objetivo, :style => 'width:80%;', :rows => 7, :cols => 20, class: 'validate[required]' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :definiciones, 'Definiciones', class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :definiciones %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :elabora_fecha, 'Fecha de Elaboración', class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :elabora_fecha, :class => 'date_picker' %>
+    </div>
+  </div>
+
+  <%= f.hidden_field :serieproceso_id, :value => @subproceso_id %>
+
 <% end %>
+
+<script>
+  $(function(){
+    $('.form_remote').validationEngine();
+  })
+</script>

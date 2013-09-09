@@ -1,38 +1,78 @@
-<%= simple_form_for @funcionario, :html => { :class => 'form-horizontal' } do |f| %>
-<%= f.error_notification %>
-
-<%= f.input :nombres %>
-<%= f.input :apellidos %>
-<%= f.input :documento, :label => "Documento (CI)" %>
-<%= f.input :direccion, :label => "Direcci&oacute;n" %>
-<%= f.input :telefono, :label => "Tel&eacute;fono" %>
-<div class="control-group string optional">
-  <div class="control-label">
-    <%= label 'estructura_id', "Estructura" %>
+<%= form_for @funcionario, html: { class: 'form-horizontal', :id => 'form_funcionario' } do |f| %>
+  <% if @funcionario.errors.present? %>
+    <div class="alert alert-block alert-error">
+      <h4>No se ha podido guardar el registro, verifique lo siguiente:</h4>
+      <ul>
+        <% @funcionario.errors.full_messages.each do |error| %>
+          <li><%= error %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="control-group">
+    <%= f.label :nombres, required_label('Nombres'), class: 'control-label' %>
     <div class="controls">
-      <%= select_tag 'estructura_id', options_from_collection_for_select(Estructura.all, "id", "nombre", @estructura.present? ? @estructura.id : nil), :prompt => "-- Seleccione --" %>
+      <%= f.text_field :nombres %>
     </div>
   </div>
-</div>
 
-<div class="control-group string optional">
-  <div class="control-label">
-    <%= label 'cargo_id', "Puesto de Trabajo" %>
+  <div class="control-group">
+    <%= f.label :apellidos, required_label('Apellidos'), class: 'control-label' %>
     <div class="controls">
-      <%= select_tag 'cargo_id', options_from_collection_for_select(@cargos.present? ? @cargos : Cargo.all, "id", "nombre", @cargo.present? ? @cargo.id : nil), :prompt => "-- Seleccione --" %>
+      <%= f.text_field :apellidos %>
     </div>
   </div>
-</div>
-<%#= f.input :cargo_funcionario_id, :label => "Puesto de Trabajo" ,:collection =>  Cargo.all, :label_method => :nombre, :prompt => '-- Seleccione --' %>
 
-<%= linked_combo 'cargo_id', :linked => 'estructura_id', :param => 'estructura_id', :url => '/cargos.json' %>
+  <div class="control-group">
+    <%= f.label :documento, required_label('Documento (CI)'), class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :documento %>
+    </div>
+  </div>
 
-<%= f.input :territorio_id, :label => "Ciudad", :collection => Ciudad.all, :label_method => :nombre, :prompt => "-- Seleccione --" %>
+  <div class="control-group">
+    <%= f.label :direccion, 'Dirección', class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :direccion, :style => 'width:80%;', :rows => 3, :cols => 20 %>
+    </div>
+  </div>
 
-<%= f.input :tipo_documento_id, :as => :hidden, :input_html => { :value => "1" } %> <!-- 1 CIN -->
+  <div class="control-group">
+    <%= f.label :telefono, 'Teléfono', class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :telefono %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= label_tag :estructura_id, required_label('Dependencia'), class: 'control-label' %>
+    <div class="controls">
+      <%= collection_select :estructura, :id, Estructura.all, :id, :nombre, @estructuras_opts, { :name => 'estructura_id' } %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :cargo_estructura_id, required_label('Puesto de Trabajo'), class: 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select :cargo_estructura_id, @cargos_estructuras, :id, :descripcion, { :prompt => "-- Seleccione --" }, {  }  %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :territorio_id, required_label('Ciudad'), class: 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select :territorio_id, Ciudad.all, :id, :nombre, { :prompt => "-- Seleccione --" }, {  }  %>
+    </div>
+  </div>
+
+  <%= f.hidden_field :tipo_documento_id, :value => 1 %>
 
 <div class="form-actions">
-  <%= f.button :submit, 'Guardar', :class => 'btn btn-success' %>
+  <%= f.submit 'Guardar', :class => 'btn btn-success' %>
   <%= link_to 'Cancelar', funcionarios_path, :class => "btn" %>
 </div>
 <% end %>
+
+
+<%= linked_combo "funcionario_cargo_estructura_id", :linked => "estructura_id",
+                 :url => cargo_estructuras_path(format: 'json'), :param => "estructura_id", :display => 'descripcion' %>

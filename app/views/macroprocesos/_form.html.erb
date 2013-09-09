@@ -12,35 +12,51 @@
   <div class="control-group">
     <%= f.label :nombre, required_label('Nombre'), class: 'control-label' %>
     <div class="controls">
-      <%= f.text_field :nombre %>      
+      <%= f.text_field :nombre, class: 'validate[required]' %>
     </div>
   </div>
 
   <div class="control-group">
     <%= f.label :clasificacion, required_label('Clasificación'), class: 'control-label' %>
     <div class="controls">
-      <%= f.select :clasificacion, Macroproceso::CLASIFICACIONES.map{|c| [c,c]}, :prompt => "-- Seleccione --" %>      
+      <%= f.select :clasificacion, Macroproceso::CLASIFICACIONES.map{|c| [c,c]}, { :prompt => true }, { class: 'validate[required]' } %>
     </div>
   </div>
 
   <div class="control-group">
     <%= f.label :codigo, required_label('Código'), class: 'control-label' %>
     <div class="controls">
-      <%= f.text_field :codigo %>      
+      <%= f.text_field :codigo, class: 'validate[required]' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= label_tag :estructura_id, required_label('Estructura'), class: 'control-label' %>
+    <div class="controls">
+      <%= collection_select :estructura, :id, Estructura.all, :id, :nombre, @estructuras_opts, { :name => 'estructura_id', class: 'validate[required]' } %>
     </div>
   </div>
 
   <div class="control-group">
     <%= f.label :cargo_estructura_id, required_label('Cargo Responsable'), class: 'control-label' %>
     <div class="controls">
-      <%= f.collection_select :cargo_estructura_id, CargoEstructura.all, :id, :descripcion, :prompt => "-- Seleccione --" %>      
+      <%= f.collection_select :cargo_estructura_id, @cargos_estructuras, :id, :descripcion, { :prompt => "-- Seleccione --" }, { class: 'validate[required]' }  %>
     </div>
   </div>
 
   <div class="control-group">
     <%= f.label :objetivo, required_label('Objetivo'), class: 'control-label' %>
     <div class="controls">
-      <%= f.text_area :objetivo, rows: 5, class: 'input-xlarge' %>      
+      <%= f.text_area :objetivo, rows: 5, class: 'input-xlarge validate[required]' %>
     </div>
   </div>
 <% end %>
+
+
+<%= linked_combo "macroproceso_cargo_estructura_id", :linked => "estructura_id",
+                 :url => cargo_estructuras_path(format: 'json'), :param => "estructura_id", :display => 'descripcion' %>
+<script>
+  $(function(){
+    $('.form_remote').validationEngine();
+  })
+</script>

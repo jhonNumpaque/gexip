@@ -47,6 +47,8 @@ end
   # GET /funcionarios/new.json
   def new
   	@funcionario = Funcionario.new
+	  @estructuras_opts = { :prompt => true }
+	  @cargos_estructuras = []
 
   	respond_to do |format|
       format.html # new.html.erb
@@ -58,18 +60,23 @@ end
   def edit
   	@funcionario = Funcionario.find(params[:id])
     #para mostrar el cargo y el ente que se encuentran seleccionados
-    cargo_estructura = CargoEstructura.find(@funcionario.cargo_estructura_id)
-    @estructura = Estructura.find(cargo_estructura.estructura_id)
-    @cargo = Estructura.find(cargo_estructura.cargo_id)
+    #cargo_estructura = CargoEstructura.find(@funcionario.cargo_estructura_id)
+    #@estructura = Estructura.find(cargo_estructura.estructura_id)
+    #@cargo = Estructura.find(cargo_estructura.cargo_id)
     #buscar todos los cargos del ente para mostrar en el select
-    cargos_estructura = CargoEstructura.where(:estructura_id => @estructura.id).all
-    @cargos = Cargo.find(cargos_estructura.map{|x| x.cargo_id})
+    #cargos_estructura = CargoEstructura.where(:estructura_id => @estructura.id).all
+    #@cargos = Cargo.find(cargos_estructura.map{|x| x.cargo_id})
+
+	  @cargos_estructuras = @funcionario.cargo_estructura.estructura.cargos_estructuras
+	  @estructuras_opts = { :selected => @funcionario.cargo_estructura.estructura_id }
 end
 
   # POST /funcionarios
   # POST /funcionarios.json
   def create
   	@funcionario = Funcionario.new(params[:funcionario])
+	  @cargos_estructuras = @funcionario.cargo_estructura ? @funcionario.cargo_estructura.estructura.cargos_estructuras : []
+	  @estructuras_opts = @cargos_estructuras.present? ? { :selected => @funcionario.cargo_estructura.estructura_id } : { :prompt => true }
 
     if params[:cargo_id].present? && params[:estructura_id].present?
       cargo_estructura = CargoEstructura.where("cargo_id = ? and estructura_id = ?", "#{params[:cargo_id]}", "#{params[:estructura_id]}").first
@@ -99,6 +106,9 @@ end
 
   	respond_to do |format|
   		if @funcionario.update_attributes(params[:funcionario])
+			  @cargos_estructuras = @funcionario.cargo_estructura ? @funcionario.cargo_estructura.estructura.cargos_estructuras : []
+			  @estructuras_opts = @cargos_estructuras.present? ? { :selected => @funcionario.cargo_estructura.estructura_id } : { :prompt => true }
+
   			format.html { redirect_to funcionarios_path, notice: 'Funcionario Modificado Correctamente.' }
   			format.json { head :no_content }
   		else

@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <%= stylesheet_link_tag    "application", "bootstrap-modal", :media => "all" %>    
-    <%= stylesheet_link_tag    "procedimientos_jstree", 'select2', 'select2-bootstrap', :media => "all" %>
+    <%= stylesheet_link_tag    "validationEngine.jquery", "procedimientos_jstree", 'select2', 'select2-bootstrap', :media => "all" %>
     <%#= javascript_include_tag "application" %>
     <%= javascript_include_tag "tree" %>
 
@@ -101,6 +101,7 @@
 		<%= javascript_include_tag 'jquery.jstree' %>
     <script type="text/javascript">
       $(function(){
+        $('.form_remote').validationEngine();
         $('#submit_form').live('click', function(){ $('.form_remote').submit(); });
 
         $("#search").click(function () {
