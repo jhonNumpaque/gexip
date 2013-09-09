@@ -53,8 +53,12 @@ class ProcedimientosController < ApplicationController
 		query_val = {}
 
     #traer todos los procedimientos que se permiten al cargo del usuario
-    cargo_estructura = CargoEstructura.find(current_usuario.funcionario.cargo_estructura_id)
-    @procedimientos = cargo_estructura.procedimientos
+    #cargo_estructura = CargoEstructura.find(current_usuario.funcionario.cargo_estructura_id)
+    tareas = Tarea.where(:tipo => 'INICIO', :cargo_estructura_id => current_usuario.funcionario.cargo_estructura_id)
+
+    procedimientos_id = tareas.map{ |t| t.actividad.procedimiento.id }
+
+    @procedimientos = Procedimiento.where(:id => procedimientos_id)
     if params[:nombre].present?
 			query_str << 'nombre ilike :nombre'
 			query_val[:nombre] = "%#{params[:nombre]}%"
