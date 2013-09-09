@@ -15,6 +15,7 @@ class Procedimiento < ActiveRecord::Base
 	belongs_to :proceso, :foreign_key => 'serieproceso_id', :counter_cache => true, :conditions => "serieprocesos.type = 'Proceso'"
 	belongs_to :serieproceso, :foreign_key => 'serieproceso_id'
 	has_one :version_aprobada, :foreign_key => :item_id, :conditions => { tipo_item: 'Procedimiento' }
+  belongs_to :cargo_estructura
 
 	scope :a_aprobar, where(estado: 'aprobable')
 	scope :aprobados, where(estado: 'aprobado')
