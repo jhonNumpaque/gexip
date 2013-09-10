@@ -25,31 +25,25 @@
             <th>Procedimiento</th>
             <th>Solicitante</th>
             <th>Descripci&oacute;n</th>
-            <th></th>
+            <th>Fecha de Entrada</th>
+            <th>Estado</th>
           </tr>
           <% @expedientes_procesos.each do |expediente| %>
             <tr>
-              <td><%= expediente.id %> <%= link_to expediente.numero, expediente %></td>
+              <td><%= link_to expediente.numero, expediente %></td>
               <td>
-                <span class="label label-info"><%= expediente.estado %></span>
+                <%= link_to expediente.tarea_expediente_actual.tarea.actividad.procedimiento.nombre, expediente %>
               </td>
-              <td><%= expediente.ente_id %></td>
+              <td><%= expediente.ente.nombre_completo %></td>
               <td><%= truncate(expediente.descripcion, :length => 80) %></td>
-              <td>
-                <div class="btn-group">
-                  <%= link_to 'Acciones <b class="caret"></b>'.html_safe, '#', :class => 'btn btn-primary dropdown-toggle', 'data-toggle' => 'dropdown' %>
-                  <ul id="menu1" class="dropdown-menu">
-                    <li><%= link_to icon_tag('Editar', :class => 'icon-pencil'), edit_expediente_path(expediente) %></li>
-                    <li><%= link_to icon_tag('Eliminar', :class => 'icon-trash'), expediente, confirm: '¿Está seguro de eliminar este registro?. Esta acción no se puede deshacer', method: :delete %></li>
-                  </ul>
-                </div>
-              </td>
+              <td><%= l(expediente.created_at, :format => :fechahora ) %></td>
+              <td><span class="label label-info"><%= expediente.estado %></span></td>
             </tr>
           <% end %>
         </table>
       <% else %>
         <p class="alert-message warning">
-          Todavía no hay expedientes, <%= link_to 'agregar', new_expediente_path %>.
+          No hay expedientes en esta lista.
         </p>
       <% end %>
 
@@ -65,58 +59,64 @@
             <th>Procedimiento</th>
             <th>Solicitante</th>
             <th>Descripci&oacute;n</th>
-            <th></th>
+            <th>Fecha de Entrada</th>
+            <th>Estado</th>
           </tr>
           <% @expedientes_entradas.each do |expediente| %>
             <tr>
-              <td> <%= expediente.id %> <%= link_to expediente.numero, expediente %></td>
+              <td><%= link_to expediente.numero, expediente %></td>
               <td>
-                <span class="label label-info"><%= expediente.estado %></span>
+                <%= link_to expediente.tarea_expediente_actual.tarea.actividad.procedimiento.nombre, expediente %>
               </td>
-              <td><%= expediente.ente_id %></td>
+              <td><%= expediente.ente.nombre_completo %></td>
               <td><%= truncate(expediente.descripcion, :length => 80) %></td>
-              <td>
-                <div class="btn-group">
-                  <%= link_to 'Acciones <b class="caret"></b>'.html_safe, '#', :class => 'btn btn-primary dropdown-toggle', 'data-toggle' => 'dropdown' %>
-                  <ul id="menu1" class="dropdown-menu">
-                    <li><%= link_to icon_tag('Editar', :class => 'icon-pencil'), edit_expediente_path(expediente) %></li>
-                    <li><%= link_to icon_tag('Eliminar', :class => 'icon-trash'), expediente, confirm: '¿Está seguro de eliminar este registro?. Esta acción no se puede deshacer', method: :delete %></li>
-                  </ul>
-                </div>
-              </td>
+              <td><%= l(expediente.created_at, :format => :fechahora ) %></td>
+              <td><span class="label label-info"><%= expediente.estado %></span></td>
             </tr>
           <% end %>
         </table>
 
       <% else %>
         <p class="alert-message warning">
-          Todavía no hay expedientes, <%= link_to 'agregar', new_expediente_path %>.
+          No hay expedientes en esta lista.
         </p>
       <% end %>
     </div>
 
     <div class="tab-pane" id="ccentransito">
       <h2>Bandeja de Salida</h2>
+      <% if @expedientes_salidas.present? %>
       <table class='table table-condensed table-bordered'>
         <thead>
         <tr>
-          <th>Número</th>
+          <th>N&uacute;mero</th>
           <th>Procedimiento</th>
-          <th>Descripción</th>
-          <th></th>
+          <th>Solicitante</th>
+          <th>Descripci&oacute;n</th>
+          <th>Fecha de Entrada</th>
+          <th>Estado</th>
         </tr>
         </thead>
         <tbody>
         <% @expedientes_salidas.each do |expediente| %>
           <tr>
-            <td><%= expediente.numero %></td>
-            <td><%= %></td>
-            <td><%= expediente.descripcion %></td>
-            <td></td>
+            <td><%= link_to expediente.numero, expediente %></td>
+            <td>
+              <%= link_to expediente.tarea_expediente_actual.tarea.actividad.procedimiento.nombre, expediente %>
+            </td>
+            <td><%= expediente.ente.nombre_completo %></td>
+            <td><%= truncate(expediente.descripcion, :length => 80) %></td>
+            <td><%= l(expediente.created_at, :format => :fechahora ) %></td>
+            <td><span class="label label-info"><%= expediente.estado %></span></td>
           </tr>
         <% end %>
         </tbody>
       </table>
+      <% else %>
+      <p class="alert-message warning">
+        No hay expedientes en esta lista.
+      </p>
+      <% end %>
     </div>
     </div>
      

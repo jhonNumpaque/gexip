@@ -8,7 +8,7 @@ module ExpedientesHelper
       disabled = 'disabled'
     end
 
-    link_to(icon_tag('Inicar', class: 'icon-play icon-white'),
+    link_to(icon_tag('Iniciar', class: 'icon-play icon-white'),
             iniciar_tarea_path(), class: clase,
             disabled: disabled, id: 'iniciar_tarea',
             confirm: '¿Está seguro que desea INICIAR esta tarea?')

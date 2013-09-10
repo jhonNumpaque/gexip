@@ -46,6 +46,10 @@ class Expediente < ActiveRecord::Base
 		self.estado == 'NUEVO' || self.estado == 'PROCESANDO'
   end
 
+  def finalizar!
+		self.update_attributes(:estado => 'FINALIZADO', :fecha_finalizo => Time.now)
+  end
+
   def a_recibir?(usuario)
 		cargo_estructura_id = usuario.funcionario.cargo_estructura_id
 		tarea =  self.tarea_expediente_actual.tarea

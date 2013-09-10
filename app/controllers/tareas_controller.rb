@@ -267,6 +267,10 @@ class TareasController < ApplicationController
         @expediente = Expediente.find(params[:eid])
         @tarea_expediente_actual = TareaExpediente.find(params[:tid])
         @tarea_siguiente = @expediente.tarea_siguiente
+        @esta_tarea = @tarea_expediente_actual.tarea
+        if @esta_tarea.es_fin?
+					@expediente.finalizar!
+        end
         
         if @tarea_siguiente
           actividad = @tarea_siguiente.actividad

@@ -47,6 +47,10 @@ class Tarea < ActiveRecord::Base
 		self.version_aprobada.version.reify if self.version_aprobada.present?
 	end
 
+	def es_fin?
+		self.tipo.downcase == 'fin'
+	end
+
 	def es_traslado?
 		self.tipo.downcase == 'traslado'
 	end

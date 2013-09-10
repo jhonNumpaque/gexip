@@ -54,7 +54,7 @@ class ProcedimientosController < ApplicationController
 
     #traer todos los procedimientos que se permiten al cargo del usuario
     cargo_estructura = CargoEstructura.find(current_usuario.funcionario.cargo_estructura_id)
-    @procedimientos = cargo_estructura.procedimientos
+    #@procedimientos = cargo_estructura.procedimientos
     if params[:nombre].present?
 			query_str << 'nombre ilike :nombre'
 			query_val[:nombre] = "%#{params[:nombre]}%"
@@ -64,8 +64,8 @@ class ProcedimientosController < ApplicationController
 			cond[1] = query_val
 		end
 
-		#@procedimientos = Procedimiento.aprobados.where(cond).page(params[:page]).per(10)
-		@procedimientos = @procedimientos.where(cond).page(params[:page]).per(10)
+		@procedimientos = Procedimiento.aprobados.where(cond).page(params[:page]).per(10)
+		#@procedimientos = @procedimientos.where(cond).page(params[:page]).per(10)
 
 		respond_to do |format|
 			format.js
