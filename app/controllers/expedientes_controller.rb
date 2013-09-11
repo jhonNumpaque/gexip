@@ -107,6 +107,8 @@ class ExpedientesController < ApplicationController
     end
     @seguimiento_tareas = VistaTarea.order('actividad_id,orden').where(:procedimiento_id => @tarea_actual.actividad.procedimiento_id).all
     @vista_expediente_proceso = VistaExpedienteProceso.select('DISTINCT tarea_id, tarea_expediente_fecha_fin, tarea_expediente_fecha_inicio, tarea_expediente_usuario_inicio, tarea_expediente_usuario_fin').where(:expediente_id => @expediente).group('tarea_id, tarea_expediente_fecha_fin, tarea_expediente_fecha_inicio, tarea_expediente_usuario_inicio, tarea_expediente_usuario_fin').all
+    @observaciones = {}
+    @expediente.tareas_expedientes.each { |te| @observaciones[te.tarea_id] = te.observacion_envio }
 
     respond_to do |format|
       format.html # show.html.erb
