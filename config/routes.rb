@@ -118,6 +118,7 @@ Gexip::Application.routes.draw do
 
   #consultas
   match 'consulta_verificar_expediente' => 'consultas#verificar_expediente', :as => :consulta_verificar_expediente
+  match 'consulta_desplegar_expediente' => 'consultas#desplegar_expediente', :as => :consulta_desplegar_expediente
   
   #entes
   match '/search' => 'entes#search', :as => 'search_ente'
