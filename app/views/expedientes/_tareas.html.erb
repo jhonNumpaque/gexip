@@ -1,9 +1,32 @@
-<div class="span5 well-simple" id="tareas_wrapper">          
+<div class="modal hide fade" id='observaciones-wrap'>
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Observaciones</h3>
+  </div>
+  <div class="modal-body">
+    <%= form_tag finalizar_tarea_path, :class => 'form-horizontal', :id => 'save-obs' do %>
+      <div class="control-group">
+        <label class="observaciones" for="inputEmail"><%= required_label('Observaciones') %></label>
+        <div class="controls">
+          <%= text_area_tag :observaciones, nil, :style => 'width:346px', :autofocus => true %>
+          <%= hidden_field_tag :eid, @expediente.id %>
+          <%= hidden_field_tag :tid, @tarea_expediente_actual.id if @tarea_expediente_actual %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">Cancelar</a>
+    <a href="#" class="btn btn-primary" id='save-form'>Guardar</a>
+  </div>
+</div>
+
+<div class="span5 well-simple" id="tareas_wrapper">
   <fieldset>
     <legend>Tareas</legend>
     <div class="btn-group">
-      <%= link_iniciar_tarea(@expediente) %>
-      <%= link_finalizar_tarea(@expediente) %>
+      <%= link_iniciar_tarea(@expediente,@tarea_siguiente) %>
+      <%= link_finalizar_tarea(@expediente,@tarea_actual) %>
       <%= link_cancelar_tarea(@expediente, vista_tareas.first) %>
     </div>
 

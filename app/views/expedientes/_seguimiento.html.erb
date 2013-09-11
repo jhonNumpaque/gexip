@@ -31,6 +31,12 @@
               <td><%= tarea.cargo_estructura.estructura.nombre %></td>
               <td><%= mostrar_funcionario(tarea, @vista_expediente_proceso) %> </td>
             </tr>
+          <% if @observaciones[tarea.id] %>
+            <tr>
+              <td>Observaciones:</td>
+              <td colspan="7"><%= @observaciones[tarea.id] %></td>
+            </tr>
+          <% end %>
         <% end %>
 
     <% else %>
