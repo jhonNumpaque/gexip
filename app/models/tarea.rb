@@ -43,6 +43,10 @@ class Tarea < ActiveRecord::Base
 #    @anterior_id = value
 #  end
 
+	def estructura
+		self.cargo_estructura.estructura
+	end
+
 	def aprobado
 		self.version_aprobada.version.reify if self.version_aprobada.present?
 	end
