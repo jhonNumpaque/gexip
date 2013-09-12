@@ -65,6 +65,23 @@ class Expediente < ActiveRecord::Base
     end
   end
 
+  def rechazar!(observacion)
+	  TareaExpediente.transaction do
+		  self.update_attributes(:estado => 'PROCESANDO')
+		  self.tarea_expediente_actual.update_attributes(:estado => 'PROCESANDO',
+		                                                 :observacion_recepcion => observacion)
+	  end
+  end
+
+  def cancelar!(observacion)
+		  self.update_attributes(:estado => 'ANULADO',
+		                         :observacion_fin => observacion)
+  end
+
+  def primera_tarea?
+		self.tareas_expedientes.length == 1
+  end
+
   def generar_numero
     return true unless self.new_record?
 
@@ -158,7 +175,7 @@ class Expediente < ActiveRecord::Base
   def establecer_estado
     return true unless self.new_record?
     
-    self.estado = ESTADO[0]
+    self.estado = 'PROCESANDO'
   end
   
   def iniciar_proceso
@@ -166,7 +183,7 @@ class Expediente < ActiveRecord::Base
       procedimiento = Procedimiento.find(self.procedimiento_id)
       actividad = procedimiento.actividades.order('orden').first
       tarea = actividad.tareas.order('orden').first()
-    
+
       # tarea_expediente_status contiene un array con true|false en 
       # el primer elemento (si se guardó o no el registro) y en el 
       # segundo elemento el objeto tarea_expediente
@@ -189,19 +206,21 @@ class Expediente < ActiveRecord::Base
 
   private
   def validar_documentos
-    if self.adjuntos.present?
-      if self.adjuntos_tareas_expedientes.present?
-        if self.adjuntos.length == self.adjuntos_tareas_expedientes.length
-          true
-        else
-          false
-        end
-      else
-        false
-      end
-    else
-      true
-    end
+    if self.new_record?
+	    if self.adjuntos.present?
+	      if self.adjuntos_tareas_expedientes.present?
+	        if self.adjuntos.length == self.adjuntos_tareas_expedientes.length
+	          true
+	        else
+	          false
+	        end
+	      else
+	        false
+	      end
+	    else
+	      true
+	    end
+	  end
   end
 
 end

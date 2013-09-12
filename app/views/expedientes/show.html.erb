@@ -6,9 +6,12 @@
   <div class="row">
     <div class="well-simple span11">
       <div class="btn-group">
-        <%= link_to icon_tag('Recibir', :class => 'icon-edit icon-white'), recibir_expediente_path(@expediente), :class => 'btn btn-primary' if @expediente.a_recibir?(current_usuario) %>
+        <%= link_to icon_tag('Recibir', :class => 'icon-edit icon-white'), recibir_expediente_path(@expediente), :confirm => '¿Está seguro de recibir?', :class => 'btn btn-primary' if @expediente.a_recibir?(current_usuario) %>
+        <%= link_to icon_tag('Rechazar', :class => 'icon-refresh icon-white'), rechazar_expediente_path(@expediente),
+                    :class => 'btn btn-primary', :id => 'rechazar' if @expediente.a_recibir?(current_usuario) %>
         <%#= link_to icon_tag('Editar', :class => 'icon-edit icon-white'), edit_expediente_path(@expediente), :class => 'btn btn-primary' %>
         <%#= link_to icon_tag('Borrar', :class => 'icon-trash icon-white'), @expediente, confirm: 'Estás seguro?', method: :delete, class: 'btn btn-primary' %>
+        <%= link_to icon_tag('Cancelar', :class => 'icon-remove icon-white'), cancelar_expedientes_path(@expediente), class: 'btn btn-primary', :id => 'cancelar' if @expediente.primera_tarea? %>
         <%= link_to icon_tag('Ver Todos', :class => 'icon-arrow-left icon-white'), expedientes_path, class: 'btn btn-primary' %>
         <%= mostrar_comprobante_entrada @expediente %>
       </div>
@@ -48,7 +51,7 @@
               </tr>
             </table>
           </fieldset>
-          <% if @vista_tareas.present? %>
+          <% if @vista_tareas.present? && @expediente.tarea_expediente_actual.finalizado? %>
               <%= render 'logica_toolbar',
                 :tarea_siguiente => @tarea_siguiente,
                 :tarea_expediente_actual => @tarea_expediente_actual,
@@ -76,9 +79,8 @@
       </div>
 
     <div id="tareas">
-      <%#= @vista_tareas.blank? %>
-
-      <%= render 'tareas', :vista_tareas => @vista_tareas unless (!@expediente.procesable? || @vista_tareas.blank?) || (@tarea_siguiente && @tarea_siguiente.es_logica? || @tarea_siguiente.es_archivado? || (@expediente.tarea_expediente_actual.finalizado? && @tarea_siguiente.es_traslado?)) %>
+      <% visible = @tarea_siguiente.present? && @expediente.tarea_expediente_actual.finalizado? ? !(@tarea_siguiente.es_traslado? || @tarea_siguiente.es_logica? || @tarea_siguiente.es_archivado?) : true %>
+      <%= render 'tareas', :vista_tareas => @vista_tareas if @vista_tareas.present? && visible && @expediente.procesable? %>
     </div>
 
     <div class="span11 well-simple">
@@ -104,6 +106,29 @@
     </div>
   </div>
 </section>
+
+<div class="modal hide fade" id='observaciones-wrap'>
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Observaciones</h3>
+  </div>
+  <div class="modal-body">
+    <%= form_tag finalizar_tarea_path, :class => 'form-horizontal', :id => 'save-obs' do %>
+      <div class="control-group">
+        <label class="observaciones" for="inputEmail"><%= required_label('Observaciones') %></label>
+        <div class="controls">
+          <%= text_area_tag :observaciones, nil, :style => 'width:346px', :autofocus => true %>
+          <%= hidden_field_tag :eid, @expediente.id %>
+          <%= hidden_field_tag :tid, @tarea_expediente_actual.id if @tarea_expediente_actual %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">Cancelar</a>
+    <a href="#" class="btn btn-primary" id='save-form'>Guardar</a>
+  </div>
+</div>
 
 <% content_for :javascripts do %>
     <script type="text/javascript">

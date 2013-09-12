@@ -53,7 +53,8 @@ class ConsultasController < ApplicationController
     documento = params[:documento]
     id = params[:id]
 
-    @expediente = Expediente.where(:numero => documento, :id => id)
+    #@expediente = Expediente.where(:numero => documento, :id => id)
+    @expediente = Expediente.where(:numero => documento)
     if @expediente.present?
       @expediente = @expediente.first
       #seleccionar las tareas ya realizadas en el expediente
@@ -79,7 +80,7 @@ class ConsultasController < ApplicationController
       if @expediente.present?
         format.html { render action: "expediente_desplegado" }
       else
-        format.html { redirect_to consultas_url, :flash => {:error => "Datos Inocorrectos!"} }
+        format.html { redirect_to request.referer, :flash => {:error => "Datos Inocorrectos!"} }
       end
     end
 

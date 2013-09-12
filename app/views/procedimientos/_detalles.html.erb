@@ -4,7 +4,7 @@
 		<%= image_tag 'icons/procedimiento.png' %> <%= @procedimiento.nombre %>
 	</div>
 	<div class="span4 pull-right">
-      <%= link_to icon_tag('Comprobar y Terminar', class: 'icon-check'),
+      <%= link_to icon_tag('Enviar a aprobación', class: 'icon-check'),
             comprobar_procedimiento_path(procedimiento_id: @procedimiento.id), remote: true%>
 
 		<%= link_to icon_tag('Editar', :class => 'icon-pencil'), 

@@ -78,6 +78,43 @@ $(function(){
 		return false;
 	});
 
+	$('#tarea_enviar').click(function(){
+		href = $(this).attr('href');
+		tid = href.split('&')[1].split('=')[1];
+		$('#observaciones-wrap').modal('show');
+		$('#save-obs').attr('action',href);
+		$('#tid').val(tid);
+		$('#observaciones').focus();
+		return false;
+	});
+
+	$('#rechazar').click(function(){
+		href = $(this).attr('href');
+		$('#observaciones-wrap').modal('show');
+		$('#save-obs').attr('action',href);
+		$('#observaciones').focus();
+		return false;
+	});
+
+	$('#cancelar').click(function(){
+		href = $(this).attr('href');
+		$('#observaciones-wrap').modal('show');
+		$('#save-obs').attr('action',href);
+		$('#observaciones').focus();
+		return false;
+	});
+
+
+	$('#tarea_archivar').click(function(){
+		href = $(this).attr('href');
+		tid = href.split('&')[1].split('=')[1];
+		$('#observaciones-wrap').modal('show');
+		$('#save-obs').attr('action',href);
+		$('#tid').val(tid);
+		$('#observaciones').focus();
+		return false;
+	});
+
 //    $('#finalizar_tarea').click(function(){
 //        var url = $(this).attr('href');
 //        var ids = $('.alert-success').attr('rel').split('-');

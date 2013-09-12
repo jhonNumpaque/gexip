@@ -39,6 +39,7 @@ class TareaExpediente < ActiveRecord::Base
       :expediente_id => fields[:expediente_id],
       :tarea_id => fields[:tarea_id],
       :usuario_inicio_id => fields[:usuario_inicio_id],
+      :observacion_envio => fields[:observacion_envio],
       :fecha_inicio => Time.now,
       :estado => estado_inicial
     )

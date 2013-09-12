@@ -8,6 +8,14 @@
   </div>
   <br />
 
+  <div class='well'>
+    <h4>Consulta de Expedientes</h4>
+    <%= form_tag consulta_desplegar_expediente_path do %>
+      <%= label_tag :documento, 'Nro. Expediente' %>
+      <%= text_field_tag :documento %>
+      <%= submit_tag 'Consultar', :class => 'btn btn-primary' %>
+    <% end %>
+  </div>
 
   <ul class="nav nav-tabs" id="myTab">
     <li class="active"><a href="#ccenproceso">Mis Expedientes</a></li>

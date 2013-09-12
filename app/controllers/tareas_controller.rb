@@ -118,6 +118,7 @@ class TareasController < ApplicationController
     if params[:eid].present? && params[:tid].present?
       Expediente.transaction do
         @expediente = Expediente.find(params[:eid])
+        @expediente.tarea_id = params[:tid]
         @tarea_actual = Tarea.find(params[:tid])
         tarea_anterior_id = @expediente.tarea_actual.id
       
@@ -214,6 +215,7 @@ class TareasController < ApplicationController
 		Expediente.transaction do
 			if params[:eid].present? && params[:tid].present?
 				expediente = Expediente.find(params[:eid])
+				expediente.tarea_id = params[:tid]
 				tarea_logica = Tarea.find(params[:tid])
 				actividad = tarea_logica.actividad
 				procedimiento = actividad.procedimiento
@@ -222,6 +224,7 @@ class TareasController < ApplicationController
 						:procedimiento_id => procedimiento.id,
 						:expediente_id => expediente.id,
 						:tarea_id => tarea_logica.id,
+						:observacion_envio => params[:observaciones],
 						:usuario_inicio_id => current_usuario.id
 				)
 
@@ -245,13 +248,15 @@ class TareasController < ApplicationController
 			  tarea_expediente_actual = TareaExpediente.crear!(
 					  :procedimiento_id => procedimiento.id,
 					  :expediente_id => expediente.id,
+					  :observacion_envio => params[:observaciones],
 					  :tarea_id => tarea_logica.id,
 					  :usuario_inicio_id => current_usuario.id
 			  )
 
-			  tarea_expediente_actual.finalizar!(current_usuario.id, 'Archivado')
+			  tarea_expediente_actual.finalizar!(current_usuario.id, params[:observaciones])
 
 			  expediente.update_attributes(:tarea_expediente_actual => tarea_expediente_actual, :estado => 'FINALIZADO')
+
 			  redirect_to expediente_path(params[:eid])
 		  else
 			  flash[:error] = "No se pudo trasladar el expediente, datos incompletos"
