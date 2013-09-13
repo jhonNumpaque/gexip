@@ -58,7 +58,7 @@ class ExpedientesController < ApplicationController
   def rechazar
 	  expediente = Expediente.find(params[:id])
 
-	  expediente.rechazar!(params[:observaciones])
+	  expediente.rechazar!(params[:observaciones], current_usuario)
 
 	  redirect_to expediente_path(expediente)
   end
@@ -104,7 +104,6 @@ class ExpedientesController < ApplicationController
       query_values.merge!({ :orden => orden, :actividad_id => actividad.id, :procedimiento_id => actividad.procedimiento_id, :actividad_orden => actividad.orden })
       query_string += 'orden >= :orden and actividad_id = :actividad_id) or (procedimiento_id = :procedimiento_id and actividad_orden > :actividad_orden)'        
 
-      puts "------------------dafdsfasdfs----#{query_string}---#{query_values}---"
       #@vista_tareas = VistaTarea.del_cargo_estructura(current_usuario.funcionario.cargo_estructura_id).order('actividad_id,orden').limit(2).where(query_string,query_values).all
       @vista_tareas = VistaTarea.del_cargo_estructura(current_usuario.funcionario.cargo_estructura_id).order('actividad_id,orden').limit(2).where(query_string,query_values).all
       #busca las tareas realizadas
@@ -117,7 +116,11 @@ class ExpedientesController < ApplicationController
     @seguimiento_tareas = VistaTarea.order('actividad_id,orden').where(:procedimiento_id => @tarea_actual.actividad.procedimiento_id).all
     @vista_expediente_proceso = VistaExpedienteProceso.select('DISTINCT tarea_id, tarea_expediente_fecha_fin, tarea_expediente_fecha_inicio, tarea_expediente_usuario_inicio, tarea_expediente_usuario_fin').where(:expediente_id => @expediente).group('tarea_id, tarea_expediente_fecha_fin, tarea_expediente_fecha_inicio, tarea_expediente_usuario_inicio, tarea_expediente_usuario_fin').all
     @observaciones = {}
-    @expediente.tareas_expedientes.each { |te| @observaciones[te.tarea_id] = te.observacion_envio }
+    @expediente.tareas_expedientes.each do |te|
+	    @observaciones[te.tarea_id] ||= {}
+	    @observaciones[te.tarea_id][:ejecucion] = te.observacion_envio
+	    @observaciones[te.tarea_id][:rechazo] = te.observacion_recepcion if te.observacion_recepcion?
+    end
 
     respond_to do |format|
       format.html # show.html.erb

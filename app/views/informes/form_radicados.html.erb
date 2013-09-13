@@ -11,7 +11,7 @@
 
   <%= simple_form_for controller_name, :url => show_radicados_path, :method => :post do |f| %>
 
-      <%= f.input 'anho', :collection => (2010 .. 2020), :prompt => '-- Seleccione --' %>
+      <%= f.input 'anho', :collection => (2010 .. 2020), :prompt => '-- Seleccione --', :label => 'Año' %>
 
       <%#= f.input 'macro_proceso', :collection => Macroproceso.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Macroproceso", input_html: {id: 'macroproceso_id'} %>
       <%#= f.input 'proceso', :collection => Proceso.all, :label_method => :nombre, :prompt => '-- Seleccione --', :label => "Proceso", :input_html => {:onchange => "desactivarCampos()"}, input_html: {id: 'proceso_id'} %>

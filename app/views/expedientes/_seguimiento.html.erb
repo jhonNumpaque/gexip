@@ -33,9 +33,16 @@
             </tr>
           <% if @observaciones[tarea.id] %>
             <tr>
+              <% rechazado = @observaciones[tarea.id].has_key? :rechazo  %>
               <td>Observaciones:</td>
-              <td colspan="7"><%= @observaciones[tarea.id] %></td>
+              <td colspan="7"><%= @observaciones[tarea.id][:ejecucion] %></td>
             </tr>
+            <% if rechazado %>
+              <tr>
+                <td>Motivo de Rechazo:</td>
+                <td colspan='7'><%= @observaciones[tarea.id][:rechazo] %></td>
+              </tr>
+            <% end %>
           <% end %>
         <% end %>
 

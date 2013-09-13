@@ -215,7 +215,6 @@ class TareasController < ApplicationController
 		Expediente.transaction do
 			if params[:eid].present? && params[:tid].present?
 				expediente = Expediente.find(params[:eid])
-				expediente.tarea_id = params[:tid]
 				tarea_logica = Tarea.find(params[:tid])
 				actividad = tarea_logica.actividad
 				procedimiento = actividad.procedimiento

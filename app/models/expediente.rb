@@ -43,7 +43,7 @@ class Expediente < ActiveRecord::Base
   after_create :iniciar_proceso
 
   def procesable?
-		self.estado == 'NUEVO' || self.estado == 'PROCESANDO'
+		self.estado == 'NUEVO' || self.estado == 'PROCESANDO' || self.estado == 'RECHAZADO'
   end
 
   def finalizar!
@@ -65,16 +65,21 @@ class Expediente < ActiveRecord::Base
     end
   end
 
-  def rechazar!(observacion)
+  def rechazar!(observacion,usuario)
 	  TareaExpediente.transaction do
-		  self.update_attributes(:estado => 'PROCESANDO')
-		  self.tarea_expediente_actual.update_attributes(:estado => 'PROCESANDO',
+		  self.update_attributes(:estado => 'RECHAZADO')
+		  self.tarea_expediente_actual.update_attributes(:estado => 'RECHAZADO',
+		                                                 :fecha_fin => Time.now,
+		                                                 :usuario_fin_id => usuario.id,
 		                                                 :observacion_recepcion => observacion)
+		  anterior = self.tareas_expedientes.where('id <> ?', self.tarea_expediente_actual_id).last
+		  self.update_attribute(:tarea_expediente_actual_id, anterior.id)
 	  end
   end
 
   def cancelar!(observacion)
 		  self.update_attributes(:estado => 'ANULADO',
+		                         :fecha_finalizo => Time.now,
 		                         :observacion_fin => observacion)
   end
 
