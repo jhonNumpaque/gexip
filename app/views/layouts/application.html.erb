@@ -81,6 +81,7 @@
                     <li><%= link_to 'Funcionarios',funcionarios_path %></li>
                     <li><%= link_to 'Estructura Organizacional',estructuras_path %></li>
                     <li><%= link_to 'Roles',roles_path %></li>
+                    <li><%= link_to 'Aprobar Procedimientos', aprobables_path %></li>
                     <li><%= link_to 'Cargos',cargos_path %></li>
                     <!--<li><%= link_to 'Entes', entes_path %></li>-->
                     <li><%= link_to 'Paises', paises_path %></li>
@@ -92,11 +93,12 @@
               </ul>
               <ul class="nav pull-right">
                 <li class="dropdown">
-                  <%= link_to 'Contectado como ' + current_usuario.login, '#', :class => 'dropdown-toggle', 'data-toggle' => 'dropdown' %>
+                  <%= link_to ('Contectado como ' + current_usuario.login + content_tag(:b, '', :class => 'caret')).html_safe,
+                      '#', :class => 'dropdown-toggle', 'data-toggle' => 'dropdown' %>
                   <ul class="dropdown-menu">
                     <li><%= link_to icon_tag(' Ver Perfil', :class => 'icon-user'),  usuario_path(current_usuario.id) %></li>
                     <li><%= link_to icon_tag(' Cambiar Clave', :class => 'icon-edit'),  cambiar_clave_path %></li>
-                    <li><%# link_to icon_tag(' Salir', :class => 'icon-share'), logout_path %></li>
+                    <li><%= link_to icon_tag(' Salir', :class => 'icon-share'), logout_path %></li>
                   </ul>
                 </li>
               </ul>

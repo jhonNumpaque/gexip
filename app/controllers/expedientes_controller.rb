@@ -55,6 +55,22 @@ class ExpedientesController < ApplicationController
 		redirect_to expediente_path(expediente)
   end
 
+  def rechazar
+	  expediente = Expediente.find(params[:id])
+
+	  expediente.rechazar!(params[:observaciones], current_usuario)
+
+	  redirect_to expediente_path(expediente)
+  end
+
+  def cancelar
+	  expediente = Expediente.find(params[:id])
+
+	  expediente.cancelar!(params[:observaciones])
+
+	  redirect_to expedientes_path
+  end
+
   # GET /expedientes/1
   # GET /expedientes/1.json
   def show
@@ -85,28 +101,26 @@ class ExpedientesController < ApplicationController
         end
       end
 
-      #if @tarea_actual.es_proceso_si?
-      #  query_string += 'id <> :id_not and '
-      #  query_values[:id_not] = tarea_anterior.tarea_alt_id
-      #elsif @tarea_actual.es_proceso_no?
-      #  query_string += 'id <> :id_not and '
-      #  query_values[:id_not] = tarea_anterior.tarea_sig_id
-      #end
-
-      query_values.merge!({ :orden => orden, :actividad_id => actividad.id, :procedimiento_id => actividad.procedimiento_id, :actividad_orden => actividad.orden })    
+      query_values.merge!({ :orden => orden, :actividad_id => actividad.id, :procedimiento_id => actividad.procedimiento_id, :actividad_orden => actividad.orden })
       query_string += 'orden >= :orden and actividad_id = :actividad_id) or (procedimiento_id = :procedimiento_id and actividad_orden > :actividad_orden)'        
 
-      # .del_cargo(current_usuario.ente.cargo_id)
-
+      #@vista_tareas = VistaTarea.del_cargo_estructura(current_usuario.funcionario.cargo_estructura_id).order('actividad_id,orden').limit(2).where(query_string,query_values).all
       @vista_tareas = VistaTarea.del_cargo_estructura(current_usuario.funcionario.cargo_estructura_id).order('actividad_id,orden').limit(2).where(query_string,query_values).all
       #busca las tareas realizadas
       @seguimiento_tareas = VistaTarea.order('actividad_id,orden').where(:procedimiento_id => actividad.procedimiento_id)
       #buscar todas las tareas
       @vista_expediente_proceso = VistaExpedienteProceso.select('DISTINCT tarea_id, tarea_expediente_fecha_fin, tarea_expediente_fecha_inicio, tarea_expediente_usuario_inicio, tarea_expediente_usuario_fin').where(:expediente_id => @expediente).group('tarea_id, tarea_expediente_fecha_fin, tarea_expediente_fecha_inicio, tarea_expediente_usuario_inicio, tarea_expediente_usuario_fin')
-
+    elsif !@tarea_expediente_actual.finalizado?
+	    @vista_tareas = VistaTarea.del_cargo_estructura(current_usuario.funcionario.cargo_estructura_id).where(id: @tarea_actual.id).all
     end
     @seguimiento_tareas = VistaTarea.order('actividad_id,orden').where(:procedimiento_id => @tarea_actual.actividad.procedimiento_id).all
     @vista_expediente_proceso = VistaExpedienteProceso.select('DISTINCT tarea_id, tarea_expediente_fecha_fin, tarea_expediente_fecha_inicio, tarea_expediente_usuario_inicio, tarea_expediente_usuario_fin').where(:expediente_id => @expediente).group('tarea_id, tarea_expediente_fecha_fin, tarea_expediente_fecha_inicio, tarea_expediente_usuario_inicio, tarea_expediente_usuario_fin').all
+    @observaciones = {}
+    @expediente.tareas_expedientes.each do |te|
+	    @observaciones[te.tarea_id] ||= {}
+	    @observaciones[te.tarea_id][:ejecucion] = te.observacion_envio
+	    @observaciones[te.tarea_id][:rechazo] = te.observacion_recepcion if te.observacion_recepcion?
+    end
 
     respond_to do |format|
       format.html # show.html.erb

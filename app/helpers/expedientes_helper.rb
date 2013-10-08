@@ -1,29 +1,31 @@
 # encoding: utf-8
 module ExpedientesHelper
-  def link_iniciar_tarea(expediente)
+  def link_iniciar_tarea(expediente,vista_tarea)
     if expediente.tarea_expediente_actual.finalizado?
       clase = 'btn btn-primary'
     else
       clase = 'btn'
       disabled = 'disabled'
     end
+    tsgt_id = vista_tarea.id if vista_tarea
 
-    link_to(icon_tag('Inicar', class: 'icon-play icon-white'),
-            iniciar_tarea_path(), class: clase,
+    link_to(icon_tag('Iniciar', class: 'icon-play icon-white'),
+            iniciar_tarea_path(eid: expediente.id, tid: tsgt_id), class: clase,
             disabled: disabled, id: 'iniciar_tarea',
             confirm: '¿Está seguro que desea INICIAR esta tarea?')
   end
 
-  def link_finalizar_tarea(expediente)
+  def link_finalizar_tarea(expediente,vista_tarea)
     if expediente.tarea_expediente_actual.finalizado?
       clase = 'btn'
       disabled = 'disabled'
     else
       clase = 'btn btn-primary'
     end
+    tarea_actual_id = vista_tarea.id if vista_tarea
 
     link_to(icon_tag('Finalizar', class: 'icon-ok-sign icon-white'),
-            finalizar_tarea_path(),
+            finalizar_tarea_path(eid: expediente.id, tid: tarea_actual_id),
             class: clase, disabled: disabled,
             id: 'finalizar_tarea',
             confirm: '¿Está seguro que desea FINALIZAR esta tarea?')

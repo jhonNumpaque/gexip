@@ -43,7 +43,11 @@ class Expediente < ActiveRecord::Base
   after_create :iniciar_proceso
 
   def procesable?
-		self.estado == 'NUEVO' || self.estado == 'PROCESANDO'
+		self.estado == 'NUEVO' || self.estado == 'PROCESANDO' || self.estado == 'RECHAZADO'
+  end
+
+  def finalizar!
+		self.update_attributes(:estado => 'FINALIZADO', :fecha_finalizo => Time.now)
   end
 
   def a_recibir?(usuario)
@@ -59,6 +63,28 @@ class Expediente < ActiveRecord::Base
 			                                               :usuario_fin_id => usuario.id,
 			                                               :fecha_fin => Time.now)
     end
+  end
+
+  def rechazar!(observacion,usuario)
+	  TareaExpediente.transaction do
+		  self.update_attributes(:estado => 'RECHAZADO')
+		  self.tarea_expediente_actual.update_attributes(:estado => 'RECHAZADO',
+		                                                 :fecha_fin => Time.now,
+		                                                 :usuario_fin_id => usuario.id,
+		                                                 :observacion_recepcion => observacion)
+		  anterior = self.tareas_expedientes.where('id <> ?', self.tarea_expediente_actual_id).last
+		  self.update_attribute(:tarea_expediente_actual_id, anterior.id)
+	  end
+  end
+
+  def cancelar!(observacion)
+		  self.update_attributes(:estado => 'ANULADO',
+		                         :fecha_finalizo => Time.now,
+		                         :observacion_fin => observacion)
+  end
+
+  def primera_tarea?
+		self.tareas_expedientes.length == 1
   end
 
   def generar_numero
@@ -154,7 +180,7 @@ class Expediente < ActiveRecord::Base
   def establecer_estado
     return true unless self.new_record?
     
-    self.estado = ESTADO[0]
+    self.estado = 'PROCESANDO'
   end
   
   def iniciar_proceso
@@ -162,7 +188,7 @@ class Expediente < ActiveRecord::Base
       procedimiento = Procedimiento.find(self.procedimiento_id)
       actividad = procedimiento.actividades.order('orden').first
       tarea = actividad.tareas.order('orden').first()
-    
+
       # tarea_expediente_status contiene un array con true|false en 
       # el primer elemento (si se guardó o no el registro) y en el 
       # segundo elemento el objeto tarea_expediente
@@ -185,19 +211,21 @@ class Expediente < ActiveRecord::Base
 
   private
   def validar_documentos
-    if self.adjuntos.present?
-      if self.adjuntos_tareas_expedientes.present?
-        if self.adjuntos.length == self.adjuntos_tareas_expedientes.length
-          true
-        else
-          false
-        end
-      else
-        false
-      end
-    else
-      true
-    end
+    if self.new_record?
+	    if self.adjuntos.present?
+	      if self.adjuntos_tareas_expedientes.present?
+	        if self.adjuntos.length == self.adjuntos_tareas_expedientes.length
+	          true
+	        else
+	          false
+	        end
+	      else
+	        false
+	      end
+	    else
+	      true
+	    end
+	  end
   end
 
 end

@@ -53,6 +53,9 @@ class ProcedimientosController < ApplicationController
 		query_val = {}
 
     #traer todos los procedimientos que se permiten al cargo del usuario
+    cargo_estructura = CargoEstructura.find(current_usuario.funcionario.cargo_estructura_id)
+    #@procedimientos = cargo_estructura.procedimientos
+
     #cargo_estructura = CargoEstructura.find(current_usuario.funcionario.cargo_estructura_id)
     tareas = Tarea.where(:tipo => 'INICIO', :cargo_estructura_id => current_usuario.funcionario.cargo_estructura_id)
 
@@ -68,8 +71,8 @@ class ProcedimientosController < ApplicationController
 			cond[1] = query_val
 		end
 
-		#@procedimientos = Procedimiento.aprobados.where(cond).page(params[:page]).per(10)
-		@procedimientos = @procedimientos.where(cond).page(params[:page]).per(10)
+		@procedimientos = Procedimiento.aprobados.where(cond).page(params[:page]).per(10)
+		#@procedimientos = @procedimientos.where(cond).page(params[:page]).per(10)
 
 		respond_to do |format|
 			format.js

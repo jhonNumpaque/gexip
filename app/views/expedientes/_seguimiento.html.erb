@@ -31,6 +31,19 @@
               <td><%= tarea.cargo_estructura.estructura.nombre %></td>
               <td><%= mostrar_funcionario(tarea, @vista_expediente_proceso) %> </td>
             </tr>
+          <% if @observaciones[tarea.id] %>
+            <tr>
+              <% rechazado = @observaciones[tarea.id].has_key? :rechazo  %>
+              <td>Observaciones:</td>
+              <td colspan="7"><%= @observaciones[tarea.id][:ejecucion] %></td>
+            </tr>
+            <% if rechazado %>
+              <tr>
+                <td>Motivo de Rechazo:</td>
+                <td colspan='7'><%= @observaciones[tarea.id][:rechazo] %></td>
+              </tr>
+            <% end %>
+          <% end %>
         <% end %>
 
     <% else %>

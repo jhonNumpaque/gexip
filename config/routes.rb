@@ -26,6 +26,8 @@ Gexip::Application.routes.draw do
 
 	# expedientes
 	match 'expedientes/:id/recibir' => 'expedientes#recibir', :as => :recibir_expediente
+	match 'expedientes/:id/rechazar' => 'expedientes#rechazar', :as => :rechazar_expediente
+	match 'expedientes/:id/cancelar' => 'expedientes#cancelar', :as => :cancelar_expedientes
 
 	resources :organismos_internos
 
@@ -120,7 +122,8 @@ Gexip::Application.routes.draw do
 
   #consultas
   match 'consulta_verificar_expediente' => 'consultas#verificar_expediente', :as => :consulta_verificar_expediente
-  
+  match 'consulta_desplegar_expediente' => 'consultas#desplegar_expediente', :as => :consulta_desplegar_expediente
+
   #entes
   match '/search' => 'entes#search', :as => 'search_ente'
 

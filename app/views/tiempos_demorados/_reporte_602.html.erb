@@ -21,7 +21,7 @@
         end
         %>
         <tr>
-          <td><%= tiempo_demorado.cnumero %> - <%= tiempo_demorado.cid %></td>
+<td><%= link_to tiempo_demorado.cnumero, consulta_desplegar_expediente_path(:id => tiempo_demorado.cid, :documento => tiempo_demorado.cnumero) %> - <%= tiempo_demorado.cid %></td>
           <td><%= tiempo_demorado.cfecha_inicio %></td>
           <td><%= tiempo_letra tiempo_demorado.cminutos_demorados %></td>
           <td><%= tiempo_letra tiempo_demorado.cminutos_estimados %></td>

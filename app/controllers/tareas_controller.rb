@@ -118,6 +118,7 @@ class TareasController < ApplicationController
     if params[:eid].present? && params[:tid].present?
       Expediente.transaction do
         @expediente = Expediente.find(params[:eid])
+        @expediente.tarea_id = params[:tid]
         @tarea_actual = Tarea.find(params[:tid])
         tarea_anterior_id = @expediente.tarea_actual.id
       
@@ -145,6 +146,7 @@ class TareasController < ApplicationController
     
     respond_to do |format|
       format.js
+	    format.html { redirect_to expediente_path(@expediente)}
     end
   end
   
@@ -221,6 +223,7 @@ class TareasController < ApplicationController
 						:procedimiento_id => procedimiento.id,
 						:expediente_id => expediente.id,
 						:tarea_id => tarea_logica.id,
+						:observacion_envio => params[:observaciones],
 						:usuario_inicio_id => current_usuario.id
 				)
 
@@ -244,13 +247,15 @@ class TareasController < ApplicationController
 			  tarea_expediente_actual = TareaExpediente.crear!(
 					  :procedimiento_id => procedimiento.id,
 					  :expediente_id => expediente.id,
+					  :observacion_envio => params[:observaciones],
 					  :tarea_id => tarea_logica.id,
 					  :usuario_inicio_id => current_usuario.id
 			  )
 
-			  tarea_expediente_actual.finalizar!(current_usuario.id, 'Archivado')
+			  tarea_expediente_actual.finalizar!(current_usuario.id, params[:observaciones])
 
 			  expediente.update_attributes(:tarea_expediente_actual => tarea_expediente_actual, :estado => 'FINALIZADO')
+
 			  redirect_to expediente_path(params[:eid])
 		  else
 			  flash[:error] = "No se pudo trasladar el expediente, datos incompletos"
@@ -267,6 +272,10 @@ class TareasController < ApplicationController
         @expediente = Expediente.find(params[:eid])
         @tarea_expediente_actual = TareaExpediente.find(params[:tid])
         @tarea_siguiente = @expediente.tarea_siguiente
+        @esta_tarea = @tarea_expediente_actual.tarea
+        if @esta_tarea.es_fin?
+					@expediente.finalizar!
+        end
         
         if @tarea_siguiente
           actividad = @tarea_siguiente.actividad
@@ -278,7 +287,7 @@ class TareasController < ApplicationController
           end
         end
       
-        @tarea_expediente_actual.finalizar!(current_usuario.id)
+        @tarea_expediente_actual.finalizar!(current_usuario.id, params[:observaciones])
         #@expediente.update_attribute(:tarea_anterior_id, @tarea_expediente_actual.tarea_id)
         if @tarea_siguiente
           qs = '(orden >= :orden and actividad_id = :aid) or (procedimiento_id = :pid and actividad_id > :aid)'
@@ -290,6 +299,7 @@ class TareasController < ApplicationController
     
     respond_to do |format|
       format.js
+	    format.html { redirect_to expediente_path(@expediente) }
     end
   end
   
