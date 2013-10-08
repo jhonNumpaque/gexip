@@ -115,6 +115,8 @@ Gexip::Application.routes.draw do
   match 'show_rendimiento' => 'informes#show_rendimiento', :as => :show_rendimiento
   match 'show_radicados' => 'informes#show_radicados', :as => :show_radicados
   match 'show_anulados' => 'informes#show_anulados', :as => :show_anulados
+  match 'show_macroproceso/:id' => 'informes#show_macroproceso', :as => :show_macroproceso
+  match 'show_procesos/:macroproceso_id' => 'informes#show_procesos', :as => :show_procesos
 
   #consultas
   match 'consulta_verificar_expediente' => 'consultas#verificar_expediente', :as => :consulta_verificar_expediente

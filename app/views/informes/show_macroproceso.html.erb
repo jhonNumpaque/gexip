@@ -1,0 +1,29 @@
+<section>
+	<div class="well">
+		<%= link_to icon_tag('Volver', :class => 'icon-arrow-left icon-white'), informes_path, :class => 'btn btn-primary' %>
+	</div>
+	<table class="table table-striped table-bordered table-condensed">
+		<thead>
+			<tr>
+				<th>Año</th>
+				<th>Macroproceso</th>
+				<th>Cant. Recibidos</th>
+				<th>% Personas Físicas</th>
+				<th>% Personas Jurídicas</th>
+				<th>% Personas Jurídicas Internas</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @porcentaje.each do |key, val| %>
+			<tr>
+				<td><%= link_to key, show_procesos_path(:macroproceso_id => @macroproceso.id, :anho => key) %></td>
+				<td><%= link_to @macroproceso.nombre, show_procesos_path(@macroproceso.id) %></td>
+				<td><%= val["cantidad"] %></td>
+				<td><%= calcular_porcentaje(val["cantidad"], val["PersonaFisica"]) %></td>
+				<td><%= calcular_porcentaje(val["cantidad"], val["PersonaJuridica"]) %></td>
+				<td><%= calcular_porcentaje(val["cantidad"], val["OrganismoInterno"]) %></td>
+			</tr>
+			<% end %>
+		</tbody>
+	</table>
+</section>

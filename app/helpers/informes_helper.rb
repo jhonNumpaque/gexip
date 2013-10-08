@@ -53,5 +53,9 @@ def get_cargos_estructuras
 
 	return result
 end
+  
+  def calcular_porcentaje(cantidad_total, cantidad_parcial)
+    return (cantidad_parcial.to_f / cantidad_total.to_f) * 100
+  end
 
 end

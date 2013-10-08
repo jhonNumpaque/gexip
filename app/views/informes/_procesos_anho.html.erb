@@ -1,0 +1,28 @@
+
+<table class="table table-striped table-bordered table-condensed">
+	<thead>
+		<tr>
+			<th>Año</th>
+			<th>Proceso</th>
+			<th>Cant. Recibidos</th>
+			<th>% Personas Físicas</th>
+			<th>% Personas Jurídicas</th>
+			<th>% Personas Jurídicas Internas</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @porcentaje.each do |key, val| %>
+		<% val['anho'].each do |k, v| %>
+		<tr>
+			<td><%= link_to k, '#' %></td>
+			<td><%= link_to val['nombre'], "#" %></td>
+			<td><%= v['cantidad'] %></td>
+			<td><%= calcular_porcentaje(v['cantidad'], v['PersonaFisica']) %></td>
+			<td><%= calcular_porcentaje(v['cantidad'], v['PersonaJuridica']) %></td>
+			<td><%= calcular_porcentaje(v['cantidad'], v['OrganismoInterno']) %></td>
+		</tr>
+
+		<% end %>
+		<% end %>
+	</tbody>
+</table>
