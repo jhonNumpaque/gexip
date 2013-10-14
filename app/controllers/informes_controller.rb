@@ -18,7 +18,7 @@ class InformesController < ApplicationController
     puts @porcentaje
 
     respond_to do |format|
-      format.html # show.html.erb     
+      format.html # show.html.erb
     end
   end
 
@@ -73,7 +73,7 @@ class InformesController < ApplicationController
       @porcentaje[v.proceso_id]['anho'][v.anho]['mes'][v.mes]["cantidad"] ||= 0
       @porcentaje[v.proceso_id]['anho'][v.anho]['mes'][v.mes]["cantidad"] += 1 #contar la cantidad de expedientes por anho
       #semestre
-      if v.mes.to_i <= 6 
+      if v.mes.to_i <= 6
         @porcentaje[v.proceso_id]['anho'][v.anho]['semestre']['01'] ||= {}
         @porcentaje[v.proceso_id]['anho'][v.anho]['semestre']['01'][v.ente_type] ||= 0
         @porcentaje[v.proceso_id]['anho'][v.anho]['semestre']['01'][v.ente_type] += 1 #contar la cantidad de expedientes por tipo de persona
@@ -132,23 +132,193 @@ class InformesController < ApplicationController
         @porcentaje[v.proceso_id]['anho'][v.anho]['cuatrimestre']['03']["cantidad"] ||= 0
         @porcentaje[v.proceso_id]['anho'][v.anho]['cuatrimestre']['03']["cantidad"] += 1
       end
-    @porcentaje[v.proceso_id]["nombre"] = v.proceso_nombre
+      @porcentaje[v.proceso_id]["nombre"] = v.proceso_nombre
+    end
+
+    respond_to do |format|
+      format.html
+    end
   end
 
-  respond_to do |format|
-    format.html
-  end
-end
+  def show_procedimientos
+      @proceso = Proceso.find(params['proceso_id'])
+      @macroproceso = Macroproceso.find(@proceso.serieproceso_id)
 
-def form_demora
-  respond_to do |format|
-      format.html # show.html.erb     
+     vista = VistaExpedienteTotal
+     vista = vista.select("DISTINCT expediente_id, proceso_id, proceso_nombre, procedimiento_id, procedimiento_nombre, ente_type, TO_CHAR(expediente_fecha_creacion::timestamp, 'YYYY') AS anho, TO_CHAR(expediente_fecha_creacion::timestamp, 'mm') AS mes")
+     vista = vista.where("proceso_id in (?)", @proceso.id )
+     vista = vista.where("TO_CHAR(expediente_fecha_creacion::timestamp, 'YYYY') = (?)", params[:anho] ) if params[:anho].present? #filtar el proceso por anho
+     vista = vista.order("anho ASC, mes ASC")
+
+     @porcentaje = {}
+     vista.each do |v|
+      @porcentaje[v.procedimiento_id] ||= {}
+      @porcentaje[v.procedimiento_id]['anho'] ||= {}
+      @porcentaje[v.procedimiento_id]['anho'][v.anho] ||= {}
+      @porcentaje[v.procedimiento_id]['anho'][v.anho][v.ente_type] ||= 0
+      @porcentaje[v.procedimiento_id]['anho'][v.anho][v.ente_type] += 1 #contar la cantidad de expedientes por tipo de persona
+      @porcentaje[v.procedimiento_id]['anho'][v.anho]["cantidad"] ||= 0
+      @porcentaje[v.procedimiento_id]['anho'][v.anho]["cantidad"] += 1
+      @porcentaje[v.procedimiento_id]['anho'][v.anho] ||= {}
+      @porcentaje[v.procedimiento_id]['anho'][v.anho]['mes'] ||= {}
+      @porcentaje[v.procedimiento_id]['anho'][v.anho]['semestre'] ||= {}
+      @porcentaje[v.procedimiento_id]['anho'][v.anho]['trimestre'] ||= {}
+      @porcentaje[v.procedimiento_id]['anho'][v.anho]['cuatrimestre'] ||= {}
+      @porcentaje[v.procedimiento_id]['anho'][v.anho]['mes'][v.mes] ||= {}
+      @porcentaje[v.procedimiento_id]['anho'][v.anho]['mes'][v.mes][v.ente_type] ||= 0
+      @porcentaje[v.procedimiento_id]['anho'][v.anho]['mes'][v.mes][v.ente_type] += 1 #contar la cantidad de expedientes por tipo de persona
+      @porcentaje[v.procedimiento_id]['anho'][v.anho]['mes'][v.mes]["cantidad"] ||= 0
+      @porcentaje[v.procedimiento_id]['anho'][v.anho]['mes'][v.mes]["cantidad"] += 1 #contar la cantidad de expedientes por anho
+      #semestre
+      if v.mes.to_i <= 6
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['semestre']['01'] ||= {}
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['semestre']['01'][v.ente_type] ||= 0
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['semestre']['01'][v.ente_type] += 1 #contar la cantidad de expedientes por tipo de persona
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['semestre']['01']["cantidad"] ||= 0
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['semestre']['01']["cantidad"] += 1
+      elsif v.mes.to_i > 6
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['semestre']['02'] ||= {}
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['semestre']['02'][v.ente_type] ||= 0
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['semestre']['02'][v.ente_type] += 1 #contar la cantidad de expedientes por tipo de persona
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['semestre']['02']["cantidad"] ||= 0
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['semestre']['02']["cantidad"] += 1
+      end #end del if
+      #trimestre
+      if v.mes.to_i <= 3
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['trimestre']['01'] ||= {}
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['trimestre']['01'][v.ente_type] ||= 0
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['trimestre']['01'][v.ente_type] += 1 #contar la cantidad de expedientes por tipo de persona
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['trimestre']['01']["cantidad"] ||= 0
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['trimestre']['01']["cantidad"] += 1
+      elsif v.mes.to_i > 3 and v.mes.to_i <= 6
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['trimestre']['02'] ||= {}
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['trimestre']['02'][v.ente_type] ||= 0
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['trimestre']['02'][v.ente_type] += 1 #contar la cantidad de expedientes por tipo de persona
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['trimestre']['02']["cantidad"] ||= 0
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['trimestre']['02']["cantidad"] += 1
+      elsif v.mes.to_i > 6 and v.mes.to_i <= 9
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['trimestre']['03'] ||= {}
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['trimestre']['03'][v.ente_type] ||= 0
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['trimestre']['03'][v.ente_type] += 1 #contar la cantidad de expedientes por tipo de persona
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['trimestre']['03']["cantidad"] ||= 0
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['trimestre']['03']["cantidad"] += 1
+      elsif v.mes.to_i > 9 and v.mes.to_i <= 12
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['trimestre']['04'] ||= {}
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['trimestre']['04'][v.ente_type] ||= 0
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['trimestre']['04'][v.ente_type] += 1 #contar la cantidad de expedientes por tipo de persona
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['trimestre']['04']["cantidad"] ||= 0
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['trimestre']['04']["cantidad"] += 1
+      end
+      #cuatrimestre
+      if v.mes.to_i <= 4
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['cuatrimestre']['01'] ||= {}
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['cuatrimestre']['01'][v.ente_type] ||= 0 #contar la cantidad de expedientes por tipo de persona
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['cuatrimestre']['01'][v.ente_type] += 1 #contar la cantidad de expedientes por tipo de persona
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['cuatrimestre']['01']["cantidad"] ||= 0
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['cuatrimestre']['01']["cantidad"] += 1
+      elsif v.mes.to_i > 4 and v.mes.to_i <= 8
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['cuatrimestre']['02'] ||= {}
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['cuatrimestre']['02'][v.ente_type] ||= 0
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['cuatrimestre']['02'][v.ente_type] += 1 #contar la cantidad de expedientes por tipo de persona
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['cuatrimestre']['02']["cantidad"] ||= 0
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['cuatrimestre']['02']["cantidad"] += 1
+      elsif v.mes.to_i > 8 and v.mes.to_i <= 12
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['cuatrimestre']['03'] ||= {}
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['cuatrimestre']['03'][v.ente_type] ||= 0
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['cuatrimestre']['03'][v.ente_type] += 1 #contar la cantidad de expedientes por tipo de persona
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['cuatrimestre']['03']["cantidad"] ||= 0
+        @porcentaje[v.procedimiento_id]['anho'][v.anho]['cuatrimestre']['03']["cantidad"] += 1
+      end
+      @porcentaje[v.procedimiento_id]["nombre"] = v.procedimiento_nombre
+    end
+
+     respond_to do |format|
+      format.html
+    end
+  end
+
+  def show_expedientes
+
+    @procedimiento = Procedimiento.find(params[:procedimiento_id])
+    begin
+      @proceso = Proceso.find(@procedimiento.serieproceso_id)
+    rescue Exception => e
+      puts e
+    ensure
+      @subproceso = Subproceso.find(@procedimiento.serieproceso_id)
+      @proceso = Proceso.find(@subproceso.serieproceso_id)
+    end
+
+    @macroproceso = Macroproceso.find(@proceso.serieproceso_id)
+
+    @vista = VistaExpedienteTotal.select("DISTINCT expediente_id, expediente_fecha_creacion, TO_CHAR(expediente_fecha_creacion, 'YYYY') as anho, TO_CHAR(expediente_fecha_creacion, 'mm') as mes, expediente_estado, ente_nombre, ente_apellido, ente_type, expediente_fecha_finalizo, usuario_inicio, expediente_numero")
+    @vista = @vista.where("procedimiento_id = ?", @procedimiento.id)
+    @vista = @vista.where("TO_CHAR(expediente_fecha_creacion, 'YYYY') = ?", params['anho']) if params['anho'].present?
+    @vista = @vista.where("TO_CHAR(expediente_fecha_creacion, 'mm') = ?", params['mes']) if params['mes'].present?
+    @vista = @vista.where("expediente_estado = ?", params['estado']) if params['estado'].present?
+    @vista = @vista.where("ente_id = ?", params['cliente']) if params['cliente'].present?
+    @vista = @vista.where("ente_type = ?", params['tipo_cliente']) if params['tipo_cliente'].present?
+    @vista = @vista.where("usuario_inicio = ?", params['funcionario']) if params['funcionario'].present?
+    #seleccionar semestre
+    if params['semestre'].present?
+      case params['semestre']
+      when '01'
+        @vista = @vista.where("TO_CHAR(expediente_fecha_creacion, 'mm') <= ? ", '06')
+      when '02'
+        @vista = @vista.where("TO_CHAR(expediente_fecha_creacion, 'mm') > ? ", '06')
+      end
+    end
+    #seleccionar trimestre
+    if params['trimestre'].present?
+      case params['trimestre']
+      when '01'
+        @vista = @vista.where("TO_CHAR(expediente_fecha_creacion, 'mm') <= ? ", '03')
+      when '02'
+        @vista = @vista.where("TO_CHAR(expediente_fecha_creacion, 'mm') > ? AND to_char(expediente_fecha_creacion, 'mm') <= ? ", '03', '06')
+      when '03'
+        @vista = @vista.where("TO_CHAR(expediente_fecha_creacion, 'mm') > ? AND to_char(expediente_fecha_creacion, 'mm') <= ? ", '06', '09')
+      when '04'
+        @vista = @vista.where("TO_CHAR(expediente_fecha_creacion, 'mm') > ? ", '09')
+      end
+    end
+    #seleccionar cuatrimestre
+    if params['cuatrimestre'].present?
+      case params['cuatrimestre']
+      when '01'
+        @vista = @vista.where("TO_CHAR(expediente_fecha_creacion, 'mm') <= ? ", '04')
+      when '02'
+        @vista = @vista.where("TO_CHAR(expediente_fecha_creacion, 'mm') > ? AND to_char(expediente_fecha_creacion, 'mm') <= ? ", '04', '08')
+      when '03'
+        @vista = @vista.where("TO_CHAR(expediente_fecha_creacion, 'mm') > ? ", '08')
+      end
+    end
+
+    @vista = @vista.order("expediente_fecha_creacion ASC")
+    @usuarios = Usuario.find(@vista.map{ |v| v.usuario_inicio })
+
+    respond_to do |format|
+      format.html
+    end
+  end
+
+  def show_tareas
+    @vista = VistaExpedienteTotal
+    @vista = @vista.select("DISTINCT tarea_expediente_id, tarea_nombre, tarea_expediente_fecha_inicio, tarea_expediente_fecha_fin, tarea_expediente_usuario_inicio, tarea_expediente_usuario_fin, tarea_expediente_estado, procedimiento_id, procedimiento_nombre")
+    @vista = @vista.where('expediente_id = ?', params[:expediente_id])
+
+    @expediente = Expediente.find(params[:expediente_id])
+
+  end
+
+  def form_demora
+    respond_to do |format|
+      format.html # show.html.erb
     end
   end
 
   def form_demanda
     respond_to do |format|
-      format.html # show.html.erb     
+      format.html # show.html.erb
     end
   end
 
@@ -308,7 +478,7 @@ def form_demora
     end
 
     respond_to do |format|
-      format.html # show.html.erb     
+      format.html # show.html.erb
     end
 
   end
@@ -370,7 +540,7 @@ def form_demora
     puts @resultados
 
     respond_to do |format|
-      format.html # show.html.erb     
+      format.html # show.html.erb
     end
 
   end

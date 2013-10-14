@@ -1,0 +1,68 @@
+<section>
+	<div class="well">
+		<%= link_to icon_tag('Volver', :class => 'icon-arrow-left icon-white'), show_procedimientos_path(@proceso.id), :class => 'btn btn-primary' %>
+		<%= simple_form_for controller_name, :url => show_expedientes_path(@procedimiento.id), :method => :get do |f| %>
+		<div class="control-group">
+			<label class="optional">Tipo Cliente</label>
+			<div class="controls">
+				<%= select_tag 'tipo_cliente', options_for_select({'Persona Física'=>'PersonaFisica', 'Persona Jurídica'=>'PersonaJuridica', 'Organismo Interno'=>'OrganismoInterno'}, params[:tipo_cliente]), prompt: "-- Seleccionar --" %>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="optional">Cliente</label>
+			<div class="controls">
+				<%= select_tag 'cliente', options_from_collection_for_select(Ente.all, :id, :nombre_completo, params[:cliente]), prompt: "-- Seleccionar --" %>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="optional">Estado</label>
+			<div class="controls">
+				<%= select_tag 'estado', options_for_select(Expediente::ESTADO.map{|c| [c,c]},params[:estado]), prompt: "-- Seleccionar --" %>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="optional">Funcionario</label>
+			<div class="controls">
+				<%= select_tag 'funcionario', options_from_collection_for_select(Funcionario.all,:id, :nombre_completo, params['funcionario']), prompt: "-- Seleccionar --" %>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<div class="controls">
+				<%= submit_tag 'Filtrar', :class => 'btn btn-success' %>
+			</div>
+		</div>
+		<% end %>
+	</div>
+	<p><b>Macroproceso: </b><%= @macroproceso.nombre %><p>
+	<p><b>Proceso: </b><%= @proceso.nombre %><p>
+	<p><b>Subproceso: </b><%= @subproceso.nombre if @subproceso.present? %><p>
+	<p><b>Procedimiento: </b><%= @procedimiento.nombre %><p>
+	<p><b>Cant. de Expedientes: </b><%= @vista.count %><p>
+	<table class="table table-striped table-bordered table-condensed">
+		<thead>
+			<tr>
+				<th>Fecha Ingreso</th>
+				<th>Número de Expediente</th>
+				<th>Cliente</th>
+				<th>Tipo Cliente</th>
+				<th>Funcionario Ingreso</th>
+				<th>Estado</th>
+				<th>Fecha Finalizo</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @vista.each do |v| %>
+			<tr>
+				<td><%= v.expediente_fecha_creacion %></td>
+				<td><%= link_to v.expediente_numero, show_tareas_path(v.expediente_id) %></td>
+				<td><%= v.ente_nombre %></td>
+				<td><%= v.ente_type	 %></td>
+				<td><%= Usuario.find(v.usuario_inicio).funcionario.nombre_completo	 %></td>
+				<td><%= v.expediente_estado %></td>
+				<td><%= v.expediente_fecha_finalizo.present? ? v.expediente_fecha_finalizo : 'No Finalizado' %></td>
+			</tr>
+			<% end %>
+		</tbody>
+	</table>
+</section>

@@ -1,0 +1,36 @@
+<section>
+	<div class="well">
+		<%= link_to icon_tag('Volver', :class => 'icon-arrow-left icon-white'), informes_path, :class => 'btn btn-primary' %>
+	</div>
+	<p><b>Macroproceso: </b><%#= @macroproceso.nombre %><p>
+	<p><b>Proceso: </b><%#= @proceso.nombre %><p>
+	<p><b>Subproceso: </b><%#= @subproceso.nombre if @subproceso.present? %><p>
+	<p><b>Expediente: </b><%= @expediente.numero %><p>
+	<p><b>Cliente: </b><%= @expediente.ente.nombre_completo %><p>
+	<table class="table table-striped table-bordered table-condensed">
+		<thead>
+			<tr>
+				<th>Tarea</th>
+				<th>Fecha Inicio</th>
+				<th>Funcionario Inicio</th>
+				<th>Estado</th>
+				<th>Fecha Fin</th>
+				<th>Funcionario Fin</th>
+				<th>Procedimiento</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @vista.each do |v| %>
+			<tr>
+				<td><%= v.tarea_nombre %></td>
+				<td><%= v.tarea_expediente_fecha_inicio %></td>
+				<td><%= Usuario.find(v.tarea_expediente_usuario_inicio).funcionario.nombre_completo %></td>
+				<td><%= v.tarea_expediente_estado %></td>
+				<td><%= v.tarea_expediente_fecha_fin if v.tarea_expediente_fecha_fin.present? %></td>
+				<td><%= Usuario.find(v.tarea_expediente_usuario_fin).funcionario.nombre_completo if v.tarea_expediente_usuario_fin.present? %></td>
+				<td><%= v.procedimiento_nombre %></td>
+			</tr>
+			<% end %>
+		</tbody>
+	</table>
+</section>

@@ -3,7 +3,7 @@
 	<thead>
 		<tr>
 			<th>Año</th>
-			<th>Proceso</th>
+			<th>Procedimiento</th>
 			<th>Cant. Recibidos</th>
 			<th>% Personas Físicas</th>
 			<th>% Personas Jurídicas</th>
@@ -14,9 +14,9 @@
 		<% @porcentaje.each do |key, val| %>
 		<% val['anho'].each do |k, v| %>
 		<tr>
-			<td><%= link_to k, show_procedimientos_path(:proceso_id => key, :anho => k) %></td>
+			<td><%= link_to k, '#' %></td>
 			<td><%= link_to val['nombre'], show_procedimientos_path(key) %></td>
-			<td><%= v['cantidad'] %></td>
+			<td><%= link_to v['cantidad'], show_expedientes_path(:procedimiento_id => key, :anho => k) %></td>
 			<td><%= calcular_porcentaje(v['cantidad'], v['PersonaFisica']) %></td>
 			<td><%= calcular_porcentaje(v['cantidad'], v['PersonaJuridica']) %></td>
 			<td><%= calcular_porcentaje(v['cantidad'], v['OrganismoInterno']) %></td>

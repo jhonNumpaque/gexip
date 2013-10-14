@@ -91,7 +91,7 @@ Gexip::Application.routes.draw do
   match '/usuarios/datos/modificar_datos/:id' => 'usuarios#modificar_datos', :as => :modificar_datos
   match '/usuarios/datos/cambiar_clave_grabar/' => 'usuarios#cambiar_clave_grabar', :as => :cambiar_clave_grabar
   match '/usuarios/datos/modificar_datos_grabar/:id' => 'usuarios#modificar_datos_grabar', :as => :modificar_datos_grabar
-  
+
   match '/:actividad_id/agregar_tarea' => 'actividades#agregar_tarea', :as => 'agregar_tarea'
   match '/:actividad_id/listar_tareas' => 'actividades#listar_tareas', :as => 'listar_tareas'
   match '/editar_tarea' => 'tareas#edit', :as => 'editar_tarea'
@@ -103,7 +103,7 @@ Gexip::Application.routes.draw do
   match 'iniciar_archivado' => 'tareas#iniciar_archivado', :as => 'iniciar_archivado'
   #cargos
   match 'agregar_cargo' => 'cargos#agregar_cargo', :as => 'agregar_cargo'
-  
+
   # file upload
   resources :uploads
 
@@ -119,6 +119,9 @@ Gexip::Application.routes.draw do
   match 'show_anulados' => 'informes#show_anulados', :as => :show_anulados
   match 'show_macroproceso/:id' => 'informes#show_macroproceso', :as => :show_macroproceso
   match 'show_procesos/:macroproceso_id' => 'informes#show_procesos', :as => :show_procesos
+  match 'show_procedimientos/:proceso_id' => 'informes#show_procedimientos', :as => :show_procedimientos
+  match 'show_expedientes/:procedimiento_id' => 'informes#show_expedientes', :as => :show_expedientes
+  match 'show_tareas/:expediente_id' => 'informes#show_tareas', :as => :show_tareas
 
   #consultas
   match 'consulta_verificar_expediente' => 'consultas#verificar_expediente', :as => :consulta_verificar_expediente
