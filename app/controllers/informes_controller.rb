@@ -307,6 +307,22 @@ class InformesController < ApplicationController
     @vista = @vista.where('expediente_id = ?', params[:expediente_id])
 
     @expediente = Expediente.find(params[:expediente_id])
+    @procedimiento = Procedimiento.find(@expediente.tareas.first.actividad.procedimiento.id)
+
+    begin
+      @proceso = Proceso.find(@procedimiento.serieproceso_id)
+    rescue Exception => e
+      puts e
+    ensure
+      @subproceso = Subproceso.find(@procedimiento.serieproceso_id)
+      @proceso = Proceso.find(@subproceso.serieproceso_id)
+    end
+
+    @macroproceso = Macroproceso.find(@proceso.serieproceso_id)
+
+    respond_to do |format|
+      format.html
+    end
 
   end
 

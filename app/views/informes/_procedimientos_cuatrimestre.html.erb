@@ -17,7 +17,7 @@
 		<% VistaExpedienteTotal::CUATRIMESTRES.each do |k, v| %>
 		<tr>
 			<td><%= anho %></td>
-			<td><%= link_to v, '#' %></td>
+			<td><%= v %></td>
 			<td><%= link_to val['nombre'], "#" %></td>
 			<td><%= val['anho'][anho]['cuatrimestre'][k].present? ? link_to(val['anho'][anho]['cuatrimestre'][k]['cantidad'], show_expedientes_path(:procedimiento_id => key, :anho => anho, :cuatrimestre => k) ) : 0 %></td>
 			<td><%= val['anho'][anho]['cuatrimestre'][k].present? ? calcular_porcentaje(val['anho'][anho]['cuatrimestre'][k]['cantidad'], val['anho'][anho]['cuatrimestre'][k]['PersonaFisica']) : 0 %></td>

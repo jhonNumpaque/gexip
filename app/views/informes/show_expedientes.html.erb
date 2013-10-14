@@ -54,7 +54,7 @@
 		<tbody>
 			<% @vista.each do |v| %>
 			<tr>
-				<td><%= v.expediente_fecha_creacion %></td>
+				<td><%= v.expediente_fecha_creacion.strftime("%d/%m/%Y") %></td>
 				<td><%= link_to v.expediente_numero, show_tareas_path(v.expediente_id) %></td>
 				<td><%= v.ente_nombre %></td>
 				<td><%= v.ente_type	 %></td>
