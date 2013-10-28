@@ -5,9 +5,9 @@ class CargosController < ApplicationController
   def index
     if params[:estructura_id].present?
       estructura = Estructura.find(params[:estructura_id])
-      @cargos = estructura.cargos
+      @cargos = estructura.cargos.de_la_estructura(current_usuario.estructura_root_id)
     else
-      @cargos = Cargo
+      @cargos = Cargo.de_la_estructura(current_usuario.estructura_root_id)
       @cargos = @cargos.where("nombre like ?", "%#{params[:nombre]}%") if params[:nombre].present?
       @cargos = @cargos.page(params[:page]).per(10)
       @cargos_actuales = []
@@ -22,7 +22,7 @@ class CargosController < ApplicationController
   # GET /cargos/1
   # GET /cargos/1.json
   def show
-    @cargo = Cargo.find(params[:id])
+    @cargo = Cargo.de_la_estructura(current_usuario.estructura_root_id).find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -43,13 +43,14 @@ class CargosController < ApplicationController
 
   # GET /cargos/1/edit
   def edit
-    @cargo = Cargo.find(params[:id])
+    @cargo = Cargo.de_la_estructura(current_usuario.estructura_root_id).find(params[:id])
   end
 
   # POST /cargos
   # POST /cargos.json
   def create
     @cargo = Cargo.new(params[:cargo])
+    @cargo.estructura_id = current_usuario.estructura_root_id
 
     respond_to do |format|
       if @cargo.save
@@ -69,7 +70,7 @@ class CargosController < ApplicationController
   # PUT /cargos/1
   # PUT /cargos/1.json
   def update
-    @cargo = Cargo.find(params[:id])
+    @cargo = Cargo.de_la_estructura(current_usuario.estructura_root_id).find(params[:id])
 
     respond_to do |format|
       if @cargo.update_attributes(params[:cargo])
@@ -85,7 +86,7 @@ class CargosController < ApplicationController
   # DELETE /cargos/1
   # DELETE /cargos/1.json
   def destroy
-    @cargo = Cargo.find(params[:id])
+    @cargo = Cargo.de_la_estructura(current_usuario.estructura_root_id).find(params[:id])
     
     begin
       @cargo.destroy

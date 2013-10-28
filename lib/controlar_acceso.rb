@@ -3,6 +3,8 @@ module ControlarAcceso
     klass.class_eval do
       include InstanceMethods
     end
+		klass.helper_method :tiene_permiso?
+		klass.helper_method :al_menos_uno?
   end
   
   module InstanceMethods
@@ -14,7 +16,7 @@ module ControlarAcceso
     end
     
     def permisos
-      #@permisos ||= current_usuario.rol.permisos
+      @permisos ||= current_usuario.rol.permisos
     end
     
     def ignorar?
@@ -25,16 +27,25 @@ module ControlarAcceso
       ['sesiones.new', 'sesiones.create', 'sesiones.destroy', 'usuarios.denegado']       
     end
     
-    def tiene_permiso?
-      permiso = current_usuario.rol.permisos.find_by_controlador_and_accion(controller_name, action_name)
+    def tiene_permiso?(controller=controller_name,action=action_name)
+      permiso = current_usuario.rol.permisos.find_by_controlador_and_accion(controller, action)
       unless permiso 
-        permiso = Permiso.find_by_controlador_and_accion(controller_name, action_name)
+        permiso = Permiso.find_by_controlador_and_accion(controller, action)
         return true if permiso.publico
         
         permiso = nil unless permiso.secundario? && permiso.accion_principal.roles_permisos.find_by_rol_id(current_usuario.rol_id)          
       end
       permiso.present?
     end
-    
+
+		def al_menos_uno?(rutas)
+			tiene = false
+			rutas.each do |ruta|
+				controller,action = ruta.split('.')
+				tiene = tiene_permiso?(controller,action)
+				break if tiene
+			end
+			tiene
+		end
   end
 end

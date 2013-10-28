@@ -37,6 +37,9 @@ class Tarea < ActiveRecord::Base
   before_validation :complete_data
   before_destroy :unlink_foreigns
 
+  # Scopes
+  scope :de_la_estructura, lambda { |estructura_id| where(:estructura_id => estructura_id) }
+
   accepts_nested_attributes_for :adjuntos, :reject_if => lambda { |a| a[:descripcion].blank? }, :allow_destroy => true
   
 #  def tarea_anterior_id=(value)

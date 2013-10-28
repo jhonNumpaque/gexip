@@ -3,7 +3,7 @@ class FuncionariosController < ApplicationController
 	 # GET /funcionarios
   # GET /funcionarios.json
   def index
-  	@funcionarios = Funcionario
+  	@funcionarios = Funcionario.de_la_estructura(current_usuario.estructura_root_id)
 
   	if params[:valor].present?
   		case params[:tipo_busqueda]
@@ -22,7 +22,7 @@ class FuncionariosController < ApplicationController
   		@funcionarios = @funcionarios.page(params[:page]).order('id').per(50)
   	else
       #@usuarios = Usuario.all
-      @funcionarios = Funcionario.page(params[:page]).order('id').per(50)
+      @funcionarios = Funcionario.de_la_estructura(current_usuario.estructura_root_id).page(params[:page]).order('id').per(50)
   end
 
   respond_to do |format|
@@ -34,7 +34,7 @@ end
   # GET /funcionarios/1
   # GET /funcionarios/1.json
   def show
-  	@funcionario = Funcionario.find(params[:id])
+  	@funcionario = Funcionario.de_la_estructura(current_usuario.estructura_root_id).find(params[:id])
 
   	respond_to do |format|
       format.html # show.html.erb
@@ -58,7 +58,7 @@ end
 
   # GET /funcionarios/1/edit
   def edit
-  	@funcionario = Funcionario.find(params[:id])
+  	@funcionario = Funcionario.de_la_estructura(current_usuario.estructura_root_id).find(params[:id])
     #para mostrar el cargo y el ente que se encuentran seleccionados
     #cargo_estructura = CargoEstructura.find(@funcionario.cargo_estructura_id)
     #@estructura = Estructura.find(cargo_estructura.estructura_id)
@@ -77,7 +77,7 @@ end
   	@funcionario = Funcionario.new(params[:funcionario])
 	  @cargos_estructuras = @funcionario.cargo_estructura ? @funcionario.cargo_estructura.estructura.cargos_estructuras : []
 	  @estructuras_opts = @cargos_estructuras.present? ? { :selected => @funcionario.cargo_estructura.estructura_id } : { :prompt => true }
-
+	  @funcionario.estructura_id = current_usuario.estructura_root_id
     if params[:cargo_id].present? && params[:estructura_id].present?
       cargo_estructura = CargoEstructura.where("cargo_id = ? and estructura_id = ?", "#{params[:cargo_id]}", "#{params[:estructura_id]}").first
       @funcionario.cargo_estructura_id = cargo_estructura.id
@@ -102,7 +102,7 @@ end
   # PUT /funcionarios/1
   # PUT /funcionarios/1.json
   def update
-  	@funcionario = Funcionario.find(params[:id])
+  	@funcionario = Funcionario.de_la_estructura(current_usuario.estructura_root_id).find(params[:id])
 
   	respond_to do |format|
   		if @funcionario.update_attributes(params[:funcionario])
@@ -121,7 +121,7 @@ end
   # DELETE /funcionarios/1
   # DELETE /funcionarios/1.json
   def destroy
-  	@funcionario = Funcionario.find(params[:id])
+  	@funcionario = Funcionario.de_la_estructura(current_usuario.estructura_root_id).find(params[:id])
 
   	begin
   		@funcionario.destroy

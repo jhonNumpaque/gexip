@@ -56,6 +56,11 @@ class InformesController < ApplicationController
     @porcentaje = {}
     vista.each do |v|
       @porcentaje[v.proceso_id] ||= {}
+      #@porcentaje[v.proceso_id] ||= { 'anho' => { v.anho => { v.ente_type => 0, 'cantidad' => 0 }},
+      #                                'mes' => { v.mes => { v.ente_type => 0, 'cantidad' => 0 }},
+      #                                'trimestre' => { v.mes => { v.ente_type => 0, 'cantidad' => 0 }},
+      #                                'semestre' => { v.mes => { v.ente_type => 0, 'cantidad' => 0 }},
+      #                                'cuatrimestre' => { v.mes => { v.ente_type => 0, 'cantidad' => 0 }}}
       @porcentaje[v.proceso_id]['anho'] ||= {}
       @porcentaje[v.proceso_id]['anho'][v.anho] ||= {}
       @porcentaje[v.proceso_id]['anho'][v.anho][v.ente_type] ||= 0

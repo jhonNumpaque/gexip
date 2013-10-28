@@ -14,7 +14,9 @@ class Funcionario < ActiveRecord::Base
   belongs_to :ciudad, :foreign_key => :territorio_id
   belongs_to :cargo_estructura, :foreign_key => :cargo_estructura_id
   has_one :cargo, :through => :cargo_estructura  
-  has_one :estructura, :through => :cargo_estructura  
+  has_one :estructura, :through => :cargo_estructura
+
+	scope :de_la_estructura, lambda { |estructura_id| where(:estructura_id => estructura_id)}
     
   
   # CONSTANTE

@@ -39,6 +39,11 @@ class Usuario < ActiveRecord::Base
   def nombre_completo
     "#{self.funcionario.nombres} #{self.funcionario.apellidos}".strip
   end
+
+  def estructura_root_id
+	  self.funcionario.cargo_estructura.estructura.root.id
+  end
+
   #Concatena apellido y nombre
   def apellido_nombre
     "#{self.funcionario.apellidos}, #{self.funcionario.nombres}".strip

@@ -56,6 +56,7 @@
               <thead>
               <tr>
                 <th>Tarea</th>
+                <th>Observación</th>
                 <th>Fecha Inicio</th>
                 <th>Fecha Fin</th>
                 <th>Actividad</th>
@@ -67,6 +68,7 @@
               <% @tareas_expedientes.each do |f| %>
                   <tr>
                     <td><%= f.tarea.nombre %></td>
+                    <td><%= f.observacion_envio %></td>
                     <td><%= f.fecha_inicio %></td>
                     <td><%= f.fecha_fin %></td>
                     <td><%= f.tarea.actividad.nombre %></td>

@@ -18,8 +18,10 @@ class TiemposDemoradosController < ApplicationController
 
     if params[:tiempos_demorados][:fecha1].present? && params[:tiempos_demorados][:fecha2].present?
 
-      fecha1 = Date.strptime(params[:tiempos_demorados][:fecha1], "%m-%d-%Y")
-      fecha2 = Date.strptime(params[:tiempos_demorados][:fecha2], "%m-%d-%Y")
+      #fecha1 = Date.strptime(params[:tiempos_demorados][:fecha1], "%m-%d-%Y")
+      #fecha2 = Date.strptime(params[:tiempos_demorados][:fecha2], "%m-%d-%Y")
+      fecha1 = Date.parse(params[:tiempos_demorados][:fecha1])
+      fecha2 = Date.parse(params[:tiempos_demorados][:fecha2])
       #para saber que tipo de reporte voy a utilizar
       filtro = params[:tiempos_demorados][:filtro]
       expediente = params[:tiempos_demorados][:expediente]

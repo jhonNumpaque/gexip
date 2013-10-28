@@ -13,6 +13,9 @@ class Ente < ActiveRecord::Base
   belongs_to :tipo_documento
   belongs_to :ciudad, :foreign_key => :territorio_id
   has_many :expediente, :foreign_key => :ente_id, :dependent => :restrict
+
+	#scopes
+	scope :de_la_estructura, lambda { |estructura_id| where(:estructura_id => estructura_id) }
   
   
   # CONSTANTE

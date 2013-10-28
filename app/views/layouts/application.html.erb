@@ -48,7 +48,7 @@
                 dayNamesShort: ['Dom','Lun','Mar','Mi&eacute;','Juv','Vie','S&aacute;b'],
                 dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','S&aacute;'],
                 weekHeader: 'Sm',
-                dateFormat: 'mm-dd-yy',
+                dateFormat: 'dd-mm-yy',
                 firstDay: 1
         })
       })
@@ -77,16 +77,15 @@
                     <b class="caret"></b>
                   </a>
                   <ul class="dropdown-menu">
-                    <li><%= link_to 'Usuarios',usuarios_path %></li>
-                    <li><%= link_to 'Funcionarios',funcionarios_path %></li>
-                    <li><%= link_to 'Estructura Organizacional',estructuras_path %></li>
-                    <li><%= link_to 'Roles',roles_path %></li>
-                    <li><%= link_to 'Aprobar Procedimientos', aprobables_path %></li>
-                    <li><%= link_to 'Cargos',cargos_path %></li>
-                    <!--<li><%= link_to 'Entes', entes_path %></li>-->
-                    <li><%= link_to 'Paises', paises_path %></li>
-                    <li><%= link_to 'Ciudades', ciudades_path %></li>
-                    <li><%= link_to 'Unidades de Tiempo', unidades_tiempos_path %></li>
+                    <%= menu_link_to('Usuarios',:usuarios,wrapper_tag: :li) %>
+                    <%= menu_link_to('Funcionarios',:funcionarios,wrapper_tag: :li) %>
+                    <%= menu_link_to('Estructura Organizacional',:estructuras,wrapper_tag: :li) %>
+                    <%= menu_link_to('Roles',:roles,wrapper_tag: :li) %>
+                    <%= menu_link_to('Aprobar Procedimientos',:procedimientos, :action => :aprobables,wrapper_tag: :li) %>
+                    <%= menu_link_to('Cargos',:cargos,wrapper_tag: :li) %>
+                    <%= menu_link_to('Paises',:paises,wrapper_tag: :li) %>
+                    <%= menu_link_to('Ciudades',:ciudades,wrapper_tag: :li) %>
+                    <%= menu_link_to('Unidades de Tiempo',:unidades_tiempos,wrapper_tag: :li) %>
                   </ul>
                 </li>
 
@@ -114,16 +113,25 @@
         <div class="span2">
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
-              <li class="nav-header">Personas/Organismos</li>
-              <li><%= link_to 'Personas Físicas', personas_fisicas_path %></li>
-              <li><%= link_to 'Personas Juridicas', personas_juridicas_path %></li>
-              <li><%= link_to 'Organismos Internos', organismos_internos_path %></li>
-              <li class="nav-header">Procesos</li>
-              <li><%= link_to 'Flujos de Trabajo', new_procedimientos_index_path %></li>
-              <li class="nav-header">Expedientes</li>
-              <li><%= link_to 'Expedientes', expedientes_path %></li>
-              <li class="nav-header">Informes y consultas</li>
-              <li><%= link_to 'Informes', informes_path %></li>
+              <% if al_menos_uno?(['personas_fisicas.index','personas_juridicas.index',
+                                   'organismos_internos.index']) %>
+                <li class="nav-header">Personas/Organismos</li>
+                <%= menu_link_to('Personas Físicas',:personas_fisicas, wrapper_tag: :li) %>
+                <%= menu_link_to('Personas Juridicas',:personas_juridicas, wrapper_tag: :li) %>
+                <%= menu_link_to('Organismos Internos',:organismos_internos, wrapper_tag: :li) %>
+              <% end %>
+              <% if al_menos_uno?(['procedimientos.new_index']) %>
+                <li class="nav-header">Procesos</li>
+              <% end %>
+              <%= menu_link_to('Flujos de Trabajo',:procedimientos, action: :new_index, wrapper_tag: :li) %>
+              <% if al_menos_uno?(['expedientes.index']) %>
+                <li class="nav-header">Expedientes</li>
+              <% end %>
+              <%= menu_link_to('Expedientes',:expedientes, wrapper_tag: :li) %>
+              <% if al_menos_uno?(['informes.index']) %>
+                <li class="nav-header">Informes y consultas</li>
+              <% end %>
+              <%= menu_link_to('Informes',:informes, wrapper_tag: :li) %>
             </ul>
           </div><!--/.well -->
         </div><!--/span-->

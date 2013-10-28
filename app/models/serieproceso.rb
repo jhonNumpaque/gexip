@@ -15,6 +15,8 @@ class Serieproceso < ActiveRecord::Base
   after_destroy :update_counter_cache
   before_create :set_defaults
 
+  scope :de_la_estructura, lambda { |estructura_id| where(:estructura_id => estructura_id)}
+
   def tree_state
   	'closed' if self.serieprocesos_count > 0 || self.procedimientos_count > 0
   end

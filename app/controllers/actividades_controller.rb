@@ -20,7 +20,7 @@ class ActividadesController < ApplicationController
 
 	def show
 		@actividad = Actividad.find(params[:id])
-		@tareas = @actividad.tareas.order("orden")
+		@tareas = @actividad.tareas.de_la_estructura(current_usuario.estructura_root_id).order("orden")
 
 		respond_to do |format|
 			format.js

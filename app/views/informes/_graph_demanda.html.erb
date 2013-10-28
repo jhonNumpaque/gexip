@@ -90,8 +90,8 @@
       });
 <% else %>
       <% puts @formato %>
-  <% fecha_ini = fecha_formato_en_a_es(@fecha_inicio) %>
-  <% fecha_fin = fecha_formato_en_a_es(@fecha_fin) %>
+  <% fecha_ini = Date.parse(@fecha_inicio) #fecha_formato_en_a_es(@fecha_inicio) %>
+  <% fecha_fin = Date.parse(@fecha_fin) #fecha_formato_en_a_es(@fecha_fin) %>
   <% if fecha_ini.month == fecha_fin.month %>
     <% days = Time.days_in_month(fecha_ini.month, fecha_ini.year) %>
     <% weeks = fecha_ini.total_weeks %>

@@ -34,4 +34,16 @@ module ApplicationHelper
     content_tag(:em, "*", class: 'required').concat(" #{label}")
   end
 
+	def menu_link_to(name,controller,options={})
+		defaults = {
+				action: :index,
+		    wrapper_tag: false,
+		    link_options: {}
+		}
+		options = options.reverse_merge(defaults)
+		res = link_to(name,url_for(:controller => controller, :action => options[:action]),options[:link_options])
+		res = content_tag(options[:wrapper_tag],res) if options[:wrapper_tag]
+		res if tiene_permiso?(controller,options[:action])
+	end
+
 end

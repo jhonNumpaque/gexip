@@ -3,7 +3,7 @@ class EntesController < ApplicationController
   # GET /entes
   # GET /entes.json
   def index
-    @entes = Ente
+    @entes = Ente.de_la_estructura(current_usuario.estructura_root_id)
     
     if params[:valor].present?
       case params[:tipo]
@@ -36,7 +36,7 @@ class EntesController < ApplicationController
   # GET /entes/1
   # GET /entes/1.json
   def show
-    @ente = Ente.find(params[:id])
+    @ente = Ente.de_la_estructura(current_usuario.estructura_root_id).find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -65,7 +65,7 @@ class EntesController < ApplicationController
 			cond = ['documento = ?', params[:documento]]
 		end
 
-		@entes = Ente.where(cond).page(params[:page]).per(10)
+		@entes = Ente.de_la_estructura(current_usuario.estructura_root_id).where(cond).page(params[:page]).per(10)
 
 		respond_to do |format|
 			format.js
@@ -85,13 +85,14 @@ class EntesController < ApplicationController
 
   # GET /entes/1/edit
   def edit
-    @ente = Ente.find(params[:id])
+    @ente = Ente.de_la_estructura(current_usuario.estructura_root_id).find(params[:id])
   end
 
   # POST /entes
   # POST /entes.json
   def create
     @ente = Ente.new(params[:ente])
+    @ente.estructura_id = current_usuario.estructura_root_id
 
     respond_to do |format|
       if @ente.save
@@ -107,7 +108,7 @@ class EntesController < ApplicationController
   # PUT /entes/1
   # PUT /entes/1.json
   def update
-    @ente = Ente.find(params[:id])
+    @ente = Ente.de_la_estructura(current_usuario.estructura_root_id).find(params[:id])
 
     respond_to do |format|
       if @ente.update_attributes(params[:ente])
@@ -123,7 +124,7 @@ class EntesController < ApplicationController
   # DELETE /entes/1
   # DELETE /entes/1.json
   def destroy
-    @ente = Ente.find(params[:id])
+    @ente = Ente.de_la_estructura(current_usuario.estructura_root_id).find(params[:id])
     @ente.destroy
 
     respond_to do |format|
@@ -133,7 +134,7 @@ class EntesController < ApplicationController
   end
   
   def search
-    @entes = Ente
+    @entes = Ente.de_la_estructura(current_usuario.estructura_root_id)
     @entes = @entes.search(params[:form], params[:search], params[:documento], params[:nombre])
     @entes = @entes.page(params[:page]).per(10)
     

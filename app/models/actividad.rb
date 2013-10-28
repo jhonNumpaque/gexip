@@ -13,6 +13,9 @@ class Actividad < ActiveRecord::Base
 	# Callbacks
 	before_validation :set_order
 
+	# Scopes
+	scope :de_la_estructura, lambda { |estructura_id| where(:estructura_id => estructura_id) }
+
 	def nombre
 		self.descripcion
 	end

@@ -118,7 +118,7 @@ class TareasController < ApplicationController
     if params[:eid].present? && params[:tid].present?
       Expediente.transaction do
         @expediente = Expediente.find(params[:eid])
-        @expediente.tarea_id = params[:tid]
+        #@expediente.tarea_id = params[:tid]
         @tarea_actual = Tarea.find(params[:tid])
         tarea_anterior_id = @expediente.tarea_actual.id
       

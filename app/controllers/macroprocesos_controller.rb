@@ -2,7 +2,7 @@ class MacroprocesosController < ApplicationController
   # GET /macroprocesos
   # GET /macroprocesos.json
   def index
-    @macroprocesos = Macroproceso
+    @macroprocesos = Macroproceso.de_la_estructura(current_usuario.estructura_root_id)
     
     if params[:valor].present?
       case params[:tipo]
@@ -31,7 +31,7 @@ class MacroprocesosController < ApplicationController
   # GET /macroprocesos/1
   # GET /macroprocesos/1.json
   def show
-    @macroproceso = Macroproceso.find(params[:id])
+    @macroproceso = Macroproceso.de_la_estructura(current_usuario.estructura_root_id).find(params[:id])
     @procesos = @macroproceso.procesos
 
     respond_to do |format|
@@ -59,7 +59,7 @@ class MacroprocesosController < ApplicationController
 
   # GET /macroprocesos/1/edit
   def edit
-    @macroproceso = Macroproceso.find(params[:id])
+    @macroproceso = Macroproceso.de_la_estructura(current_usuario.estructura_root_id).find(params[:id])
     @cargos_estructuras = @macroproceso.cargo_estructura.estructura.cargos_estructuras
     @estructuras_opts = { :selected => @macroproceso.cargo_estructura.estructura_id }
 
@@ -74,6 +74,7 @@ class MacroprocesosController < ApplicationController
     @macroproceso = Macroproceso.new(params[:macroproceso])
     @cargos_estructuras = @macroproceso.cargo_estructura.estructura.cargos_estructuras
     @estructuras_opts = { :selected => @macroproceso.cargo_estructura.estructura_id }
+    @macroproceso.estructura_id = current_usuario.estructura_root_id
 
     respond_to do |format|
       if @macroproceso.save
@@ -91,7 +92,7 @@ class MacroprocesosController < ApplicationController
   # PUT /macroprocesos/1
   # PUT /macroprocesos/1.json
   def update
-    @macroproceso = Macroproceso.find(params[:id])
+    @macroproceso = Macroproceso.de_la_estructura(current_usuario.estructura_root_id).find(params[:id])
     @cargos_estructuras = @macroproceso.cargo_estructura.estructura.cargos_estructuras
     @estructuras_opts = { :selected => @macroproceso.cargo_estructura.estructura_id }
 
@@ -109,7 +110,7 @@ class MacroprocesosController < ApplicationController
   # DELETE /macroprocesos/1
   # DELETE /macroprocesos/1.json
   def destroy
-    @macroproceso = Macroproceso.find(params[:id])
+    @macroproceso = Macroproceso.de_la_estructura(current_usuario.estructura_root_id).find(params[:id])
     begin
       @macroproceso.destroy
       flash[:notice] = "Macroproceso Eliminado!"

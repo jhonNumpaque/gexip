@@ -20,6 +20,7 @@ class Procedimiento < ActiveRecord::Base
 	scope :a_aprobar, where(estado: 'aprobable')
 	scope :aprobados, where(estado: 'aprobado')
 	scope :borradores, where(estado: 'pendiente')
+	scope :de_la_estructura, lambda { |estructura_id| where(:estructura_id => estructura_id) }
 
 	before_update :marcar_como_borrador
 	

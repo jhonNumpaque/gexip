@@ -23,7 +23,7 @@ class ProcedimientosController < ApplicationController
   # GET /procedimientos/1.json
   def show
     @procedimiento = Procedimiento.find(params[:id])
-    @actividades = @procedimiento.actividades.order('orden asc')
+    @actividades = @procedimiento.actividades.de_la_estructura(current_usuario.estructura_root_id).order('orden asc')
 
     respond_to do |format|
       format.html # show.html.erb
@@ -216,25 +216,25 @@ class ProcedimientosController < ApplicationController
   def jstree
     if params[:operation] == 'search'
       data = []
-      data << Procedimiento.where('nombre like ?', "%#{params[:search_str]}%").all
-      data << Serieproceso.where('nombre like ?', "%#{params[:search_str]}%").all
-      data << Actividad.where('descripcion like ?', "%#{params[:search_str]}%").all
+      data << Procedimiento.de_la_estructura(current_usuario.estructura_root_id).where('nombre like ?', "%#{params[:search_str]}%").all
+      data << Serieproceso.de_la_estructura(current_usuario.estructura_root_id).where('nombre like ?', "%#{params[:search_str]}%").all
+      data << Actividad.de_la_estructura(current_usuario.estructura_root_id).where('descripcion like ?', "%#{params[:search_str]}%").all
 
       data.flatten!
       
       response = data.map { |d| { attr: { id: "node_#{d.id}", rel: d.class.to_s.downcase, type: d.class.to_s.downcase  }, data: d.nombre, state: 'open' }}
     else
       if params[:id] == '0'
-        data = Macroproceso.all
+        data = Macroproceso.de_la_estructura(current_usuario.estructura_root_id).all
       else      
         if params[:type] == 'proceso' || params[:type] == 'subproceso'
-          data = Procedimiento.where(serieproceso_id: params[:id]).all
-          data.concat(Serieproceso.where(serieproceso_id: params[:id]).all)
+          data = Procedimiento.de_la_estructura(current_usuario.estructura_root_id).where(serieproceso_id: params[:id]).all
+          data.concat(Serieproceso.de_la_estructura(current_usuario.estructura_root_id).where(serieproceso_id: params[:id]).all)
           data.compact!
         elsif params[:type] == 'procedimiento'
-          data = Actividad.where(procedimiento_id: params[:id]).order('orden').all      
+          data = Actividad.de_la_estructura(current_usuario.estructura_root_id).where(procedimiento_id: params[:id]).order('orden').all
         else
-          data = Serieproceso.where(serieproceso_id: params[:id]).all
+          data = Serieproceso.de_la_estructura(current_usuario.estructura_root_id).where(serieproceso_id: params[:id]).all
         end
         
         #image = data.first ? data.first.type : nil
