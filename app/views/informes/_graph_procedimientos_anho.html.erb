@@ -1,0 +1,95 @@
+<div id="container" style="width:1086px"></div>
+
+<script type="text/javascript">
+$(function () {
+    <% if @porcentaje.first.second['anho'].first.first.to_i < Time.now.year %>
+    $('#container').highcharts({
+        title: {
+            text: 'Resumen del Proceso <%= @proceso.nombre %>'
+        },
+        subtitle: {
+            text: 'Cantidad de expedientes recibidos por proceso'
+        },
+        xAxis: {
+            categories: [
+            <%  (@porcentaje.first.second['anho'].first.first.to_i .. Time.now.year).each do |y|%>
+            '<%= y %>',
+            <% end %>
+            ]
+        },
+        yAxis: {
+            title: {
+                text: 'Cantidad'
+            }
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: [
+        <% @porcentaje.each do |k, p| %>
+        {
+            name: '<%= p['nombre'] %>',
+            data: [
+            <% (@porcentaje.first.second['anho'].first.first.to_i .. Time.now.year).each do |y|%>
+            <%= @porcentaje[k]['anho'][y.to_s].present? ? @porcentaje[k]['anho'][y.to_s]["cantidad"].to_i : 0 %>,
+            <% end %>
+            ]
+        },
+        <% end %>
+        ]
+    });
+<% else %>
+$('#container').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Resumen del Macroproceso <%= @macroproceso.nombre %>'
+        },
+        subtitle: {
+            text: "Cantidad de expedientes recibidos por proceso <%= ' Año ' + Time.now.year.to_s %>"
+        },
+        xAxis: {
+            title: {
+                text: 'Procesos'
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Cantidad'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [
+        <% @porcentaje.each do |p|%>
+        {
+
+            name: '<%= p['nombre'] %>',
+            data: [
+            <%= @porcentaje[k]['anho'][y.to_s].present? ? @porcentaje[k]['anho'][y.to_s]["cantidad"].to_i : 0 %>,
+            ]
+
+        },
+        <% end %>
+        ]
+    });
+<% end %>
+});
+</script>

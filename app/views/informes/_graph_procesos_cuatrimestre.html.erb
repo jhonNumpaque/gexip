@@ -1,0 +1,133 @@
+<% if params[:anho].blank? %>
+<%  (@porcentaje.first.second['anho'].first.first.to_i .. Time.now.year).each do |y|%>
+<div id="container-<%= y %>" style="width:1086px"></div>
+<% end %>
+<% else %>
+<div id="container-<%= params[:anho] %>" style="width:1086px"></div>
+<% end %>
+
+<script type="text/javascript">
+<% if params[:anho].blank? %>
+$(function () {
+    <%  (@porcentaje.first.second['anho'].first.first.to_i .. Time.now.year).each do |y|%>
+
+    $('#container-<%= y %>').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Resumen del Macroproceso <%= @macroproceso.nombre %>'
+        },
+        subtitle: {
+            text: 'Cantidad de expedientes recibidos por proceso en cuatrimestres del Año <%= y %>'
+        },
+        xAxis: {
+            categories: [
+            'Primer Cuatrimestre',
+            'Segundo Cuatrimestre',
+            'Tercer Cuatrimestre',
+            ]
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Cantidad'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [
+        <% @procesos.each do |p|%>
+        {
+
+            name: '<%= p.nombre %>',
+            data: [
+            <% (1 .. 3).each do |m| %>
+            <% if @porcentaje[p.id]['anho'][y.to_s].present? %>
+            <%= @porcentaje[p.id]['anho'][y.to_s]['cuatrimestre'][("%.2i" %m).to_s].present? ?  @porcentaje[p.id]['anho'][y.to_s]['cuatrimestre'][("%.2i" %m).to_s]['cantidad'].to_i : 0 %>,
+            <% else %>
+            <%= 0 %>,
+            <% end %>
+            <% end %>
+            ]
+
+        },
+        <% end %>
+        ]
+    });
+<% end %>
+});
+<% else %>
+$(function () {
+    $('#container-<%= params[:anho] %>').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Resumen del Macroproceso <%= @macroproceso.nombre %>'
+        },
+        subtitle: {
+            text: 'Cantidad de expedientes recibidos por proceso en semestres del Año <%= params[:anho] %>'
+        },
+        xAxis: {
+            categories: [
+            'Primer Cuatrimestre',
+            'Segundo Cuatrimestre',
+            'Tercer Cuatrimestre',
+            ]
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Cantidad'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [
+        <% @procesos.each do |p|%>
+        {
+
+            name: '<%= p.nombre %>',
+            data: [
+            <% (1 .. 3).each do |m| %>
+            <% if @porcentaje[p.id]['anho'][params[:anho]].present? %>
+            <%= @porcentaje[p.id]['anho'][params[:anho]]['cuatrimestre'][("%.2i" %m).to_s].present? ?  @porcentaje[p.id]['anho'][params[:anho]]['cuatrimestre'][("%.2i" %m).to_s]['cantidad'].to_i : 0 %>,
+            <% else %>
+            <%= 0 %>,
+            <% end %>
+            <% end %>
+            ]
+
+        },
+        <% end %>
+        ]
+    });
+});
+<% end %>
+
+</script>

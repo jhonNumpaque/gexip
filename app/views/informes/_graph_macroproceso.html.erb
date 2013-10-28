@@ -1,0 +1,50 @@
+<div id="container" style="width:1086px"></div>
+
+<script type="text/javascript">
+$(function () {
+	$('#container').highcharts({
+		chart: {
+			type: 'column'
+		},
+		title: {
+			text: 'Resumen del Macroproceso <%= @macroproceso.nombre %>'
+		},
+		subtitle: {
+			text: "Cantidad de expedientes recibidos <%= @anho.present? ? ' Año ' + @anho : '' %>"
+		},
+		xAxis: {
+			categories: ['<%= @macroproceso.nombre %>']
+		},
+		yAxis: {
+			min: 0,
+			title: {
+				text: 'Cantidad'
+			}
+		},
+		tooltip: {
+			headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+			pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+			'<td style="padding:0"><b>{point.y}</b></td></tr>',
+			footerFormat: '</table>',
+			shared: true,
+			useHTML: true
+		},
+		plotOptions: {
+			column: {
+				pointPadding: 0.2,
+				borderWidth: 0
+			}
+		},
+		series: [
+		<% @porcentaje.each do |k,v|%>
+		{
+
+			name: '<%= k %>',
+			data: [<%= v["cantidad"] %>]
+
+		},
+		<% end %>
+		]
+	});
+});
+</script>

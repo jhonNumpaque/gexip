@@ -1,5 +1,12 @@
 class InformesController < ApplicationController
   def index
+
+    respond_to do |format|
+      format.html # show.html.erb
+    end
+  end
+
+  def vista_general
     vista = VistaExpedienteTotal
     vista = vista.select("DISTINCT expediente_id, macroproceso_id, macroproceso_nombre, ente_type")
 
@@ -141,12 +148,12 @@ class InformesController < ApplicationController
   end
 
   def show_procedimientos
-      @proceso = Proceso.find(params['proceso_id'])
-      @macroproceso = Macroproceso.find(@proceso.serieproceso_id)
+    @proceso = Proceso.find(params['proceso_id'])
+    @macroproceso = Macroproceso.find(@proceso.serieproceso_id)
 
-     vista = VistaExpedienteTotal
-     vista = vista.select("DISTINCT expediente_id, proceso_id, proceso_nombre, procedimiento_id, procedimiento_nombre, ente_type, TO_CHAR(expediente_fecha_creacion::timestamp, 'YYYY') AS anho, TO_CHAR(expediente_fecha_creacion::timestamp, 'mm') AS mes")
-     vista = vista.where("proceso_id in (?)", @proceso.id )
+    vista = VistaExpedienteTotal
+    vista = vista.select("DISTINCT expediente_id, proceso_id, proceso_nombre, procedimiento_id, procedimiento_nombre, ente_type, TO_CHAR(expediente_fecha_creacion::timestamp, 'YYYY') AS anho, TO_CHAR(expediente_fecha_creacion::timestamp, 'mm') AS mes")
+    vista = vista.where("proceso_id in (?)", @proceso.id )
      vista = vista.where("TO_CHAR(expediente_fecha_creacion::timestamp, 'YYYY') = (?)", params[:anho] ) if params[:anho].present? #filtar el proceso por anho
      vista = vista.order("anho ASC, mes ASC")
 
@@ -232,7 +239,7 @@ class InformesController < ApplicationController
       @porcentaje[v.procedimiento_id]["nombre"] = v.procedimiento_nombre
     end
 
-     respond_to do |format|
+    respond_to do |format|
       format.html
     end
   end
@@ -251,7 +258,7 @@ class InformesController < ApplicationController
 
     @macroproceso = Macroproceso.find(@proceso.serieproceso_id)
 
-    @vista = VistaExpedienteTotal.select("DISTINCT expediente_id, expediente_fecha_creacion, TO_CHAR(expediente_fecha_creacion, 'YYYY') as anho, TO_CHAR(expediente_fecha_creacion, 'mm') as mes, expediente_estado, ente_nombre, ente_apellido, ente_type, expediente_fecha_finalizo, usuario_inicio, expediente_numero")
+    @vista = VistaExpedienteTotal.select("expediente_id, expediente_fecha_creacion, TO_CHAR(expediente_fecha_creacion, 'YYYY') as anho, TO_CHAR(expediente_fecha_creacion, 'mm') as mes, expediente_estado, ente_nombre, ente_apellido, ente_type, expediente_fecha_finalizo, usuario_inicio, expediente_numero, tarea_expediente_fecha_inicio, tarea_expediente_fecha_fin")
     @vista = @vista.where("procedimiento_id = ?", @procedimiento.id)
     @vista = @vista.where("TO_CHAR(expediente_fecha_creacion, 'YYYY') = ?", params['anho']) if params['anho'].present?
     @vista = @vista.where("TO_CHAR(expediente_fecha_creacion, 'mm') = ?", params['mes']) if params['mes'].present?
@@ -294,6 +301,29 @@ class InformesController < ApplicationController
     end
 
     @vista = @vista.order("expediente_fecha_creacion ASC")
+    #obtener el tiempo total que se lleva a cabo en el expediente REVISAR
+    @resultado = {}
+    @vista.each do |v|
+      @resultado[v.expediente_id] ||= {}
+      @resultado[v.expediente_id]["expediente_fecha_creacion"] ||= v.expediente_fecha_creacion
+      @resultado[v.expediente_id]["expediente_fecha_finalizo"] ||= v.expediente_fecha_finalizo
+      @resultado[v.expediente_id]["expediente_numero"] ||= v.expediente_numero
+      @resultado[v.expediente_id]["expediente_estado"] ||= v.expediente_estado
+      @resultado[v.expediente_id]["ente_nombre"] ||= v.ente_nombre
+      @resultado[v.expediente_id]["ente_apellido"] ||= v.ente_apellido
+      @resultado[v.expediente_id]["ente_type"] ||= v.ente_type
+      @resultado[v.expediente_id]["usuario_inicio"] ||= v.usuario_inicio
+      @resultado[v.expediente_id]["expediente_fecha_creacion"] = v.expediente_fecha_creacion
+      @resultado[v.expediente_id]["expediente_fecha_creacion"] = v.expediente_fecha_creacion
+      if v.tarea_expediente_fecha_fin.present?
+        @resultado[v.expediente_id]["duracion"] += ((v.tarea_expediente_fecha_fin.to_datetime - v.tarea_expediente_fecha_inicio.to_datetime) * 24 * 60 ).to_i
+      elsif
+        @resultado[v.expediente_id]["duracion"] = 0
+      end
+
+
+    end
+
     @usuarios = Usuario.find(@vista.map{ |v| v.usuario_inicio })
 
     respond_to do |format|

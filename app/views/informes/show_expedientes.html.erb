@@ -48,19 +48,21 @@
 				<th>Tipo Cliente</th>
 				<th>Funcionario Ingreso</th>
 				<th>Estado</th>
+				<th>Tiempo de Ejecución</th>
 				<th>Fecha Finalizo</th>
 			</tr>
 		</thead>
 		<tbody>
-			<% @vista.each do |v| %>
+			<% @resultado.each do |k,v| %>
 			<tr>
-				<td><%= v.expediente_fecha_creacion.strftime("%d/%m/%Y") %></td>
-				<td><%= link_to v.expediente_numero, show_tareas_path(v.expediente_id) %></td>
-				<td><%= v.ente_nombre %></td>
-				<td><%= v.ente_type	 %></td>
-				<td><%= Usuario.find(v.usuario_inicio).funcionario.nombre_completo	 %></td>
-				<td><%= v.expediente_estado %></td>
-				<td><%= v.expediente_fecha_finalizo.present? ? v.expediente_fecha_finalizo : 'No Finalizado' %></td>
+				<td><%= v['expediente_fecha_creacion'].strftime("%d/%m/%Y") %></td>
+				<td><%= link_to v['expediente_numero'], show_tareas_path(k) %></td>
+				<td><%= v["ente_nombre"] %></td>
+				<td><%= v["ente_type"]	 %></td>
+				<td><%= Usuario.find(v["usuario_inicio"]).funcionario.nombre_completo	 %></td>
+				<td><%= v['expediente_estado'] %></td>
+				<td><%= distance_of_time_in_words(v["duracion"].minutes.ago, v['expediente_fecha_finalizo'].present? ? v['expediente_fecha_finalizo'] : Time.now) %></td>
+				<td><%= v['expediente_fecha_finalizo'].present? ? v['expediente_fecha_finalizo'] : 'No Finalizado' %></td>
 			</tr>
 			<% end %>
 		</tbody>

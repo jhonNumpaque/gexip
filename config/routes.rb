@@ -122,6 +122,7 @@ Gexip::Application.routes.draw do
   match 'show_procedimientos/:proceso_id' => 'informes#show_procedimientos', :as => :show_procedimientos
   match 'show_expedientes/:procedimiento_id' => 'informes#show_expedientes', :as => :show_expedientes
   match 'show_tareas/:expediente_id' => 'informes#show_tareas', :as => :show_tareas
+  match 'vista_general' => 'informes#vista_general', :as => :vista_general
 
   #consultas
   match 'consulta_verificar_expediente' => 'consultas#verificar_expediente', :as => :consulta_verificar_expediente
