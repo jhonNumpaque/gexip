@@ -78,12 +78,12 @@ $('#container').highcharts({
             }
         },
         series: [
-        <% @porcentaje.each do |p|%>
+        <% @porcentaje.each do |k,p|%>
         {
 
             name: '<%= p['nombre'] %>',
             data: [
-            <%= @porcentaje[k]['anho'][y.to_s].present? ? @porcentaje[k]['anho'][y.to_s]["cantidad"].to_i : 0 %>,
+            <%= @porcentaje[k]['anho'][Time.now.year.to_s].present? ? @porcentaje[k]['anho'][Time.now.year.to_s]["cantidad"].to_i : 0 %>,
             ]
 
         },
