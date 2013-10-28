@@ -252,15 +252,13 @@ class InformesController < ApplicationController
   def show_expedientes
 
     @procedimiento = Procedimiento.find(params[:procedimiento_id])
-    begin
+    case @procedimiento.serieproceso.type
+    when 'Proceso'
       @proceso = Proceso.find(@procedimiento.serieproceso_id)
-    rescue Exception => e
-      puts e
-    ensure
+    when 'Subproceso'
       @subproceso = Subproceso.find(@procedimiento.serieproceso_id)
       @proceso = Proceso.find(@subproceso.serieproceso_id)
     end
-
     @macroproceso = Macroproceso.find(@proceso.serieproceso_id)
 
     @vista = VistaExpedienteTotal.select("expediente_id, expediente_fecha_creacion, TO_CHAR(expediente_fecha_creacion, 'YYYY') as anho, TO_CHAR(expediente_fecha_creacion, 'mm') as mes, expediente_estado, ente_nombre, ente_apellido, ente_type, expediente_fecha_finalizo, usuario_inicio, expediente_numero, tarea_expediente_fecha_inicio, tarea_expediente_fecha_fin")
@@ -321,7 +319,7 @@ class InformesController < ApplicationController
       @resultado[v.expediente_id]["expediente_fecha_creacion"] = v.expediente_fecha_creacion
       @resultado[v.expediente_id]["expediente_fecha_creacion"] = v.expediente_fecha_creacion
       if v.tarea_expediente_fecha_fin.present?
-        @resultado[v.expediente_id]["duracion"] += ((v.tarea_expediente_fecha_fin.to_datetime - v.tarea_expediente_fecha_inicio.to_datetime) * 24 * 60 ).to_i
+        #@resultado[v.expediente_id]["duracion"] = ((v.tarea_expediente_fecha_fin.to_s.to_datetime.to_i - v.tarea_expediente_fecha_inicio.to_s.to_datetime.to_i) * 24 * 60 ).to_i
       elsif
         @resultado[v.expediente_id]["duracion"] = 0
       end
@@ -344,11 +342,10 @@ class InformesController < ApplicationController
     @expediente = Expediente.find(params[:expediente_id])
     @procedimiento = Procedimiento.find(@expediente.tareas.first.actividad.procedimiento.id)
 
-    begin
+    case @procedimiento.serieproceso.type
+    when 'Proceso'
       @proceso = Proceso.find(@procedimiento.serieproceso_id)
-    rescue Exception => e
-      puts e
-    ensure
+    when 'Subproceso'
       @subproceso = Subproceso.find(@procedimiento.serieproceso_id)
       @proceso = Proceso.find(@subproceso.serieproceso_id)
     end
