@@ -1,0 +1,56 @@
+<section>
+	<div class="well">
+		<%= link_to icon_tag('Volver', :class => 'icon-arrow-left icon-white'), informes_path, :class => 'btn btn-primary' %>
+		<%= simple_form_for controller_name, :url => vista_general_path, :method => :get do |f| %>
+		<div class="control-group">
+			<label class="optional">Año</label>
+			<div class="controls">
+				<%= select_tag 'anho', options_for_select(1990 .. 2013), prompt: "-- Seleccionar --" %>
+				<%= submit_tag 'Filtrar', :class => 'btn btn-success' %>
+			</div>
+		</div>
+		<% end %>
+		<%= link_to icon_tag('', :class => 'chart'), '#', :class => 'btn', :onclick => 'showGraph()', :title => 'Graficar' %>
+		<%= button_tag icon_tag('', :class => 'icon-print'), :class => "btn pull-left", :title => 'Imprimir Gráfico', :title => 'Imprimir' %>
+	</div>
+	<div id="graph" style="display:none;">
+		<%= button_tag "&times;".html_safe, :class => "close pull-right", :onclick => 'closeGraph()', :title => 'Cerrar Gráfico' %>
+		<div class="page-header">
+			<h1>Gráfico</h1>
+		</div>
+		<%= render 'graph_macroprocesos'%>
+	</div>
+	<div id="tabla-contenido">
+		<div class="page-header">
+			<h1>Datos</h1>
+		</div>
+		<table class="table table-striped table-bordered table-condensed">
+			<thead>
+				<tr>
+					<% if @anho.present? %>
+					<th>Año</th>
+					<% end %>
+					<th>Macroproceso</th>
+					<th>Cant. Recibidos</th>
+					<th>% Personas Físicas</th>
+					<th>% Personas Jurídicas</th>
+					<th>% Personas Jurídicas Internas</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @macroprocesos.each do |m| %>
+				<tr>
+					<% if @anho.present? %>
+					<td><%= @anho %></td>
+					<% end %>
+					<td><%= link_to m.nombre, show_macroproceso_path(m.id) %></td>
+					<td><%= @porcentaje[m.id].present? ? @porcentaje[m.id]["cantidad"] : 0 %></td>
+					<td><%=  @porcentaje[m.id].present? ? calcular_porcentaje(@porcentaje[m.id]["cantidad"], @porcentaje[m.id]["PersonaFisica"]) : 0 %></td>
+					<td><%=  @porcentaje[m.id].present? ? calcular_porcentaje(@porcentaje[m.id]["cantidad"], @porcentaje[m.id]["PersonaJuridica"]) : 0 %></td>
+					<td><%=  @porcentaje[m.id].present? ? calcular_porcentaje(@porcentaje[m.id]["cantidad"], @porcentaje[m.id]["OrganismoInterno"]) : 0%></td>
+				</tr>
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+</section>
