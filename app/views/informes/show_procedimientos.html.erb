@@ -1,0 +1,50 @@
+<section>
+	<div class="well">
+		<%= link_to icon_tag('Volver', :class => 'icon-arrow-left icon-white'), show_procesos_path(@proceso.serieproceso_id), :class => 'btn btn-primary' %>
+		<%= simple_form_for controller_name, :url => show_procedimientos_path, :method => :get do |f| %>
+		<div class="control-group">
+			<label class="optional">Ver Por</label>
+			<div class="controls">
+				<%= select_tag 'filtro_vista', options_for_select({'Año' => 'anho','Mes' => 'mes', 'Semestre' => 'semestre', 'Cuatrimestre' => 'cuatrimestre', 'Trimestre'=>'trimestre'}), prompt: "-- Seleccionar --" %>
+				<%= hidden_field_tag 'proceso_id', params[:proceso_id] %>
+				<%= hidden_field_tag 'anho', params[:anho] %>
+				<%= submit_tag 'Filtrar', :class => 'btn btn-success' %>
+			</div>
+		</div>
+		<% end %>
+		<%= link_to icon_tag('', :class => 'chart'), '#', :class => 'btn', :onclick => 'showGraph()', :title => 'Graficar' %>
+		<%= button_tag icon_tag('', :class => 'icon-print'), :class => "btn", :title => 'Imprimir Gráfico', :title => 'Imprimir' %>
+	</div>
+
+	<div id="graph" style="display:none;">
+		<%= button_tag "&times;".html_safe, :class => "close pull-right", :onclick => 'closeGraph()', :title => 'Cerrar Gráfico' %>
+		<div class="page-header">
+			<h1>Gráfico</h1>
+		</div>
+		<%= render 'graph_procedimientos'%>
+	</div>
+
+	<div id="tabla-contenido">
+		<div class="page-header">
+			<h1>Datos</h1>
+		</div>
+		<p><b>Macroproceso: </b><%= @macroproceso.nombre %><p>
+			<p><b>Proceso: </b><%= @proceso.nombre %><p>
+				<% if params[:filtro_vista].present? %>
+				<% case params[:filtro_vista] %>
+				<% when 'anho' %>
+				<%= render 'procedimientos_anho' %>
+				<% when 'mes' %>
+				<%= render 'procedimientos_mes' %>
+				<% when 'semestre' %>
+				<%= render 'procedimientos_semestre' %>
+				<% when 'trimestre' %>
+				<%= render 'procedimientos_trimestre' %>
+				<% when 'cuatrimestre' %>
+				<%= render 'procedimientos_cuatrimestre' %>
+				<% end %>
+				<% else %>
+				<%= render 'procedimientos_anho' %>
+				<% end %>
+			</div>
+		</section>

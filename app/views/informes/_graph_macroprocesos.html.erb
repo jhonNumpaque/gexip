@@ -1,0 +1,78 @@
+<div id="container" style="width:1086px">
+
+</div>
+
+<script type="text/javascript">
+$(function () {
+	$('#container').highcharts({
+		chart: {
+			type: 'column'
+		},
+		title: {
+			text: 'Resumen de Macroprocesos'
+		},
+		subtitle: {
+			text: "Cantidad de expedientes recibidos <%= @anho.present? ? ' Año ' + @anho : '' %>"
+		},
+		xAxis: {
+			categories: [
+			<% @macroprocesos.each do |m|%>
+			'<%= m.nombre %>',
+			<% end %>
+			]
+		},
+		yAxis: {
+			min: 0,
+			title: {
+				text: 'Cantidad'
+			}
+		},
+		tooltip: {
+			headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+			pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+			'<td style="padding:0"><b>{point.y}</b></td></tr>',
+			footerFormat: '</table>',
+			shared: true,
+			useHTML: true
+		},
+		plotOptions: {
+			column: {
+				pointPadding: 0.2,
+				borderWidth: 0
+			}
+		},
+		series: [
+		{
+			name: 'Persona Física',
+			data: [
+			<% @macroprocesos.each do |m|%>
+				<% if @porcentaje[m.id].present? %>
+					<%= @porcentaje[m.id]["PersonaFisica"].present? ? @porcentaje[m.id]["PersonaFisica"] : 0 %>,
+				<% end %>
+			<% end %>
+			]
+		},
+		{
+			name: 'Persona Jurídica',
+			data: [
+			<% @macroprocesos.each do |m|%>
+				<% if @porcentaje[m.id].present? %>
+					<%= @porcentaje[m.id]["PersonaJuridica"].present? ? @porcentaje[m.id]["PersonaJuridica"] : 0 %>,
+				<% end %>
+			<% end %>
+			]
+		},
+		{
+			name: 'Organismo Interno',
+			data: [
+			<% @macroprocesos.each do |m|%>
+				<% if @porcentaje[m.id].present? %>
+					<%= @porcentaje[m.id]["OrganismoInterno"].present? ? @porcentaje[m.id]["OrganismoInterno"] : 0 %>,
+				<% end %>
+			<% end %>
+			]
+		},
+		]
+	});
+});
+</script>

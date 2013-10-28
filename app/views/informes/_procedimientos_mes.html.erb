@@ -1,0 +1,31 @@
+
+<table class="table table-striped table-bordered table-condensed">
+	<thead>
+		<tr>
+			<th>Año</th>
+			<th>Mes</th>
+			<th>Procedimiento</th>
+			<th>Cant. Recibidos</th>
+			<th>% Personas Físicas</th>
+			<th>% Personas Jurídicas</th>
+			<th>% Personas Jurídicas Internas</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @porcentaje.each do |key, val| %>
+		<% val['anho'].keys.each do |anho| %>
+		<% VistaExpedienteTotal::MESES.each do |k, v| %>
+		<tr>
+			<td><%= anho %></td>
+			<td><%= v %></td>
+			<td><%= link_to val['nombre'], "#" %></td>
+			<td><%= val['anho'][anho]['mes'][k].present? ? link_to(val['anho'][anho]['mes'][k]['cantidad'], show_expedientes_path(:procedimiento_id => key, :anho => anho, :mes => k) ) : 0 %></td>
+			<td><%= val['anho'][anho]['mes'][k].present? ? calcular_porcentaje(val['anho'][anho]['mes'][k]['cantidad'], val['anho'][anho]['mes'][k]['PersonaFisica']) : 0 %></td>
+			<td><%= val['anho'][anho]['mes'][k].present? ? calcular_porcentaje(val['anho'][anho]['mes'][k]['cantidad'], val['anho'][anho]['mes'][k]['PersonaJuridica']) : 0 %></td>
+			<td><%= val['anho'][anho]['mes'][k].present? ? calcular_porcentaje(val['anho'][anho]['mes'][k]['cantidad'], val['anho'][anho]['mes'][k]['OrganismoInterno']) : 0 %></td>
+		</tr>
+		<% end %>
+		<% end %>
+		<% end %>
+	</tbody>
+</table>

@@ -1,0 +1,16 @@
+<% if params[:filtro_vista].present? %>
+<% case params[:filtro_vista] %>
+<% when 'anho' %>
+<%= render 'graph_procesos_anho' %>
+<% when 'mes' %>
+<%= render 'graph_procesos_mes' %>
+<% when 'semestre' %>
+<%= render 'graph_procesos_semestre' %>
+<% when 'trimestre' %>
+<%= render 'graph_procesos_trimestre' %>
+<% when 'cuatrimestre' %>
+<%= render 'graph_procesos_cuatrimestre' %>
+<% end %>
+<% else %>
+<%= render 'graph_procesos_anho' %>
+<% end %>
