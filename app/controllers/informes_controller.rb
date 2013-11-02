@@ -7,7 +7,7 @@ class InformesController < ApplicationController
   end
 
   def vista_general
-    vista = VistaExpedienteTotal
+    vista = VistaExpedienteTotal.de_la_estructura(current_usuario.estructura_root_id)
     vista = vista.select("DISTINCT expediente_id, macroproceso_id, macroproceso_nombre, ente_type")
 
     @anho = params[:anho].present? ? params[:anho] : nil
@@ -21,7 +21,7 @@ class InformesController < ApplicationController
       @porcentaje[v.macroproceso_id]["cantidad"] ||= 0
       @porcentaje[v.macroproceso_id]["cantidad"] += 1 #contar la cantidad total de expedientes por macroproceso
     end
-    @macroprocesos = Macroproceso.all
+    @macroprocesos = Macroproceso.de_la_estructura(current_usuario.estructura_root_id).all
     puts @porcentaje
 
     respond_to do |format|
@@ -318,8 +318,9 @@ class InformesController < ApplicationController
       @resultado[v.expediente_id]["usuario_inicio"] ||= v.usuario_inicio
       @resultado[v.expediente_id]["expediente_fecha_creacion"] = v.expediente_fecha_creacion
       @resultado[v.expediente_id]["expediente_fecha_creacion"] = v.expediente_fecha_creacion
-      if v.tarea_expediente_fecha_fin.present?
+      if v.tarea_expediente_fecha_fin.present?       
         #@resultado[v.expediente_id]["duracion"] = ((v.tarea_expediente_fecha_fin.to_s.to_datetime.to_i - v.tarea_expediente_fecha_inicio.to_s.to_datetime.to_i) * 24 * 60 ).to_i
+        @resultado[v.expediente_id]["duracion"] = (v.tarea_expediente_fecha_fin.to_f - v.tarea_expediente_fecha_inicio.to_f)/60.00
       elsif
         @resultado[v.expediente_id]["duracion"] = 0
       end

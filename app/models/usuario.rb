@@ -41,7 +41,9 @@ class Usuario < ActiveRecord::Base
   end
 
   def estructura_root_id
-	  self.funcionario.cargo_estructura.estructura.root.id
+		estructura_root = self.funcionario.cargo_estructura.estructura.root
+		return estructura_root if estructura_root.is_a?(Fixnum)
+		estructura_root.id
   end
 
   #Concatena apellido y nombre

@@ -7,4 +7,6 @@ class VistaExpedienteTotal < ActiveRecord::Base
   CUATRIMESTRES = {'01' => 'Primer Cuatrimestre', '02' => 'Segundo Cuatrimestre', '03' => 'Tercer Cuatrimestre'}
   TRIMESTRES = {'01' => 'Primer Trimestre', '02' => 'Segundo Trimestre', '03' => 'Tercer Trimestre', '04' => 'Cuarto Trimestre'}
 
+  scope :de_la_estructura, lambda { |eid| where(:macroproceso_estructura_id => eid) }
+
 end

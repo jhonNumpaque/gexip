@@ -61,7 +61,7 @@ class ProcedimientosController < ApplicationController
 
     procedimientos_id = tareas.map{ |t| t.actividad.procedimiento.id }
 
-    @procedimientos = Procedimiento.where(:id => procedimientos_id)
+    #@procedimientos = Procedimiento.where(:id => procedimientos_id)
     if params[:nombre].present?
 			query_str << 'nombre ilike :nombre'
 			query_val[:nombre] = "%#{params[:nombre]}%"
@@ -71,7 +71,8 @@ class ProcedimientosController < ApplicationController
 			cond[1] = query_val
 		end
 
-		@procedimientos = Procedimiento.aprobados.where(cond).page(params[:page]).per(10)
+    #@procedimientos = Procedimiento.aprobados.where(:id => procedimientos_id).page(params[:page]).per(10)
+		@procedimientos = Procedimiento.de_la_estructura(current_usuario.estructura_root_id).aprobados.where(cond).page(params[:page]).per(10)
 		#@procedimientos = @procedimientos.where(cond).page(params[:page]).per(10)
 
 		respond_to do |format|
